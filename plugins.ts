@@ -5,11 +5,9 @@ import getReadingTime from 'reading-time'
 import remarkDirective from 'remark-directive'
 import remarkDirectiveSugar from 'remark-directive-sugar'
 import remarkImgattr from 'remark-imgattr'
-import remarkMath from 'remark-math'
 
 import { rehypeHeadingIds } from '@astrojs/markdown-remark'
 import rehypeCallouts from 'rehype-callouts'
-import rehypeKatex from 'rehype-katex'
 import rehypeExternalLinks from 'rehype-external-links'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 // @ts-expect-error(rehype-wrap-all is not typed)
@@ -69,16 +67,12 @@ export const remarkPlugins: RemarkPlugins = [
   ],
   // https://github.com/OliverSpeir/remark-imgattr
   remarkImgattr,
-  // https://github.com/remarkjs/remark-math/tree/main/packages/remark-math
-  remarkMath,
   remarkReadingTime,
 ]
 
 export const rehypePlugins: RehypePlugins = [
   // https://docs.astro.build/en/guides/markdown-content/#heading-ids-and-plugins
   rehypeHeadingIds,
-  // https://github.com/remarkjs/remark-math/tree/main/packages/rehype-katex
-  rehypeKatex,
   // https://github.com/lin-stephanie/rehype-callouts
   [
     rehypeCallouts,

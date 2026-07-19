@@ -4,12 +4,11 @@ Independent investment research by Srinivas Medida, covering commodity markets, 
 
 ## Technology
 
-- [Astro](https://astro.build/)
-- TypeScript
+- Astro and TypeScript
 - MDX content collections
 - UnoCSS
 - Pagefind search
-- Vercel deployment
+- Static deployment on Vercel
 
 ## Local development
 
@@ -20,33 +19,55 @@ pnpm install
 pnpm dev
 ```
 
-The development server will print the local URL in the terminal.
+The development server prints the local URL in the terminal.
 
-## Quality checks
+## Pre-publication checks
+
+Run the complete quality gate before every production push:
 
 ```bash
-pnpm run check
-pnpm run lint
-python3 scripts/site_audit.py
-pnpm run build
+pnpm validate
 ```
+
+The command runs Astro diagnostics, ESLint, Prettier, the custom content audit and a full production build.
+
+The custom audit validates frontmatter, duplicate slugs and titles, methodology and source sections, current-view article links, featured-article consistency and required downloadable assets.
+
+## Publishing research
+
+Research articles are stored in `src/content/blog` as MDX files. Each public article should include:
+
+- complete frontmatter and a unique slug
+- a clear stance and time horizon where relevant
+- scenario analysis and explicit invalidation conditions
+- a research-methodology section
+- a dated source list and informational-use disclaimer
+
+Homepage market views are maintained in `src/data/currentViews.ts`. When a view has a completed article, set its `href` to the article slug and remove any `researchStatus` placeholder.
+
+## Models and downloads
+
+- Public model summaries: `src/pages/models/`
+- Public project page: `src/pages/projects/`
+- Downloadable files: `public/downloads/`
+- Reproducibility package: `public/projects/commodity-regime-analysis/`
+
+Do not commit generated folders such as `node_modules`, `.astro` or `dist`. Vercel installs dependencies from `package.json` and `pnpm-lock.yaml` and creates the production build automatically.
 
 ## Production deployment
 
-The site is configured for Vercel. Generated folders such as `node_modules`, `.astro` and `dist` are intentionally excluded from version control and should not be uploaded manually. Vercel installs dependencies from `package.json` and `pnpm-lock.yaml`, then runs the production build.
+The repository is intended to be connected to Vercel through GitHub. Each push to `main` triggers a production build; other branches can receive preview deployments.
 
-Before connecting the final custom domain, update `SITE.website` in `src/config.ts`:
+After Vercel assigns the final production address, update `SITE.website` in `src/config.ts`:
 
 ```ts
-website: 'https://example.com/',
+website: 'https://your-project.vercel.app/',
 ```
 
-Keep the trailing slash.
+Keep the trailing slash. This value supplies canonical URLs, the sitemap, RSS metadata, Open Graph metadata and structured data.
 
-## Content
+## Project maintenance
 
-Research articles are stored in `src/content/blog`. Downloadable models and related files are stored under `public/models` and `public/downloads`.
+The site intentionally omits the inherited theme demo content, sponsorship configuration, sample workflows, unused visual assets and unused math-rendering dependencies. Dollar-denominated market ranges are rendered as normal prose rather than being interpreted as LaTeX.
 
-## Attribution
-
-The site is based on the MIT-licensed Astro AntfuStyle Theme. See `LICENSE` for the original licence terms.
+The project retains its upstream MIT licence and attribution in `LICENSE`.

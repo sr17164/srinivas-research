@@ -10,7 +10,7 @@ export interface CurrentView {
   researchStatus?: string
 }
 
-export const CURRENT_VIEWS_LAST_REVIEWED = '2026-07-19'
+export const CURRENT_VIEWS_LAST_REVIEWED = '2026-07-20'
 
 export const currentViews: CurrentView[] = [
   {
@@ -26,15 +26,15 @@ export const currentViews: CurrentView[] = [
     stance: 'Bearish',
     timeHorizon: '3–6 months',
     rationale:
-      'Recovering Gulf supply and weak full-year demand should move the market towards surplus later in the year, although renewed regional disruption remains the principal upside risk.',
-    researchStatus: 'Research in progress',
+      'Recovering Gulf flows and an expected return to inventory builds in 4Q26 support a bearish medium-term view, although renewed regional disruption remains the principal upside risk.',
+    href: '/research/why-i-am-bearish-brent-crude-into-late-2026/',
   },
   {
     market: 'Copper',
     stance: 'Neutral',
     timeHorizon: '3–6 months',
     rationale:
-      'A small projected refined surplus and slower demand growth argue against chasing elevated prices, while constrained mine supply and long-term grid, electrification and data-centre demand support the structural case.',
-    researchStatus: 'Research in progress',
+      'Record prices and elevated visible stocks argue against chasing the rally, while regional inventory distortion, tight concentrate supply and long-term grid and data-centre demand prevent a clean bearish view.',
+    href: '/research/why-i-am-neutral-copper-after-the-2026-rally/',
   },
 ]

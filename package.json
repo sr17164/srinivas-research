@@ -18,7 +18,8 @@
     "toolbar:on": "astro preferences enable devToolbar",
     "toolbar:off": "astro preferences disable devToolbar",
     "prepare": "simple-git-hooks",
-    "postbuild": "pagefind --site dist --exclude-selectors \"pre\" --include-characters \"<>\" && del-cli \"dist/pagefind/*ui*\""
+    "postbuild": "pagefind --site dist --exclude-selectors \"pre\" --include-characters \"<>\" && del-cli \"dist/pagefind/*ui*\"",
+    "validate": "pnpm check && pnpm lint && pnpm format && python3 scripts/site_audit.py && pnpm build"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.9",
@@ -57,12 +58,10 @@
     "rehype-autolink-headings": "^7.1.0",
     "rehype-callouts": "^2.2.0",
     "rehype-external-links": "^3.0.0",
-    "rehype-katex": "^7.0.1",
     "rehype-wrap-all": "^1.1.0",
     "remark-directive": "^4.0.0",
     "remark-directive-sugar": "^2.0.1",
     "remark-imgattr": "^1.1.1",
-    "remark-math": "^6.0.0",
     "satori": "^0.26.0",
     "satori-html": "^0.3.2",
     "sharp": "^0.35.3",

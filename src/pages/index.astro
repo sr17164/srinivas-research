@@ -4,6 +4,7 @@ import { render } from 'astro:content'
 import BaseLayout from '~/layouts/BaseLayout.astro'
 import Link from '~/components/base/Link.astro'
 import CurrentViews from '~/components/research/CurrentViews.astro'
+import MarketHero from '~/components/home/MarketHero.astro'
 
 import { getFilteredPosts, getSortedPosts, getMinutesRead } from '~/utils/data'
 import { formatDate } from '~/utils/datetime'
@@ -60,41 +61,10 @@ const siteSections = [
 <BaseLayout
   title="SM Research"
   description="Independent research on commodity markets, macroeconomic forces, valuation and capital allocation."
-  bgType="plum"
   ogImage={true}
 >
   <div class="research-home">
-    <section class="home-hero">
-      <p class="home-eyebrow">Independent investment research</p>
-
-      <h1>
-        Research on markets,<br />
-        valuation and capital allocation.
-      </h1>
-
-      <p class="home-hero-copy">
-        Long-form, evidence-driven analysis of commodity markets and
-        macroeconomic themes, supported by financial modelling and quantitative
-        research.
-      </p>
-
-      <div class="home-actions">
-        <Link
-          href={withBasePath('/research/')}
-          class="home-primary-action border-b-none!"
-        >
-          Explore research
-          <span aria-hidden="true">→</span>
-        </Link>
-
-        <Link
-          href={withBasePath('/about/')}
-          class="home-secondary-action border-b-none!"
-        >
-          About the publication
-        </Link>
-      </div>
-    </section>
+    <MarketHero />
     <CurrentViews />
     {
       featuredPost && (
@@ -282,16 +252,15 @@ const siteSections = [
 </BaseLayout>
 
 <style>
+  :global(html:not(.dark) body) {
+    background: #f5f7f8;
+  }
+
   .research-home {
     width: min(100%, 72rem);
-    margin: 0 auto;
+    margin: -3.25rem auto 0;
   }
 
-  .home-hero {
-    padding: clamp(3rem, 8vw, 7rem) 0 clamp(4rem, 9vw, 8rem);
-  }
-
-  .home-eyebrow,
   .home-section-heading > p,
   .home-about-label p {
     margin: 0;
@@ -305,55 +274,6 @@ const siteSections = [
     opacity: 0.5;
   }
 
-  .home-hero h1 {
-    max-width: 65rem;
-    margin: 1.4rem 0 1.8rem;
-
-    font-family: Georgia, Cambria, 'Times New Roman', Times, serif;
-    font-size: clamp(3.3rem, 8.5vw, 7rem);
-    font-weight: 500;
-    line-height: 0.96;
-    letter-spacing: -0.058em;
-
-    text-wrap: balance;
-  }
-
-  .home-hero-copy {
-    max-width: 40rem;
-    margin: 0;
-
-    font-size: clamp(1.05rem, 2vw, 1.3rem);
-    line-height: 1.65;
-
-    opacity: 0.64;
-    text-wrap: pretty;
-  }
-
-  .home-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.85rem 1.5rem;
-    align-items: center;
-
-    margin-top: 2.4rem;
-  }
-
-  .home-primary-action {
-    display: inline-flex;
-    gap: 0.8rem;
-    align-items: center;
-
-    padding: 0.85rem 1.1rem;
-
-    background: var(--c-text);
-    color: var(--c-bg);
-
-    font-size: 0.86rem;
-    font-weight: 650;
-    text-decoration: none;
-  }
-
-  .home-secondary-action,
   .home-section-link,
   .home-about-link {
     display: inline-flex;
@@ -370,7 +290,6 @@ const siteSections = [
     transition: opacity 160ms ease;
   }
 
-  .home-secondary-action:hover,
   .home-section-link:hover,
   .home-about-link:hover {
     opacity: 1;
@@ -634,14 +553,6 @@ const siteSections = [
   }
 
   @media (max-width: 720px) {
-    .home-hero {
-      padding-top: 2.5rem;
-    }
-
-    .home-hero h1 {
-      font-size: clamp(3rem, 15vw, 4.8rem);
-    }
-
     .featured-report,
     .latest-research-link {
       grid-template-columns: minmax(0, 1fr) 1.25rem;
@@ -689,7 +600,6 @@ const siteSections = [
 
   @media (prefers-reduced-motion: reduce) {
     .featured-report,
-    .home-secondary-action,
     .home-section-link,
     .home-about-link,
     .report-type-card {
