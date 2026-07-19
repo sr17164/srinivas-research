@@ -1,0 +1,88 @@
+---
+interface Props {
+  title: string
+  label?: string
+  compact?: boolean
+}
+
+const { title, label, compact = false } = Astro.props
+---
+
+<aside class:list={['research-panel', { 'research-panel--compact': compact }]}>
+  <header class="panel-header">
+    {label && <span class="panel-label">{label}</span>}
+    <h3>{title}</h3>
+  </header>
+
+  <div class="panel-content">
+    <slot />
+  </div>
+</aside>
+
+<style>
+  .research-panel {
+    box-sizing: border-box;
+    width: 100%;
+    margin: 2rem 0 2.5rem;
+    padding: 1.35rem 1.5rem 1.4rem;
+    border: 1px solid color-mix(in srgb, currentColor 14%, transparent);
+    border-radius: 0.45rem;
+    background: color-mix(in srgb, currentColor 2.75%, transparent);
+  }
+
+  .research-panel--compact {
+    padding: 1.1rem 1.25rem;
+  }
+
+  .panel-header {
+    margin-bottom: 1rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid color-mix(in srgb, currentColor 11%, transparent);
+  }
+
+  .panel-label {
+    display: block;
+    margin-bottom: 0.35rem;
+    font-size: 0.68rem;
+    font-weight: 650;
+    line-height: 1.2;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    opacity: 0.5;
+  }
+
+  h3 {
+    margin: 0;
+    font-size: 1.08rem;
+    line-height: 1.35;
+  }
+
+  .panel-content :global(> :first-child) {
+    margin-top: 0;
+  }
+
+  .panel-content :global(> :last-child) {
+    margin-bottom: 0;
+  }
+
+  .panel-content :global(p) {
+    font-size: 0.95rem;
+    line-height: 1.65;
+  }
+
+  .panel-content :global(ul),
+  .panel-content :global(ol) {
+    margin-top: 0.75rem;
+    margin-bottom: 0;
+  }
+
+  .panel-content :global(li) {
+    margin: 0.3rem 0;
+  }
+
+  @media (max-width: 640px) {
+    .research-panel {
+      padding: 1.15rem 1.2rem;
+    }
+  }
+</style>

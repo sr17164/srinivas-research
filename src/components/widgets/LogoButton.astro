@@ -1,0 +1,78 @@
+---
+import Link from '~/components/base/Link.astro'
+import { withBasePath } from '~/utils/path'
+---
+
+<Link
+  class="select-none op-transition logo-link"
+  href={withBasePath('/')}
+  aria-label="SM Research homepage"
+  aria-current={Astro.url.pathname === withBasePath('/') ? 'page' : false}
+>
+  <span class="logo-container">
+    <img
+      src={withBasePath('/logo-dark.png')}
+      alt="SM Research"
+      class="site-logo logo-for-light-mode"
+      draggable="false"
+    />
+
+    <img
+      src={withBasePath('/logo-light.png')}
+      alt=""
+      aria-hidden="true"
+      class="site-logo logo-for-dark-mode"
+      draggable="false"
+    />
+  </span>
+
+  <style>
+    .logo-link {
+      display: inline-flex;
+      align-items: center;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+
+    .logo-container {
+      position: relative;
+      display: block;
+      width: 11.5rem;
+      aspect-ratio: 1410 / 338;
+    }
+
+    .site-logo {
+      position: absolute;
+      inset: 0;
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: left center;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    .logo-for-light-mode {
+      display: block;
+    }
+
+    .logo-for-dark-mode {
+      display: none;
+    }
+
+    :global(html.dark) .logo-for-light-mode {
+      display: none;
+    }
+
+    :global(html.dark) .logo-for-dark-mode {
+      display: block;
+    }
+
+    @media (max-width: 767.9px) {
+      .logo-container {
+        width: 9.25rem;
+      }
+    }
+  </style>
+</Link>

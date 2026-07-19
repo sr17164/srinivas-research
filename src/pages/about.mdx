@@ -1,0 +1,253 @@
+---
+title: About SM Research
+description: Why SM Research exists, how its investment research is produced and how views are evaluated over time.
+subtitle: A public record of investment theses, models and decisions under uncertainty.
+bgType: plum
+ogImage: true
+---
+
+import BaseLayout from '~/layouts/BaseLayout.astro'
+import StandardLayout from '~/layouts/StandardLayout.astro'
+import PageNavigation from '~/components/nav/PageNavigation.astro'
+
+<BaseLayout
+  title={frontmatter.title}
+  description={frontmatter.description}
+  bgType={frontmatter.bgType}
+  ogImage={frontmatter.ogImage}
+>
+  <StandardLayout
+    class="max-w-240 group/content"
+    title={frontmatter.title}
+    subtitle={frontmatter.subtitle}
+    isCentered={false}
+  >
+    <div slot="article" class="prose mx-auto">
+      <h2>Why It Exists</h2>
+
+      <p>
+        SM Research is an independent investment research publication and a
+        public record of how I analyse markets.
+      </p>
+
+      <p>
+        An investment thesis can appear convincing while it remains informal.
+        Writing it down creates a higher standard. The opportunity must be
+        defined, the assumptions made explicit, the relevant evidence
+        separated from narrative and the conditions that would invalidate the
+        conclusion stated in advance.
+      </p>
+
+      <p>
+        The purpose is not simply to publish market opinions or assemble a
+        catalogue of successful calls. It is to make the reasoning behind each
+        decision inspectable and to create a body of work through which that
+        reasoning can be evaluated over time.
+      </p>
+
+      <p>
+        SM Research is not presented as an investment firm or advisory service.
+        It is the research record of an individual analyst developing a more
+        disciplined approach to markets, valuation and capital allocation.
+      </p>
+
+      <h2>Where It Began</h2>
+
+      <p>
+        My interest in markets began with uncertainty and risk transfer rather
+        than with stock prices.
+      </p>
+
+      <p>
+        My mother's side of the family comes from a farming background, so
+        agriculture never felt like an abstract component of the economy.
+        Livelihoods could be affected by weather, harvest conditions and
+        commodity prices that changed materially from one season to the next.
+      </p>
+
+      <p>
+        Learning how futures markets allow producers to hedge prices changed
+        the way I understood finance. Behind a contract may be a farmer
+        protecting the value of a harvest, an airline managing fuel exposure or
+        a manufacturer securing the cost of a critical input. Markets became
+        mechanisms through which businesses transfer, price and manage
+        uncertainty.
+      </p>
+
+      <p>
+        Many of the earliest reports published here originated while I served
+        as Commodities Sector Head at Queen's Tower Capital, Imperial College
+        London's student-managed investment fund. I researched and prepared the
+        underlying commodity work before presenting recommendations through the
+        fund's investment process and coordinating coverage across a team of
+        five analysts.
+      </p>
+
+      <p>
+        Those presentations have not been reproduced unchanged. Each has been
+        rewritten as a long-form SM Research report, with material figures
+        checked against public sources and the original investment case
+        separated from information that became available later. Retrospective
+        outcomes are presented independently so that subsequent developments do
+        not alter the original reasoning.
+      </p>
+
+      <h2>Research Approach</h2>
+
+      <p>
+        Each report begins with a defined investment question rather than a
+        predetermined conclusion. The analysis then considers the market
+        structure, supply and demand balance, macroeconomic environment,
+        valuation, positioning, catalysts and principal risks relevant to that
+        question.
+      </p>
+
+      <p>
+        A useful thesis should identify more than a directional view. Where the
+        evidence permits, it should define an investment horizon, reference
+        price, expected catalysts, target framework and the conditions under
+        which the view should be reconsidered.
+      </p>
+
+      <p>
+        Sources are selected with preference for primary data and institutional
+        research. Facts, assumptions and interpretations should remain
+        distinguishable. Where a number cannot be supported with sufficient
+        confidence, it should be qualified or removed rather than presented
+        with false precision.
+      </p>
+
+      <p>
+        Financial models and quantitative methods are used where they improve
+        the analysis. They are intended to make assumptions clearer and
+        scenarios more testable, not to replace economic reasoning with
+        complexity.
+      </p>
+
+      <h2>Publication Standard</h2>
+
+      <p>
+        Historical reports distinguish between the evidence available when a
+        view was formed and information learned later. Outcome sections are
+        therefore retrospective evaluations rather than revisions of the
+        original record.
+      </p>
+
+      <p>
+        Where a model can be shared responsibly, the supporting code, data,
+        outputs and limitations are published alongside it. Where third-party
+        assessment material or proprietary templates cannot be redistributed,
+        the methodology and conclusions are documented without exposing the
+        underlying file.
+      </p>
+
+      <p>
+        Material errors are corrected rather than defended. The revised
+        commodity-regime project, for example, preserves its original analysis
+        while withdrawing conclusions that did not survive a data and
+        specification audit. A correction that narrows a result is more useful
+        than precision unsupported by the evidence.
+      </p>
+
+      <h2>Experience Informing the Research</h2>
+
+      <p>
+        I study Economics, Finance & Data Science at Imperial College London.
+        Short programmes at Barings, BNP Paribas and Millennium have exposed me
+        to high-yield credit, cross-asset markets, market making and systematic
+        research. These experiences inform the questions I ask, but they are
+        not presented as authority for a conclusion; the evidence in each
+        report must stand on its own.
+      </p>
+
+      <p>
+        Competitive projects have also shaped the way I work under uncertainty.
+        My teams placed first in QuantChallenge 2025 and received Jump Trading's
+        Most Creative Algorithm award at Imperial Algothon 2026. The value of
+        those exercises was not only the result, but the need to convert a view
+        into testable rules, manage execution constraints and update quickly as
+        new information arrived.
+      </p>
+
+      <h2>Evaluating a Thesis</h2>
+
+      <p>
+        Investment research should remain open to revision. An update should
+        explain what changed, which assumptions survived, which weakened and
+        whether the original risk framework remains appropriate.
+      </p>
+
+      <p>
+        Failed theses will remain available. Removing unsuccessful ideas would
+        create a cleaner record, but a less credible and less useful one. The
+        important questions are whether the original process was reasonable,
+        whether the risks were identified honestly and which assumption
+        ultimately proved incorrect.
+      </p>
+
+      <p>
+        Correct conclusions can also result from weak reasoning or favourable
+        luck. Outcomes are therefore evaluated alongside the quality of the
+        process rather than treated as a substitute for it.
+      </p>
+
+      <h2>How I Think About Uncertainty</h2>
+
+      <p>
+        One principle that has influenced my approach comes from the Bhagavad
+        Gita: focus on the quality of your actions rather than becoming attached
+        to their outcomes.
+      </p>
+
+      <p>
+        In markets, that does not mean that outcomes are unimportant. It means
+        separating the quality of a decision from the noise and randomness that
+        may shape its immediate result. A carefully researched decision can
+        lose money, while a poorly reasoned decision can occasionally be
+        rewarded.
+      </p>
+
+      <p>
+        The factors within my control are the depth of the research, the
+        clarity of the assumptions, the treatment of risk and the willingness
+        to change a view when better evidence emerges. A thesis should be held
+        with enough conviction to act on it, but not with so much attachment
+        that contradictory evidence is ignored.
+      </p>
+
+      <p>
+        Criticism is therefore useful. A competing interpretation may reveal a
+        missing variable, an underestimated risk or a weakness in the causal
+        reasoning. Research improves when it is explicit enough to be
+        challenged.
+      </p>
+
+      <h2>Current Focus</h2>
+
+      <ul>
+        <li>Commodity markets, physical balances and global supply chains</li>
+        <li>Macroeconomic forces, positioning and market structure</li>
+        <li>Financial modelling, valuation and capital allocation</li>
+        <li>Quantitative analysis of markets and investment regimes</li>
+      </ul>
+
+      <h2>About the Author</h2>
+
+      <p>
+        SM Research is written and edited by Srinivas Medida, an Economics,
+        Finance & Data Science student at Imperial College London.
+      </p>
+
+      <p>
+        My interests sit at the intersection of commodity markets,
+        macroeconomics, financial modelling and quantitative analysis. SM
+        Research is intended to become a continuing record of how those
+        interests, and the analytical framework supporting them, develop over
+        time.
+      </p>
+
+      <PageNavigation current="about" />
+    </div>
+
+  </StandardLayout>
+</BaseLayout>

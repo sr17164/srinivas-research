@@ -1,0 +1,53 @@
+{
+  "sample_start": "2017-05",
+  "sample_end": "2025-12",
+  "observations": 89,
+  "excluded_artificial_zero_rows": 14,
+  "primary_threshold_percent": 3.0,
+  "hac_lags": 3,
+  "brent_energy": {
+    "Threshold": 3.0,
+    "Relationship": "Brent \u2192 energy equities",
+    "Dependent": "EnergyETF",
+    "Commodity": "Brent",
+    "Lower_Inflation_Beta": -0.03012554471511312,
+    "High_Inflation_Beta": 0.49294804160745626,
+    "Regime_Difference": 0.5230735863225694,
+    "Difference_HAC_PValue": 0.015558761377137008,
+    "Lower_Beta_HAC_PValue": 0.8683512556729983,
+    "Model_R_Squared": 0.15398517600705086,
+    "Observations": 89,
+    "High_Inflation_Observations": 35,
+    "Lower_Inflation_Observations": 54
+  },
+  "gold_mining": {
+    "Threshold": 3.0,
+    "Relationship": "Gold \u2192 mining equities",
+    "Dependent": "MiningETF",
+    "Commodity": "Gold",
+    "Lower_Inflation_Beta": 0.2976915048579152,
+    "High_Inflation_Beta": 0.5164566986399638,
+    "Regime_Difference": 0.21876519378204862,
+    "Difference_HAC_PValue": 0.6802821470607383,
+    "Lower_Beta_HAC_PValue": 0.22828567259136479,
+    "Model_R_Squared": 0.27065738024647057,
+    "Observations": 89,
+    "High_Inflation_Observations": 35,
+    "Lower_Inflation_Observations": 54
+  },
+  "copper_mining": {
+    "Threshold": 3.0,
+    "Relationship": "Copper \u2192 mining equities",
+    "Dependent": "MiningETF",
+    "Commodity": "Copper",
+    "Lower_Inflation_Beta": 0.42847427834935725,
+    "High_Inflation_Beta": 0.7565361293971229,
+    "Regime_Difference": 0.32806185104776564,
+    "Difference_HAC_PValue": 0.35529841364744574,
+    "Lower_Beta_HAC_PValue": 0.026555480289091618,
+    "Model_R_Squared": 0.27065738024647057,
+    "Observations": 89,
+    "High_Inflation_Observations": 35,
+    "Lower_Inflation_Observations": 54
+  }
+}

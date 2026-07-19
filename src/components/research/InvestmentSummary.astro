@@ -1,0 +1,192 @@
+---
+interface Props {
+  stance: string
+  position?: string
+  horizon?: string
+  drivers?: string[]
+}
+
+const { stance, position, horizon, drivers = [] } = Astro.props
+
+const facts = [
+  position ? { label: 'Position', value: position } : null,
+  horizon ? { label: 'Time Horizon', value: horizon } : null,
+].filter(
+  (
+    item
+  ): item is {
+    label: string
+    value: string
+  } => item !== null
+)
+---
+
+<aside class="investment-summary" aria-label="Investment summary">
+  <div class="summary-heading">
+    <span class="summary-eyebrow">Investment view</span>
+    <strong class="summary-stance">{stance}</strong>
+  </div>
+
+  {
+    facts.length > 0 && (
+      <dl class="summary-facts">
+        {facts.map(({ label, value }) => (
+          <div class="summary-fact">
+            <dt>{label}</dt>
+            <dd>{value}</dd>
+          </div>
+        ))}
+      </dl>
+    )
+  }
+
+  {
+    drivers.length > 0 && (
+      <div class="summary-drivers">
+        <span class="drivers-label">Key drivers</span>
+
+        <ul>
+          {drivers.map((driver) => (
+            <li>{driver}</li>
+          ))}
+        </ul>
+      </div>
+    )
+  }
+</aside>
+
+<style>
+  .investment-summary {
+    width: 100%;
+    box-sizing: border-box;
+    margin: 2rem 0 2.75rem;
+    padding: 1.4rem 1.5rem;
+    border: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+    border-left-width: 3px;
+    border-radius: 0.45rem;
+    background: color-mix(in srgb, currentColor 3.5%, transparent);
+  }
+
+  .summary-heading {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1.25rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid color-mix(in srgb, currentColor 12%, transparent);
+  }
+
+  .summary-eyebrow,
+  .drivers-label {
+    font-size: 0.72rem;
+    font-weight: 650;
+    line-height: 1.2;
+    letter-spacing: 0.095em;
+    text-transform: uppercase;
+    opacity: 0.55;
+  }
+
+  .summary-stance {
+    font-family: inherit;
+    font-size: clamp(1.25rem, 3vw, 1.7rem);
+    line-height: 1.15;
+    text-align: right;
+  }
+
+  .summary-facts {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin: 0;
+    padding: 1.15rem 0;
+    border-bottom: 1px solid color-mix(in srgb, currentColor 12%, transparent);
+  }
+
+  .summary-fact {
+    min-width: 0;
+    padding: 0 1rem;
+    border-right: 1px solid color-mix(in srgb, currentColor 12%, transparent);
+  }
+
+  .summary-fact:first-child {
+    padding-left: 0;
+  }
+
+  .summary-fact:last-child {
+    padding-right: 0;
+    border-right: 0;
+  }
+
+  dt {
+    margin-bottom: 0.35rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.055em;
+    text-transform: uppercase;
+    opacity: 0.5;
+  }
+
+  dd {
+    margin: 0;
+    font-size: 0.96rem;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  .summary-drivers {
+    padding-top: 1rem;
+  }
+
+  .summary-drivers ul {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem 1.5rem;
+    margin: 0.75rem 0 0;
+    padding-left: 1.1rem;
+  }
+
+  .summary-drivers li {
+    margin: 0;
+    padding-left: 0.15rem;
+    font-size: 0.92rem;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 640px) {
+    .investment-summary {
+      padding: 1.2rem;
+    }
+
+    .summary-heading {
+      display: block;
+    }
+
+    .summary-stance {
+      display: block;
+      margin-top: 0.45rem;
+      text-align: left;
+    }
+
+    .summary-facts {
+      grid-template-columns: 1fr;
+    }
+
+    .summary-fact {
+      padding: 0.8rem 0;
+      border-right: 0;
+      border-bottom: 1px solid color-mix(in srgb, currentColor 10%, transparent);
+    }
+
+    .summary-fact:first-child {
+      padding-top: 0;
+    }
+
+    .summary-fact:last-child {
+      padding-bottom: 0;
+      border-bottom: 0;
+    }
+
+    .summary-drivers ul {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

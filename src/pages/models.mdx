@@ -1,0 +1,205 @@
+---
+title: Models
+subtitle: Financial modelling, valuation and quantitative analysis
+description: Financial models and quantitative projects developed to analyse markets, businesses and transactions.
+bgType: dot
+ogImage: true
+---
+
+import BaseLayout from '~/layouts/BaseLayout.astro'
+import StandardLayout from '~/layouts/StandardLayout.astro'
+import PageNavigation from '~/components/nav/PageNavigation.astro'
+import ModelProject from '~/components/models/ModelProject.astro'
+import SelectedWork from '~/components/models/SelectedWork.astro'
+
+<BaseLayout
+  title={frontmatter.title}
+  description={frontmatter.description}
+  bgType={frontmatter.bgType}
+  ogImage={frontmatter.ogImage}
+>
+  <StandardLayout
+    class="max-w-240 group/content"
+    title={frontmatter.title}
+    subtitle={frontmatter.subtitle}
+    isCentered={false}
+  >
+    <div slot="article" class="prose mx-auto">
+      <p>
+        This section documents selected financial models, empirical research
+        and investment case studies. Each entry explains the analytical
+        question, methodology and principal outputs rather than presenting a
+        spreadsheet or codebase without context.
+      </p>
+
+      <h2>Financial Models</h2>
+
+      <ModelProject
+        category="Valuation simulation"
+        title="Tesla Operating Model and Valuation"
+        date="July 2026"
+        description="A timed Excel simulation covering revenue forecasting, integrated income-statement projections, cost of capital, discounted cash flow valuation and relative valuation."
+        result="Ranked 7th of 63 · 85%"
+        facts={[
+          { label: 'Company', value: 'Tesla, Inc.' },
+          {
+            label: 'Methods',
+            value: 'Operating model · DCF · trading comparables',
+          },
+          { label: 'Format', value: 'Timed Excel assessment' },
+        ]}
+        note="Completed within an AmplifyME valuation simulation. The underlying workbook is not publicly distributed because it contains third-party assessment material."
+      >
+        <p>
+          The model forecast Tesla's income statement through 2030 using
+          alternative revenue scenarios, operating-margin assumptions and
+          working-capital drivers. I estimated beta from daily Tesla and Nasdaq
+          returns, calculated WACC and valued the business using a
+          perpetuity-growth DCF.
+        </p>
+
+        <ul>
+          <li>
+            Built revenue, cost, operating-income, EBITDA and unlevered
+            free-cash-flow projections.
+          </li>
+          <li>
+            Constructed WACC from the risk-free rate, equity beta, implied
+            equity-risk premium and after-tax cost of debt.
+          </li>
+          <li>
+            Compared DCF output with trading multiples and a valuation football
+            field.
+          </li>
+        </ul>
+      </ModelProject>
+
+      <h2>Empirical Research</h2>
+
+      <ModelProject
+        category="Revised empirical study"
+        title="Inflation Regimes and Commodity-Producer Equity Sensitivity"
+        date="May–July 2026"
+        description="An audited Python and Excel study of whether the sensitivity of commodity-producer equity returns to underlying commodity returns changes when inflation is elevated."
+        facts={[
+          { label: 'Sample', value: '89 usable monthly observations' },
+          {
+            label: 'Method',
+            value: 'Interaction OLS · Newey–West/HAC inference',
+          },
+          { label: 'Tools', value: 'Python · Excel · statsmodels' },
+        ]}
+        image="/models/commodity-equity-sensitivity.png"
+        imageAlt="Estimated Brent, gold and copper return sensitivities in lower- and higher-inflation regimes"
+        actions={[
+          {
+            label: 'Read methodology',
+            href: '/models/commodity-regime-analysis/',
+          },
+          {
+            label: 'Browse project files',
+            href: '/projects/commodity-regime-analysis/',
+          },
+          {
+            label: 'Download Excel model',
+            href: '/downloads/commodity-regime-model.xlsx',
+            download: true,
+          },
+          {
+            label: 'Download full project',
+            href: '/downloads/commodity-regime-analysis.zip',
+            download: true,
+          },
+        ]}
+        note="The original specification and write-up are retained inside the full project archive. The published conclusions reflect the corrected model."
+      >
+        <p>
+          A data audit identified 14 observations created by forward-filling
+          missing futures prices before calculating returns. The revised study
+          excludes those artificial zero-return months, classifies the regime
+          using the previous month's headline CPI rate and estimates
+          full-sample interaction models with Newey–West standard errors.
+        </p>
+
+        <ul>
+          <li>
+            Brent's estimated sensitivity to energy-equity returns increased
+            from −0.030 in lower-inflation months to 0.493 in high-inflation
+            months; the difference was statistically significant (HAC p =
+            0.016).
+          </li>
+          <li>
+            The original claim of a reliable high-inflation increase in gold
+            sensitivity was withdrawn after the correction (interaction p =
+            0.680).
+          </li>
+          <li>
+            Copper remained positively associated with mining-equity returns,
+            but the estimated regime difference was not statistically precise
+            at the primary 3% threshold (interaction p = 0.355).
+          </li>
+        </ul>
+      </ModelProject>
+
+      <h2>Selected Analytical Work</h2>
+
+      <p>
+        The projects below extend beyond the two fully published models. They
+        are included as concise records of the question and analytical process;
+        supporting files will only be published where they can be independently
+        checked and redistributed appropriately.
+      </p>
+
+      <SelectedWork
+        items={[
+          {
+            category: 'Quantitative competition',
+            title: 'QuantChallenge 2025',
+            date: '2025',
+            description:
+              'Developed and tested a systematic trading approach in a team competition combining empirical signal research, model selection and live execution under changing market conditions.',
+            result: '1st of 1,417 teams · $10,000 Five Rings prize',
+          },
+          {
+            category: 'Algorithmic trading',
+            title: 'Imperial Algothon 2026',
+            date: '2026',
+            description:
+              'Built an automated Python trading system for a live exchange simulation, combining directional signals, inventory-aware market making and relative-value logic.',
+            result: "Jump Trading's Most Creative Algorithm award",
+          },
+          {
+            category: 'Private equity case study',
+            title: 'Business Services Buyout Memorandum',
+            date: 'May 2026',
+            description:
+              'Analysed European business-services subsectors using comparable companies, precedent transactions and DCF, focusing on the valuation divide between AI-exposed transactional services and regulatory-facing recurring revenue.',
+          },
+          {
+            category: 'Infrastructure case study',
+            title: 'Digital Infrastructure Acquisition Memorandum',
+            date: 'May 2026',
+            description:
+              'Evaluated European data-centre platforms through power availability, grid access, utilisation, development pipelines, customer concentration and comparable transactions.',
+          },
+          {
+            category: 'Private markets case study',
+            title: 'Private Equity Secondaries Memorandum',
+            date: 'May 2026',
+            description:
+              'Compared LP-led portfolios and GP-led continuation vehicles through portfolio quality, vintage and concentration risk, NAV pricing, cash-flow timing and incentive alignment.',
+          },
+        ]}
+      />
+
+      <p>
+        These projects are presented as records of analytical process rather
+        than definitive forecasts. Methodological limitations, revisions and
+        failed assumptions remain part of the published record.
+      </p>
+
+      <PageNavigation current="models" />
+    </div>
+
+  </StandardLayout>
+</BaseLayout>

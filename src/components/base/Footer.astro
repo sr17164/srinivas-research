@@ -1,0 +1,97 @@
+---
+import Link from '~/components/base/Link.astro'
+
+import { SITE } from '~/config'
+import { withBasePath } from '~/utils/path'
+
+const currentYear = new Date().getFullYear()
+
+const internalLinks = [
+  { label: 'Research', href: '/research/' },
+  { label: 'Models', href: '/models/' },
+  { label: 'About', href: '/about/' },
+]
+
+const contactLinks = [
+  {
+    label: 'LinkedIn',
+    href: 'https://www.linkedin.com/in/srinivasmedida',
+    target: '_blank',
+    rel: 'noopener noreferrer',
+  },
+  {
+    label: 'Email',
+    href: 'mailto:srinivas.medida08@gmail.com',
+  },
+]
+---
+
+<footer
+  class="slide-enter animate-delay-1600! mt-auto border-t border-[#8883] px-7 print:hidden"
+>
+  <div class="mx-auto max-w-300 py-12">
+    <div class="flex flex-col items-center text-center">
+      <Link
+        class="text-lg font-semibold text-current no-underline! transition-opacity hover:op-70"
+        href={withBasePath('/')}
+      >
+        SM Research
+      </Link>
+
+      <p class="mt-3 mb-0 max-w-150 text-sm leading-relaxed op-60">
+        Independent research on commodity markets, macroeconomic forces,
+        valuation and capital allocation, supported by financial modelling and
+        quantitative analysis.
+      </p>
+
+      <p class="mt-3 mb-0 max-w-180 text-xs leading-relaxed op-45">
+        A continuing record of research, investment ideas and analytical
+        development over time.
+      </p>
+
+      <p class="mt-4 mb-0 max-w-180 text-xs leading-relaxed op-40">
+        The material published on SM Research is provided for educational and
+        informational purposes only. It does not constitute investment advice or
+        a recommendation to buy or sell any financial instrument.
+      </p>
+
+      <nav
+        class="mt-7 flex flex-wrap justify-center gap-x-5 gap-y-2 text-sm"
+        aria-label="Footer navigation"
+      >
+        {
+          internalLinks.map((item) => (
+            <Link
+              class="text-current no-underline! op-55 transition-opacity hover:op-100"
+              href={withBasePath(item.href)}
+            >
+              {item.label}
+            </Link>
+          ))
+        }
+      </nav>
+
+      <div
+        class="mt-4 flex flex-wrap justify-center gap-x-5 gap-y-2 text-sm"
+        aria-label="Contact links"
+      >
+        {
+          contactLinks.map((item) => (
+            <Link
+              class="text-current no-underline! op-55 transition-opacity hover:op-100"
+              href={item.href}
+              target={item.target}
+              rel={item.rel}
+            >
+              {item.label}
+            </Link>
+          ))
+        }
+      </div>
+
+      <p class="mt-7 mb-0 text-xs op-40">
+        © {currentYear}&nbsp;{SITE.author}
+      </p>
+    </div>
+  </div>
+</footer>

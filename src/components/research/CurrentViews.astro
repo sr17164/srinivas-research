@@ -1,0 +1,415 @@
+---
+import Link from '~/components/base/Link.astro'
+
+import { CURRENT_VIEWS_LAST_REVIEWED, currentViews } from '~/data/currentViews'
+
+import { withBasePath } from '~/utils/path'
+
+const reviewedDate = new Intl.DateTimeFormat('en-GB', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+  timeZone: 'UTC',
+}).format(new Date(`${CURRENT_VIEWS_LAST_REVIEWED}T00:00:00Z`))
+
+const getStanceClass = (stance: string) => {
+  switch (stance) {
+    case 'Bullish':
+    case 'Mildly Bullish':
+      return 'current-view-stance--bullish'
+
+    case 'Bearish':
+    case 'Mildly Bearish':
+      return 'current-view-stance--bearish'
+
+    default:
+      return 'current-view-stance--neutral'
+  }
+}
+---
+
+<section class="current-views" aria-labelledby="current-views-title">
+  <header class="current-views-header">
+    <div>
+      <p class="current-views-eyebrow">Market positioning</p>
+
+      <h2 id="current-views-title">Current Views</h2>
+
+      <p class="current-views-intro">
+        A concise record of current directional views, monitored against
+        changing market conditions and updated when the underlying evidence
+        changes.
+      </p>
+    </div>
+
+    <p class="current-views-reviewed">
+      Last reviewed:
+      <time datetime={CURRENT_VIEWS_LAST_REVIEWED}>{reviewedDate}</time>
+    </p>
+  </header>
+
+  <div class="current-views-table-wrapper">
+    <table class="current-views-table">
+      <thead>
+        <tr>
+          <th scope="col">Market</th>
+          <th scope="col">View</th>
+          <th scope="col">Horizon</th>
+          <th scope="col">Rationale</th>
+          <th scope="col">
+            <span class="sr-only">Related research</span>
+          </th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {
+          currentViews.map((view) => (
+            <tr>
+              <th scope="row" class="current-view-market">
+                {view.market}
+              </th>
+
+              <td>
+                <span
+                  class:list={[
+                    'current-view-stance',
+                    getStanceClass(view.stance),
+                  ]}
+                >
+                  <span class="current-view-dot" aria-hidden="true" />
+                  {view.stance}
+                </span>
+              </td>
+
+              <td class="current-view-horizon">{view.timeHorizon}</td>
+
+              <td class="current-view-rationale">{view.rationale}</td>
+
+              <td class="current-view-link-cell">
+                {view.href ? (
+                  <Link
+                    href={withBasePath(view.href)}
+                    class="current-view-link border-b-none!"
+                    aria-label={`Read supporting research for ${view.market}`}
+                  >
+                    Read research
+                    <span aria-hidden="true">↗</span>
+                  </Link>
+                ) : view.researchStatus ? (
+                  <span class="current-view-status">{view.researchStatus}</span>
+                ) : null}
+              </td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <p class="current-views-note">
+    These views reflect current evidence for the stated investment horizon and
+    are updated when the underlying evidence changes.
+  </p>
+</section>
+
+<style>
+  .current-views {
+    width: 100%;
+    margin-top: 7rem;
+  }
+
+  .current-views-header {
+    display: flex;
+    gap: 2rem;
+    align-items: end;
+    justify-content: space-between;
+
+    margin-bottom: 2rem;
+  }
+
+  .current-views-eyebrow {
+    margin: 0 0 0.75rem;
+
+    font-size: 0.72rem;
+    font-weight: 650;
+    line-height: 1;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+
+    opacity: 0.48;
+  }
+
+  .current-views h2 {
+    margin: 0;
+
+    font-family: Georgia, Cambria, 'Times New Roman', Times, serif;
+    font-size: clamp(2.35rem, 5vw, 3.75rem);
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -0.045em;
+  }
+
+  .current-views-intro {
+    max-width: 40rem;
+    margin: 1rem 0 0;
+
+    font-size: 0.98rem;
+    line-height: 1.65;
+
+    opacity: 0.58;
+  }
+
+  .current-views-reviewed {
+    flex: none;
+    margin: 0 0 0.15rem;
+
+    font-size: 0.75rem;
+    line-height: 1.4;
+    white-space: nowrap;
+
+    opacity: 0.48;
+  }
+
+  .current-views-reviewed time {
+    margin-left: 0.25rem;
+  }
+
+  .current-views-table-wrapper {
+    overflow-x: auto;
+
+    border-top: 1px solid color-mix(in srgb, var(--c-text) 18%, transparent);
+    border-bottom: 1px solid color-mix(in srgb, var(--c-text) 18%, transparent);
+  }
+
+  .current-views-table {
+    width: 100%;
+    min-width: 52rem;
+
+    border-collapse: collapse;
+    table-layout: fixed;
+
+    font-size: 0.86rem;
+  }
+
+  .current-views-table th,
+  .current-views-table td {
+    padding: 1.35rem 1.1rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--c-text) 11%, transparent);
+
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .current-views-table tr:last-child th,
+  .current-views-table tr:last-child td {
+    border-bottom: 0;
+  }
+
+  .current-views-table thead th {
+    padding-top: 0.85rem;
+    padding-bottom: 0.85rem;
+
+    font-size: 0.68rem;
+    font-weight: 650;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+
+    opacity: 0.45;
+  }
+
+  .current-views-table th:nth-child(1) {
+    width: 14%;
+  }
+
+  .current-views-table th:nth-child(2) {
+    width: 17%;
+  }
+
+  .current-views-table th:nth-child(3) {
+    width: 14%;
+  }
+
+  .current-views-table th:nth-child(4) {
+    width: 43%;
+  }
+
+  .current-views-table th:nth-child(5) {
+    width: 12%;
+  }
+
+  .current-view-market {
+    font-family: Georgia, Cambria, 'Times New Roman', Times, serif;
+    font-size: 1.05rem;
+    font-weight: 500;
+    letter-spacing: -0.015em;
+  }
+
+  .current-view-stance {
+    display: inline-flex;
+    gap: 0.5rem;
+    align-items: center;
+
+    font-size: 0.75rem;
+    font-weight: 650;
+    line-height: 1.4;
+    white-space: nowrap;
+  }
+
+  .current-view-dot {
+    display: inline-block;
+
+    width: 0.42rem;
+    height: 0.42rem;
+    border-radius: 999px;
+
+    background: currentColor;
+  }
+
+  .current-view-stance--bullish {
+    color: color-mix(in srgb, #228b5b 78%, var(--c-text));
+  }
+
+  .current-view-stance--bearish {
+    color: color-mix(in srgb, #b44747 78%, var(--c-text));
+  }
+
+  .current-view-stance--neutral {
+    color: color-mix(in srgb, #82764f 70%, var(--c-text));
+  }
+
+  .current-view-horizon {
+    white-space: nowrap;
+    opacity: 0.55;
+  }
+
+  .current-view-rationale {
+    line-height: 1.6;
+    opacity: 0.7;
+  }
+
+  .current-view-link-cell {
+    text-align: right !important;
+  }
+
+  .current-view-link {
+    display: inline-flex;
+    gap: 0.35rem;
+    align-items: center;
+
+    font-size: 0.73rem;
+    font-weight: 600;
+    white-space: nowrap;
+
+    color: inherit;
+    text-decoration: none;
+
+    opacity: 0.5;
+    transition: opacity 160ms ease;
+  }
+
+  .current-view-link:hover {
+    opacity: 1;
+  }
+
+  .current-view-status {
+    font-size: 0.73rem;
+    font-weight: 500;
+    white-space: nowrap;
+
+    opacity: 0.38;
+  }
+
+  .current-views-note {
+    max-width: none;
+    margin: 1rem 0 0;
+
+    font-size: 0.72rem;
+    line-height: 1.55;
+
+    opacity: 0.4;
+  }
+
+  @media (max-width: 760px) {
+    .current-views {
+      margin-top: 5rem;
+    }
+
+    .current-views-header {
+      display: block;
+    }
+
+    .current-views-reviewed {
+      margin-top: 1.2rem;
+    }
+
+    .current-views-table-wrapper {
+      overflow: visible;
+      border-bottom: 0;
+    }
+
+    .current-views-table,
+    .current-views-table tbody,
+    .current-views-table tr,
+    .current-views-table th,
+    .current-views-table td {
+      display: block;
+      width: 100%;
+      min-width: 0;
+    }
+
+    .current-views-table thead {
+      position: absolute;
+
+      overflow: hidden;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      border: 0;
+      margin: -1px;
+
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+    }
+
+    .current-views-table tr {
+      padding: 1.5rem 0;
+      border-bottom: 1px solid
+        color-mix(in srgb, var(--c-text) 13%, transparent);
+    }
+
+    .current-views-table th,
+    .current-views-table td {
+      padding: 0;
+      border: 0;
+    }
+
+    .current-view-market {
+      margin-bottom: 0.65rem;
+      font-size: 1.35rem;
+    }
+
+    .current-view-horizon {
+      margin-top: 0.4rem;
+
+      font-size: 0.76rem;
+    }
+
+    .current-view-rationale {
+      margin-top: 0.85rem;
+
+      font-size: 0.9rem;
+    }
+
+    .current-view-link-cell {
+      margin-top: 0.85rem;
+      text-align: left !important;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .current-view-link {
+      transition: none;
+    }
+  }
+</style>

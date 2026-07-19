@@ -1,0 +1,100 @@
+---
+import Link from '~/components/base/Link.astro'
+
+import { withBasePath } from '~/utils/path'
+import { formatDate } from '~/utils/datetime'
+
+interface Props {
+  idx: number
+  postSlug?: string
+  title: string
+  reportType?: string
+  assetClass?: string
+  sector?: string
+  tags?: string[]
+  minutesRead?: number
+  date: string | Date
+  radio?: boolean
+  video?: boolean
+  platform?: string
+  redirect?: string
+}
+
+const {
+  idx,
+  postSlug,
+  title,
+  reportType = 'Research Note',
+  assetClass,
+  sector,
+  tags = [],
+  minutesRead,
+  date,
+  video,
+  radio,
+  platform,
+  redirect,
+} = Astro.props
+
+const details: string[] = []
+
+if (assetClass) details.push(assetClass)
+if (sector) details.push(sector)
+if (minutesRead) details.push(`${minutesRead} min read`)
+if (platform) details.push(platform)
+
+const href = redirect ? redirect : withBasePath(`/research/${postSlug}/`)
+---
+
+<article
+  class="research-list-item slide-enter"
+  style={{ '--enter-stage': idx }}
+  data-tags={tags}
+>
+  <Link
+    {href}
+    external={Boolean(redirect)}
+    enableNewTabWarning={Boolean(redirect)}
+    class="research-list-link border-b-none!"
+  >
+    <div class="research-list-meta">
+      <span class="research-list-category">{reportType}</span>
+
+      <time datetime={new Date(date).toISOString()}>
+        {formatDate(date, false)}
+      </time>
+    </div>
+
+    <div class="research-list-main">
+      <h2 class="research-list-title">{title}</h2>
+
+      <div class="research-list-details">
+        {
+          video && (
+            <span
+              u-i-ri-film-line
+              class="research-list-icon"
+              title="Provided in video"
+              aria-label="Provided in video"
+            />
+          )
+        }
+
+        {
+          radio && (
+            <span
+              u-i-ri-radio-line
+              class="research-list-icon"
+              title="Provided in radio"
+              aria-label="Provided in radio"
+            />
+          )
+        }
+
+        {details.map((detail) => <span>{detail}</span>)}
+      </div>
+    </div>
+
+    <span class="research-list-arrow" aria-hidden="true">↗</span>
+  </Link>
+</article>

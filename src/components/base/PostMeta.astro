@@ -1,0 +1,123 @@
+---
+import { formatDate } from '~/utils/datetime'
+
+interface Props {
+  pubDate: string
+  lastModDate?: string
+  minutesRead: number
+  tags: string[]
+  reportType?: string
+  assetClass?: string
+  sector?: string
+}
+
+const {
+  pubDate,
+  minutesRead,
+  tags,
+  reportType = 'Research Note',
+  assetClass,
+  sector,
+} = Astro.props
+
+const classifications = [assetClass, sector].filter(Boolean)
+---
+
+<div class="post-meta">
+  <div class="research-category">
+    {reportType}
+  </div>
+
+  <div class="meta-line">
+    <time datetime={pubDate}>{formatDate(pubDate)}</time>
+
+    {
+      minutesRead > 0 && (
+        <>
+          <span class="divider">•</span>
+          <span>{minutesRead} min read</span>
+        </>
+      )
+    }
+  </div>
+
+  {
+    classifications.length > 0 && (
+      <div class="classification-line">
+        {classifications.map((classification, index) => (
+          <>
+            {index > 0 && <span class="classification-divider">·</span>}
+            <span>{classification}</span>
+          </>
+        ))}
+      </div>
+    )
+  }
+
+  {
+    tags.length > 0 && (
+      <div class="tag-list">
+        {tags.map((tag) => (
+          <span class="tag">{tag}</span>
+        ))}
+      </div>
+    )
+  }
+</div>
+
+<style>
+  .post-meta {
+    margin-top: -0.4rem;
+  }
+
+  .research-category {
+    margin-bottom: 1rem;
+
+    font-size: 0.72rem;
+    font-weight: 650;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+
+    opacity: 0.68;
+  }
+
+  .meta-line,
+  .classification-line {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    align-items: center;
+
+    font-size: 0.86rem;
+    line-height: 1.4;
+
+    opacity: 0.55;
+  }
+
+  .classification-line {
+    margin-top: 0.6rem;
+  }
+
+  .divider,
+  .classification-divider {
+    opacity: 0.5;
+  }
+
+  .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+
+    margin-top: 1rem;
+  }
+
+  .tag {
+    padding: 0.25rem 0.65rem;
+    border: 1px solid color-mix(in srgb, currentColor 20%, transparent);
+    border-radius: 999px;
+
+    font-size: 0.76rem;
+
+    opacity: 0.7;
+  }
+</style>

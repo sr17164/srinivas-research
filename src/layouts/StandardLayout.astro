@@ -1,0 +1,67 @@
+---
+interface Props {
+  title?: string
+  subtitle?: string
+  isCentered?: boolean
+  isSearchable?: boolean
+  searchFilter?: string
+  class?: string
+}
+
+const {
+  title,
+  subtitle,
+  isCentered = false,
+  isSearchable = false,
+  searchFilter,
+  class: className,
+} = Astro.props
+
+const hasArticle = Astro.slots.has('article')
+
+const headerClasses = [
+  'prose',
+  'mx-auto',
+  'mb-8',
+  hasArticle ? 'research-header' : '',
+  isCentered ? 'text-center' : '',
+]
+  .filter(Boolean)
+  .join(' ')
+---
+
+<header class={headerClasses}>
+  {title && <h1>{title}</h1>}
+
+  {
+    subtitle && (
+      <p class={hasArticle ? 'research-subtitle' : 'mt--4! op-50 italic'}>
+        {subtitle}
+      </p>
+    )
+  }
+
+  <slot name="head" />
+</header>
+
+{
+  hasArticle && (
+    <article
+      class="slide-enter-content prose mx-auto research-article"
+      data-pagefind-body={isSearchable ? '' : undefined}
+      data-pagefind-filter={
+        isSearchable && searchFilter ? searchFilter : undefined
+      }
+    >
+      <slot name="article" />
+    </article>
+  )
+}
+
+{
+  Astro.slots.has('default') && (
+    <div class={`mx-auto ${className ?? ''}`}>
+      <slot />
+    </div>
+  )
+}

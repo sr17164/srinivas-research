@@ -1,0 +1,699 @@
+---
+import { render } from 'astro:content'
+
+import BaseLayout from '~/layouts/BaseLayout.astro'
+import Link from '~/components/base/Link.astro'
+import CurrentViews from '~/components/research/CurrentViews.astro'
+
+import { getFilteredPosts, getSortedPosts, getMinutesRead } from '~/utils/data'
+import { formatDate } from '~/utils/datetime'
+import { withBasePath } from '~/utils/path'
+
+const posts = getSortedPosts(await getFilteredPosts())
+
+const enrichedPosts = await Promise.all(
+  posts.map(async (post) => {
+    const { remarkPluginFrontmatter } = await render(post)
+
+    return {
+      ...post,
+      minutesRead: getMinutesRead(
+        post.data.minutesRead,
+        remarkPluginFrontmatter.minutesRead
+      ),
+    }
+  })
+)
+
+const featuredPost =
+  enrichedPosts.find((post) => post.data.featured) ?? enrichedPosts[0]
+
+const latestPosts = enrichedPosts
+  .filter((post) => post.id !== featuredPost?.id)
+  .slice(0, 4)
+
+const siteSections = [
+  {
+    label: 'Research',
+    title: 'Commodity & Macro Research',
+    description:
+      'Long-form analysis of commodity markets, macroeconomic forces, market structure, catalysts and downside risk.',
+    href: '/research/',
+  },
+  {
+    label: 'Models',
+    title: 'Financial Models',
+    description:
+      'Valuation, transaction and financial modelling work supported by downloadable files and methodology notes.',
+    href: '/models/',
+  },
+  {
+    label: 'Approach',
+    title: 'Research Process',
+    description:
+      'The principles behind the publication, including evidence, uncertainty, intellectual honesty and process.',
+    href: '/about/',
+  },
+]
+---
+
+<BaseLayout
+  title="SM Research"
+  description="Independent research on commodity markets, macroeconomic forces, valuation and capital allocation."
+  bgType="plum"
+  ogImage={true}
+>
+  <div class="research-home">
+    <section class="home-hero">
+      <p class="home-eyebrow">Independent investment research</p>
+
+      <h1>
+        Research on markets,<br />
+        valuation and capital allocation.
+      </h1>
+
+      <p class="home-hero-copy">
+        Long-form, evidence-driven analysis of commodity markets and
+        macroeconomic themes, supported by financial modelling and quantitative
+        research.
+      </p>
+
+      <div class="home-actions">
+        <Link
+          href={withBasePath('/research/')}
+          class="home-primary-action border-b-none!"
+        >
+          Explore research
+          <span aria-hidden="true">→</span>
+        </Link>
+
+        <Link
+          href={withBasePath('/about/')}
+          class="home-secondary-action border-b-none!"
+        >
+          About the publication
+        </Link>
+      </div>
+    </section>
+    <CurrentViews />
+    {
+      featuredPost && (
+        <section class="home-featured">
+          <div class="home-section-heading">
+            <p>Featured research</p>
+
+            <Link
+              href={withBasePath('/research/')}
+              class="home-section-link border-b-none!"
+            >
+              View all research
+              <span aria-hidden="true">→</span>
+            </Link>
+          </div>
+
+          <Link
+            href={withBasePath(`/research/${featuredPost.id}/`)}
+            class="featured-report border-b-none!"
+          >
+            <div class="featured-report-meta">
+              <span>
+                {featuredPost.data.reportType ??
+                  featuredPost.data.tags[0] ??
+                  'Research'}
+              </span>
+
+              <time datetime={featuredPost.data.pubDate.toISOString()}>
+                {formatDate(featuredPost.data.pubDate, false)}
+              </time>
+            </div>
+
+            <div class="featured-report-content">
+              <h2>{featuredPost.data.title}</h2>
+
+              {featuredPost.data.description && (
+                <p>{featuredPost.data.description}</p>
+              )}
+
+              <div class="featured-report-details">
+                {featuredPost.data.assetClass && (
+                  <span>{featuredPost.data.assetClass}</span>
+                )}
+
+                {featuredPost.data.sector && (
+                  <span>{featuredPost.data.sector}</span>
+                )}
+
+                {featuredPost.data.investmentView && (
+                  <span>{featuredPost.data.investmentView}</span>
+                )}
+
+                {Boolean(featuredPost.minutesRead) && (
+                  <span>{featuredPost.minutesRead} min read</span>
+                )}
+              </div>
+            </div>
+
+            <span class="featured-report-arrow" aria-hidden="true">
+              ↗
+            </span>
+          </Link>
+        </section>
+      )
+    }
+
+    <section class="home-report-types">
+      <div class="home-section-heading">
+        <p>Explore SM Research</p>
+      </div>
+
+      <div class="report-type-grid">
+        {
+          siteSections.map((section) => (
+            <Link
+              href={withBasePath(section.href)}
+              class="report-type-card border-b-none!"
+            >
+              <span class="report-type-label">{section.label}</span>
+
+              <h2>{section.title}</h2>
+
+              <p>{section.description}</p>
+
+              <span class="report-type-arrow" aria-hidden="true">
+                →
+              </span>
+            </Link>
+          ))
+        }
+      </div>
+    </section>
+
+    {
+      latestPosts.length > 0 && (
+        <section class="home-latest">
+          <div class="home-section-heading">
+            <p>Latest research</p>
+
+            <Link
+              href={withBasePath('/research/')}
+              class="home-section-link border-b-none!"
+            >
+              Research archive
+              <span aria-hidden="true">→</span>
+            </Link>
+          </div>
+
+          <div class="latest-research-list">
+            {latestPosts.map((post) => (
+              <article class="latest-research-item">
+                <Link
+                  href={withBasePath(`/research/${post.id}/`)}
+                  class="latest-research-link border-b-none!"
+                >
+                  <div class="latest-research-meta">
+                    <span>
+                      {post.data.reportType ?? post.data.tags[0] ?? 'Research'}
+                    </span>
+
+                    <time datetime={post.data.pubDate.toISOString()}>
+                      {formatDate(post.data.pubDate, false)}
+                    </time>
+                  </div>
+
+                  <div class="latest-research-content">
+                    <h2>{post.data.title}</h2>
+
+                    {post.data.description && <p>{post.data.description}</p>}
+
+                    <div class="latest-research-details">
+                      {post.data.assetClass && (
+                        <span>{post.data.assetClass}</span>
+                      )}
+
+                      {post.data.sector && <span>{post.data.sector}</span>}
+
+                      {Boolean(post.minutesRead) && (
+                        <span>{post.minutesRead} min read</span>
+                      )}
+                    </div>
+                  </div>
+
+                  <span class="latest-research-arrow" aria-hidden="true">
+                    ↗
+                  </span>
+                </Link>
+              </article>
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    <section class="home-about">
+      <div class="home-about-label">
+        <p>About SM Research</p>
+      </div>
+
+      <div class="home-about-content">
+        <h2>Analytical, evidence-driven and long-term in perspective.</h2>
+
+        <p>
+          SM Research is an independent publication focused on commodity
+          markets, macroeconomic forces and decision-making under uncertainty.
+          Financial modelling and quantitative analysis are used where they
+          strengthen the underlying research.
+        </p>
+
+        <p>
+          The publication is written and edited by Srinivas Medida, an
+          Economics, Finance & Data Science student at Imperial College London.
+        </p>
+
+        <Link
+          href={withBasePath('/about/')}
+          class="home-about-link border-b-none!"
+        >
+          Read more
+          <span aria-hidden="true">→</span>
+        </Link>
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .research-home {
+    width: min(100%, 72rem);
+    margin: 0 auto;
+  }
+
+  .home-hero {
+    padding: clamp(3rem, 8vw, 7rem) 0 clamp(4rem, 9vw, 8rem);
+  }
+
+  .home-eyebrow,
+  .home-section-heading > p,
+  .home-about-label p {
+    margin: 0;
+
+    font-size: 0.72rem;
+    font-weight: 650;
+    line-height: 1;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+
+    opacity: 0.5;
+  }
+
+  .home-hero h1 {
+    max-width: 65rem;
+    margin: 1.4rem 0 1.8rem;
+
+    font-family: Georgia, Cambria, 'Times New Roman', Times, serif;
+    font-size: clamp(3.3rem, 8.5vw, 7rem);
+    font-weight: 500;
+    line-height: 0.96;
+    letter-spacing: -0.058em;
+
+    text-wrap: balance;
+  }
+
+  .home-hero-copy {
+    max-width: 40rem;
+    margin: 0;
+
+    font-size: clamp(1.05rem, 2vw, 1.3rem);
+    line-height: 1.65;
+
+    opacity: 0.64;
+    text-wrap: pretty;
+  }
+
+  .home-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.85rem 1.5rem;
+    align-items: center;
+
+    margin-top: 2.4rem;
+  }
+
+  .home-primary-action {
+    display: inline-flex;
+    gap: 0.8rem;
+    align-items: center;
+
+    padding: 0.85rem 1.1rem;
+
+    background: var(--c-text);
+    color: var(--c-bg);
+
+    font-size: 0.86rem;
+    font-weight: 650;
+    text-decoration: none;
+  }
+
+  .home-secondary-action,
+  .home-section-link,
+  .home-about-link {
+    display: inline-flex;
+    gap: 0.65rem;
+    align-items: center;
+
+    color: inherit;
+
+    font-size: 0.84rem;
+    font-weight: 600;
+    text-decoration: none;
+
+    opacity: 0.58;
+    transition: opacity 160ms ease;
+  }
+
+  .home-secondary-action:hover,
+  .home-section-link:hover,
+  .home-about-link:hover {
+    opacity: 1;
+  }
+
+  .home-featured,
+  .home-report-types,
+  .home-latest,
+  .home-about {
+    padding: clamp(3.5rem, 7vw, 6rem) 0;
+    border-top: 1px solid color-mix(in srgb, var(--c-text) 16%, transparent);
+  }
+
+  .home-section-heading {
+    display: flex;
+    justify-content: space-between;
+    gap: 1.5rem;
+    align-items: center;
+
+    margin-bottom: 2rem;
+  }
+
+  .featured-report {
+    display: grid;
+    grid-template-columns: 10rem minmax(0, 1fr) 2rem;
+    gap: 2.5rem;
+
+    padding: clamp(1.8rem, 4vw, 3.25rem);
+
+    border: 1px solid color-mix(in srgb, var(--c-text) 16%, transparent);
+
+    color: inherit;
+    text-decoration: none;
+
+    transition:
+      border-color 160ms ease,
+      transform 160ms ease;
+  }
+
+  .featured-report:hover {
+    transform: translateY(-0.15rem);
+    border-color: color-mix(in srgb, var(--c-text) 35%, transparent);
+  }
+
+  .featured-report-meta,
+  .latest-research-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    padding-top: 0.3rem;
+
+    font-size: 0.73rem;
+    line-height: 1.35;
+  }
+
+  .featured-report-meta span,
+  .latest-research-meta span {
+    font-weight: 650;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+
+    opacity: 0.7;
+  }
+
+  .featured-report-meta time,
+  .latest-research-meta time {
+    opacity: 0.44;
+  }
+
+  .featured-report-content h2 {
+    max-width: 50rem;
+    margin: 0;
+
+    font-family: Georgia, Cambria, 'Times New Roman', Times, serif;
+    font-size: clamp(2rem, 4.5vw, 3.6rem);
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: -0.04em;
+
+    text-wrap: balance;
+  }
+
+  .featured-report-content > p {
+    max-width: 43rem;
+    margin: 1.25rem 0 0;
+
+    font-size: 1rem;
+    line-height: 1.65;
+
+    opacity: 0.6;
+  }
+
+  .featured-report-details,
+  .latest-research-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 0.85rem;
+
+    margin-top: 1.3rem;
+
+    font-size: 0.74rem;
+    line-height: 1.4;
+
+    opacity: 0.46;
+  }
+
+  .featured-report-details > span + span::before,
+  .latest-research-details > span + span::before {
+    margin-right: 0.85rem;
+    content: '·';
+  }
+
+  .featured-report-arrow,
+  .latest-research-arrow {
+    font-size: 1.1rem;
+    opacity: 0.3;
+  }
+
+  .report-type-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+
+    border-top: 1px solid color-mix(in srgb, var(--c-text) 14%, transparent);
+    border-left: 1px solid color-mix(in srgb, var(--c-text) 14%, transparent);
+  }
+
+  .report-type-card {
+    position: relative;
+
+    min-height: 16rem;
+    padding: 2rem;
+
+    border-right: 1px solid color-mix(in srgb, var(--c-text) 14%, transparent);
+    border-bottom: 1px solid color-mix(in srgb, var(--c-text) 14%, transparent);
+
+    color: inherit;
+    text-decoration: none;
+
+    transition: background 160ms ease;
+  }
+
+  .report-type-card:hover {
+    background: color-mix(in srgb, var(--c-text) 4%, transparent);
+  }
+
+  .report-type-label {
+    font-size: 0.68rem;
+    font-weight: 650;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+
+    opacity: 0.42;
+  }
+
+  .report-type-card h2 {
+    margin: 2.5rem 0 0.8rem;
+
+    font-family: Georgia, Cambria, 'Times New Roman', Times, serif;
+    font-size: clamp(1.65rem, 3vw, 2.25rem);
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+  }
+
+  .report-type-card p {
+    max-width: 27rem;
+    margin: 0;
+
+    font-size: 0.88rem;
+    line-height: 1.6;
+
+    opacity: 0.56;
+  }
+
+  .report-type-arrow {
+    position: absolute;
+    right: 2rem;
+    bottom: 1.75rem;
+
+    opacity: 0.28;
+  }
+
+  .latest-research-list {
+    border-top: 1px solid color-mix(in srgb, var(--c-text) 14%, transparent);
+  }
+
+  .latest-research-item {
+    margin: 0;
+    border-bottom: 1px solid color-mix(in srgb, var(--c-text) 14%, transparent);
+  }
+
+  .latest-research-link {
+    display: grid;
+    grid-template-columns: 10rem minmax(0, 1fr) 2rem;
+    gap: 2.5rem;
+
+    padding: 2rem 0;
+
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .latest-research-content h2 {
+    margin: 0;
+
+    font-family: Georgia, Cambria, 'Times New Roman', Times, serif;
+    font-size: clamp(1.45rem, 2.8vw, 2rem);
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: -0.025em;
+  }
+
+  .latest-research-content > p {
+    max-width: 43rem;
+    margin: 0.7rem 0 0;
+
+    font-size: 0.86rem;
+    line-height: 1.55;
+
+    opacity: 0.52;
+  }
+
+  .latest-research-link:hover .latest-research-content h2 {
+    opacity: 0.65;
+  }
+
+  .home-about {
+    display: grid;
+    grid-template-columns: 12rem minmax(0, 1fr);
+    gap: 4rem;
+  }
+
+  .home-about-content {
+    max-width: 47rem;
+  }
+
+  .home-about-content h2 {
+    margin: 0 0 1.5rem;
+
+    font-family: Georgia, Cambria, 'Times New Roman', Times, serif;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.04em;
+
+    text-wrap: balance;
+  }
+
+  .home-about-content p {
+    margin: 0 0 1rem;
+
+    font-size: 0.98rem;
+    line-height: 1.7;
+
+    opacity: 0.62;
+  }
+
+  .home-about-link {
+    margin-top: 0.75rem;
+  }
+
+  @media (max-width: 720px) {
+    .home-hero {
+      padding-top: 2.5rem;
+    }
+
+    .home-hero h1 {
+      font-size: clamp(3rem, 15vw, 4.8rem);
+    }
+
+    .featured-report,
+    .latest-research-link {
+      grid-template-columns: minmax(0, 1fr) 1.25rem;
+      gap: 1.25rem;
+    }
+
+    .featured-report-meta,
+    .latest-research-meta {
+      grid-column: 1 / -1;
+      flex-direction: row;
+      gap: 0.65rem;
+      align-items: center;
+    }
+
+    .featured-report-meta time::before,
+    .latest-research-meta time::before {
+      margin-right: 0.65rem;
+      content: '·';
+    }
+
+    .featured-report-content,
+    .latest-research-content {
+      grid-column: 1;
+    }
+
+    .featured-report-arrow,
+    .latest-research-arrow {
+      grid-column: 2;
+      grid-row: 2;
+    }
+
+    .report-type-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .report-type-card {
+      min-height: 14rem;
+    }
+
+    .home-about {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .featured-report,
+    .home-secondary-action,
+    .home-section-link,
+    .home-about-link,
+    .report-type-card {
+      transition: none;
+    }
+  }
+</style>

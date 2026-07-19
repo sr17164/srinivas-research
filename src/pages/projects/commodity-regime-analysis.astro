@@ -1,0 +1,344 @@
+---
+import Link from '~/components/base/Link.astro'
+import PageNavigation from '~/components/nav/PageNavigation.astro'
+import BaseLayout from '~/layouts/BaseLayout.astro'
+import StandardLayout from '~/layouts/StandardLayout.astro'
+import { withBasePath } from '~/utils/path'
+
+const projectRoot = '/projects/commodity-regime-analysis'
+
+const groups = [
+  {
+    title: 'Documentation',
+    description: 'Methodology, findings, sources and the correction record.',
+    files: [
+      { label: 'Project README', path: 'README.md' },
+      { label: 'Detailed methodology', path: 'docs/methodology.md' },
+      { label: 'Revised findings', path: 'docs/revised_findings.md' },
+      { label: 'Data sources', path: 'docs/sources.md' },
+      { label: 'Data notice', path: 'DATA-NOTICE.md' },
+      { label: 'Correction log', path: 'CHANGELOG.md' },
+      { label: 'Code licence', path: 'LICENSE-CODE.txt' },
+      { label: 'Integrity hashes', path: 'SHA256SUMS.txt' },
+    ],
+  },
+  {
+    title: 'Code and model',
+    description: 'The reproducible Python workflow and Excel review model.',
+    files: [
+      { label: 'Python analysis', path: 'commodity_regime_analysis.py' },
+      { label: 'Python dependencies', path: 'requirements.txt' },
+      {
+        label: 'Excel review model',
+        path: 'model/commodity_regime_model.xlsx',
+        download: true,
+      },
+    ],
+  },
+  {
+    title: 'Data audit',
+    description: 'The retained input, audit trail and final model sample.',
+    files: [
+      {
+        label: 'Original prepared dataset',
+        path: 'data/raw/original_prepared_dataset.csv',
+        download: true,
+      },
+      {
+        label: 'Audited full dataset',
+        path: 'data/processed/audited_full_dataset.csv',
+        download: true,
+      },
+      {
+        label: 'Final model dataset',
+        path: 'data/processed/model_dataset.csv',
+        download: true,
+      },
+      {
+        label: 'Excluded-observation log',
+        path: 'data/processed/data_quality_log.csv',
+        download: true,
+      },
+    ],
+  },
+  {
+    title: 'Results and figures',
+    description: 'Regression output, robustness checks and published charts.',
+    files: [
+      {
+        label: 'Primary relationship results',
+        path: 'outputs/primary_relationship_results.csv',
+        download: true,
+      },
+      {
+        label: 'Full regression coefficients',
+        path: 'outputs/full_regression_coefficients.csv',
+        download: true,
+      },
+      {
+        label: 'Threshold robustness',
+        path: 'outputs/threshold_robustness.csv',
+        download: true,
+      },
+      {
+        label: 'Regression summaries',
+        path: 'outputs/regression_summaries.txt',
+      },
+      {
+        label: 'Analysis summary',
+        path: 'outputs/analysis_summary.json',
+      },
+      {
+        label: 'Sensitivity comparison figure',
+        path: 'figures/commodity-equity-sensitivity.png',
+      },
+      {
+        label: 'Brent robustness figure',
+        path: 'figures/brent-threshold-robustness.png',
+      },
+    ],
+  },
+]
+
+const hrefFor = (path: string) => withBasePath(`${projectRoot}/${path}`)
+---
+
+<BaseLayout
+  title="Commodity Regime Analysis — Project Files"
+  description="Browsable code, data, methodology and model outputs for the audited commodity-regime analysis."
+  bgType="dot"
+  ogImage={true}
+>
+  <StandardLayout
+    class="max-w-240 group/content"
+    title="Commodity Regime Analysis"
+    subtitle="Code, data, methodology and model outputs"
+    isCentered={false}
+  >
+    <div slot="article" class="prose mx-auto">
+      <p>
+        This page exposes the corrected research workflow rather than only a
+        finished chart. The project includes the retained input data, the
+        exclusion log, the final model sample, regression output and the Excel
+        review model.
+      </p>
+
+      <div class="project-meta not-prose">
+        <div>
+          <span>Usable sample</span>
+          <strong>89 monthly observations</strong>
+        </div>
+        <div>
+          <span>Primary model</span>
+          <strong>Interaction OLS with HAC inference</strong>
+        </div>
+        <div>
+          <span>Primary finding</span>
+          <strong>Robust Brent regime effect</strong>
+        </div>
+      </div>
+
+      <div class="project-groups not-prose">
+        {
+          groups.map((group) => (
+            <section class="project-group">
+              <header>
+                <h2>{group.title}</h2>
+                <p>{group.description}</p>
+              </header>
+
+              <ul>
+                {group.files.map((file) => (
+                  <li>
+                    <Link
+                      class="project-file border-b-none!"
+                      href={hrefFor(file.path)}
+                      download={file.download ? '' : undefined}
+                    >
+                      <span>{file.label}</span>
+                      <span aria-hidden="true">
+                        {file.download ? '↓' : '↗'}
+                      </span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ))
+        }
+      </div>
+
+      <div class="project-download not-prose">
+        <div>
+          <span>Complete archive</span>
+          <strong>Code, model, data, documentation and original files</strong>
+        </div>
+
+        <Link
+          class="btn-blue"
+          href={withBasePath('/downloads/commodity-regime-analysis.zip')}
+          download
+        >
+          Download full project ↓
+        </Link>
+      </div>
+
+      <p class="project-note">
+        This is an empirical association study, not a causal estimate or an
+        investment recommendation. The earliest workflow did not retain the
+        original adjusted-close series; the corrected release is reproduced from
+        the preserved monthly-return dataset and documents that limitation
+        explicitly.
+      </p>
+
+      <p>
+        <Link
+          href={withBasePath('/models/commodity-regime-analysis/')}
+          class="border-b-none!"
+        >
+          ← Return to methodology
+        </Link>
+      </p>
+
+      <PageNavigation current="models" />
+    </div>
+  </StandardLayout>
+</BaseLayout>
+
+<style>
+  .project-meta {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin: 2rem 0 3rem;
+    border-top: 1px solid color-mix(in srgb, currentColor 14%, transparent);
+    border-bottom: 1px solid color-mix(in srgb, currentColor 14%, transparent);
+  }
+
+  .project-meta div {
+    padding: 1rem 1rem 1.05rem 0;
+  }
+
+  .project-meta div + div {
+    padding-left: 1rem;
+    border-left: 1px solid color-mix(in srgb, currentColor 11%, transparent);
+  }
+
+  .project-meta span,
+  .project-download span {
+    display: block;
+    margin-bottom: 0.35rem;
+    font-size: 0.64rem;
+    font-weight: 650;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    opacity: 0.44;
+  }
+
+  .project-meta strong,
+  .project-download strong {
+    display: block;
+    font-size: 0.82rem;
+    line-height: 1.45;
+    opacity: 0.76;
+  }
+
+  .project-groups {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    margin: 0 0 2.5rem;
+  }
+
+  .project-group {
+    padding: 1.25rem 1.3rem 1.35rem;
+    border: 1px solid color-mix(in srgb, currentColor 14%, transparent);
+    border-radius: 0.5rem;
+    background: color-mix(in srgb, currentColor 2.5%, transparent);
+  }
+
+  .project-group h2 {
+    margin: 0;
+    font-family: Georgia, Cambria, 'Times New Roman', Times, serif;
+    font-size: 1.18rem;
+    font-weight: 500;
+    line-height: 1.3;
+    letter-spacing: -0.02em;
+  }
+
+  .project-group header p {
+    margin: 0.55rem 0 1rem;
+    font-size: 0.78rem;
+    line-height: 1.55;
+    opacity: 0.56;
+  }
+
+  .project-group ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  .project-group li + li {
+    border-top: 1px solid color-mix(in srgb, currentColor 9%, transparent);
+  }
+
+  .project-file {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.68rem 0;
+    color: inherit;
+    font-size: 0.76rem;
+    font-weight: 550;
+    line-height: 1.4;
+    text-decoration: none;
+    opacity: 0.62;
+  }
+
+  .project-file:hover {
+    opacity: 1;
+  }
+
+  .project-download {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 1.3rem;
+    border: 1px solid color-mix(in srgb, currentColor 14%, transparent);
+    border-radius: 0.5rem;
+  }
+
+  .project-note {
+    margin-top: 1.25rem;
+    font-size: 0.75rem;
+    line-height: 1.6;
+    opacity: 0.5;
+  }
+
+  @media (max-width: 680px) {
+    .project-meta,
+    .project-groups {
+      grid-template-columns: 1fr;
+    }
+
+    .project-meta div {
+      padding: 0.9rem 0;
+    }
+
+    .project-meta div + div {
+      padding-left: 0;
+      border-top: 1px solid color-mix(in srgb, currentColor 11%, transparent);
+      border-left: 0;
+    }
+
+    .project-download {
+      display: block;
+    }
+
+    .project-download :global(a) {
+      margin-top: 1rem;
+    }
+  }
+</style>

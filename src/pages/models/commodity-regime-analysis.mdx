@@ -1,0 +1,222 @@
+---
+title: Commodity Regime Analysis
+description: Methodology, corrected findings and reproducibility files for the commodity-producer equity sensitivity study.
+subtitle: An audited study of commodity-equity sensitivity across inflation regimes.
+bgType: dot
+ogImage: true
+---
+
+import BaseLayout from '~/layouts/BaseLayout.astro'
+import StandardLayout from '~/layouts/StandardLayout.astro'
+import PageNavigation from '~/components/nav/PageNavigation.astro'
+import Link from '~/components/base/Link.astro'
+import { withBasePath } from '~/utils/path'
+
+<BaseLayout
+  title={frontmatter.title}
+  description={frontmatter.description}
+  bgType={frontmatter.bgType}
+  ogImage={frontmatter.ogImage}
+>
+  <StandardLayout
+    class="max-w-240 group/content"
+    title={frontmatter.title}
+    subtitle={frontmatter.subtitle}
+    isCentered={false}
+  >
+    <div slot="article" class="prose mx-auto">
+      <h2>Research Question</h2>
+
+      <p>
+        Does the relationship between commodity returns and the returns of
+        commodity-producer equities change when inflation is already elevated?
+        The project studies Brent crude against US energy equities, and gold
+        and copper against US metals-and-mining equities.
+      </p>
+
+      <h2>Why the Original Model Was Revised</h2>
+
+      <p>
+        The initial workflow forward-filled missing monthly futures prices
+        before calculating returns. That produced 14 observations in which
+        Brent, gold and copper returns were all exactly zero while the producer
+        equity ETFs moved. Treating those rows as genuine observations would
+        mechanically weaken the estimated commodity-equity relationships.
+      </p>
+
+      <p>
+        The revised project excludes those artificial rows, retains a full
+        data-quality log and replaces separate regime regressions with a single
+        interaction specification. The original script and report remain in
+        the downloadable archive so that the change in methodology is visible.
+      </p>
+
+      <h2>Revised Specification</h2>
+
+      <ul>
+        <li>89 usable monthly observations from May 2017 to December 2025.</li>
+        <li>
+          High inflation is defined using the previous month's headline CPI
+          rate, with 3% as the primary threshold.
+        </li>
+        <li>
+          Energy and mining ETF returns are regressed on Brent, gold and copper
+          returns, an inflation-regime indicator, three interaction terms and
+          the monthly change in the US 10-year Treasury yield.
+        </li>
+        <li>
+          Statistical inference uses Newey-West heteroskedasticity and
+          autocorrelation-consistent standard errors with three lags.
+        </li>
+        <li>
+          Robustness tests repeat the model at 2.68%, 3%, 3.5% and 4% CPI
+          thresholds.
+        </li>
+      </ul>
+
+      <h2>Primary Results</h2>
+
+      <div class="not-prose overflow-x-auto">
+        <table class="my-6 w-full min-w-168 border-collapse text-xs">
+          <thead>
+            <tr>
+              <th class="border-t border-[#8883] px-3 py-3 text-left text-[0.65rem] font-650 tracking-[0.07em] uppercase op-50">Relationship</th>
+              <th class="border-t border-[#8883] px-3 py-3 text-right text-[0.65rem] font-650 tracking-[0.07em] uppercase op-50">Lower inflation</th>
+              <th class="border-t border-[#8883] px-3 py-3 text-right text-[0.65rem] font-650 tracking-[0.07em] uppercase op-50">High inflation</th>
+              <th class="border-t border-[#8883] px-3 py-3 text-right text-[0.65rem] font-650 tracking-[0.07em] uppercase op-50">Difference</th>
+              <th class="border-t border-[#8883] px-3 py-3 text-right text-[0.65rem] font-650 tracking-[0.07em] uppercase op-50">HAC p-value</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th class="border-t border-[#8883] px-3 py-3 text-left font-600">Brent to energy equities</th>
+              <td class="border-t border-[#8883] px-3 py-3 text-right">-0.030</td>
+              <td class="border-t border-[#8883] px-3 py-3 text-right">0.493</td>
+              <td class="border-t border-[#8883] px-3 py-3 text-right">0.523</td>
+              <td class="border-t border-[#8883] px-3 py-3 text-right">0.016</td>
+            </tr>
+            <tr>
+              <th class="border-t border-[#8883] px-3 py-3 text-left font-600">Gold to mining equities</th>
+              <td class="border-t border-[#8883] px-3 py-3 text-right">0.298</td>
+              <td class="border-t border-[#8883] px-3 py-3 text-right">0.516</td>
+              <td class="border-t border-[#8883] px-3 py-3 text-right">0.219</td>
+              <td class="border-t border-[#8883] px-3 py-3 text-right">0.680</td>
+            </tr>
+            <tr>
+              <th class="border-t border-[#8883] px-3 py-3 text-left font-600">Copper to mining equities</th>
+              <td class="border-t border-[#8883] px-3 py-3 text-right">0.428</td>
+              <td class="border-t border-[#8883] px-3 py-3 text-right">0.757</td>
+              <td class="border-t border-[#8883] px-3 py-3 text-right">0.328</td>
+              <td class="border-t border-[#8883] px-3 py-3 text-right">0.355</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>
+        The narrow defensible result is that Brent returns had a materially
+        stronger relationship with energy-equity returns when inflation was
+        already elevated. The corrected model does not support a statistically
+        reliable inflation-regime shift for gold. Copper remains positively
+        associated with mining equities, but its regime difference is not
+        precise at the primary threshold.
+      </p>
+
+      <figure>
+        <img
+          src={withBasePath('/models/commodity-equity-sensitivity.png')}
+          alt="Estimated Brent, gold and copper sensitivities in lower- and higher-inflation regimes"
+          loading="lazy"
+        />
+        <figcaption>
+          Estimated commodity-equity sensitivities under the primary 3% lagged
+          headline-CPI threshold.
+        </figcaption>
+      </figure>
+
+      <h2>Robustness and Interpretation</h2>
+
+      <p>
+        The Brent interaction remains positive and statistically significant
+        across all four tested inflation thresholds. Copper's interaction
+        becomes significant only at higher thresholds, so that result is
+        sensitive to the chosen regime boundary. The models identify
+        conditional associations, not causal effects.
+      </p>
+
+      <figure>
+        <img
+          src={withBasePath('/models/brent-threshold-robustness.png')}
+          alt="Brent high-minus-lower inflation interaction coefficient across four CPI thresholds"
+          loading="lazy"
+        />
+        <figcaption>
+          The estimated Brent regime difference across alternative lagged-CPI
+          thresholds.
+        </figcaption>
+      </figure>
+
+      <h2>Limitations</h2>
+
+      <ul>
+        <li>
+          The retained market dataset contains prepared monthly returns rather
+          than the original adjusted-close price series.
+        </li>
+        <li>
+          XLE and XME are imperfect producer-equity proxies and contain
+          company-specific and index-composition effects.
+        </li>
+        <li>
+          The sample is modest, and isolated significant results should be
+          interpreted cautiously in a multiple-testing setting.
+        </li>
+        <li>
+          Inflation thresholds are modelling choices rather than natural
+          economic boundaries.
+        </li>
+      </ul>
+
+      <h2>Files and Reproducibility</h2>
+
+      <p>
+        The public package contains the audited dataset, exclusion log, Python
+        analysis, complete regression output, threshold tests, figures,
+        methodology notes and an Excel review model. The Excel workbook
+        displays the Python-generated HAC estimates and exposes the data-quality
+        and specification choices in a reviewable format.
+      </p>
+
+      <div class="not-prose my-5 flex flex-wrap gap-3">
+        <Link
+          class="rounded border border-[#8883] px-3 py-2 text-xs font-600"
+          href={withBasePath('/projects/commodity-regime-analysis/')}
+        >
+          Browse project files ↗
+        </Link>
+        <Link
+          class="rounded border border-[#8883] px-3 py-2 text-xs font-600"
+          href={withBasePath('/downloads/commodity-regime-model.xlsx')}
+          download
+        >
+          Download Excel model ↓
+        </Link>
+        <Link
+          class="rounded border border-[#8883] px-3 py-2 text-xs font-600"
+          href={withBasePath('/downloads/commodity-regime-analysis.zip')}
+          download
+        >
+          Download full project ↓
+        </Link>
+      </div>
+
+      <p class="text-xs op-45">
+        This project is an empirical association study, not a causal estimate
+        or an investment recommendation.
+      </p>
+
+      <PageNavigation current="models" />
+    </div>
+
+  </StandardLayout>
+</BaseLayout>

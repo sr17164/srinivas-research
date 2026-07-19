@@ -1,0 +1,252 @@
+:root {
+  --c-bg: #ffffff;
+  --c-text: #374151;
+}
+
+html.dark {
+  --c-bg: #111111;
+  --c-text: #e5e7eb;
+}
+
+html {
+  background-color: var(--c-bg);
+}
+
+body {
+  background-color: transparent;
+}
+/* Research archive */
+.research-index {
+  width: min(100%, 58rem);
+  max-width: none;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.research-index-header {
+  margin-bottom: 3.5rem;
+}
+
+.research-index-eyebrow {
+  margin: 0 0 0.8rem;
+
+  font-size: 0.72rem;
+  font-weight: 650;
+  line-height: 1;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+
+  opacity: 0.48;
+}
+
+.research-index-header h1 {
+  margin: 0 0 1.15rem;
+
+  font-family: Georgia, Cambria, 'Times New Roman', Times, serif;
+  font-size: clamp(3.1rem, 8vw, 5.75rem);
+  font-weight: 500;
+  line-height: 0.95;
+  letter-spacing: -0.055em;
+}
+
+.research-index-intro {
+  max-width: 42rem;
+  margin: 0;
+
+  font-size: clamp(1.05rem, 1.8vw, 1.2rem);
+  line-height: 1.65;
+
+  opacity: 0.62;
+  text-wrap: pretty;
+}
+
+.research-index-rule {
+  width: 100%;
+  height: 1px;
+  margin-top: 2.5rem;
+
+  background: color-mix(in srgb, var(--c-text) 18%, transparent);
+}
+
+/* Remove generic prose spacing from the archive list */
+.research-index .research-list-item {
+  margin: 0;
+}
+
+.research-list-item {
+  border-bottom: 1px solid color-mix(in srgb, var(--c-text) 13%, transparent);
+}
+
+.research-list-item:first-of-type {
+  border-top: 1px solid color-mix(in srgb, var(--c-text) 13%, transparent);
+}
+
+.research-list-link {
+  display: grid;
+  grid-template-columns: 9rem minmax(0, 1fr) 1.5rem;
+  gap: 1.5rem;
+  align-items: start;
+
+  width: 100%;
+  margin: 0;
+  padding: 1.65rem 0;
+
+  color: inherit;
+  text-decoration: none;
+
+  transition:
+    opacity 160ms ease,
+    transform 160ms ease;
+}
+
+.research-list-link:hover {
+  opacity: 1;
+}
+
+.research-list-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.42rem;
+
+  padding-top: 0.18rem;
+
+  font-size: 0.76rem;
+  line-height: 1.35;
+}
+
+.research-list-meta time {
+  opacity: 0.46;
+}
+
+.research-list-category {
+  overflow: hidden;
+
+  font-weight: 650;
+  letter-spacing: 0.065em;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+
+  opacity: 0.72;
+}
+
+.research-list-main {
+  min-width: 0;
+}
+
+.research-list-title {
+  margin: 0;
+
+  font-family: Georgia, Cambria, 'Times New Roman', Times, serif;
+  font-size: clamp(1.35rem, 2.4vw, 1.75rem);
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: -0.022em;
+
+  text-wrap: balance;
+  transition: opacity 160ms ease;
+}
+
+.research-list-link:hover .research-list-title {
+  opacity: 0.66;
+}
+
+.research-list-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.8rem;
+  align-items: center;
+
+  margin-top: 0.7rem;
+
+  font-size: 0.76rem;
+  line-height: 1.4;
+
+  opacity: 0.45;
+}
+
+.research-list-details > span + span::before {
+  margin-right: 0.8rem;
+  content: '·';
+}
+
+.research-list-icon {
+  flex: none;
+}
+
+.research-list-tags {
+  overflow: hidden;
+  max-width: 100%;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.research-list-arrow {
+  display: block;
+
+  padding-top: 0.05rem;
+
+  font-size: 1rem;
+  line-height: 1;
+
+  opacity: 0.25;
+  transition:
+    opacity 160ms ease,
+    transform 160ms ease;
+}
+
+.research-list-link:hover .research-list-arrow {
+  transform: translate(0.15rem, -0.15rem);
+  opacity: 0.75;
+}
+
+@media (max-width: 720px) {
+  .research-index-header {
+    margin-bottom: 2.75rem;
+  }
+
+  .research-index-header h1 {
+    font-size: clamp(3rem, 16vw, 4.5rem);
+  }
+
+  .research-list-link {
+    grid-template-columns: minmax(0, 1fr) 1.25rem;
+    gap: 0.8rem 1rem;
+    padding: 1.45rem 0;
+  }
+
+  .research-list-meta {
+    grid-column: 1 / -1;
+    flex-direction: row;
+    gap: 0.65rem;
+    align-items: center;
+    padding-top: 0;
+  }
+
+  .research-list-meta time::before {
+    margin-right: 0.65rem;
+    content: '·';
+  }
+
+  .research-list-main {
+    grid-column: 1;
+  }
+
+  .research-list-arrow {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  .research-list-title {
+    font-size: 1.35rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .research-list-link,
+  .research-list-title,
+  .research-list-arrow {
+    transition: none;
+  }
+}

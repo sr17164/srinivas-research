@@ -1,0 +1,82 @@
+---
+import { render } from 'astro:content'
+
+import ListItem from '~/components/views/ListItem.astro'
+import DesktopAside from '~/components/base/DesktopAside.astro'
+import MobileControl from '~/components/base/MobileControl.astro'
+
+import { FEATURES } from '~/config'
+import { getFilteredPosts, getSortedPosts, getMinutesRead } from '~/utils/data'
+
+import type { CollectionEntry } from 'astro:content'
+
+interface Props {
+  pageTag?: boolean
+}
+
+const { pageTag = false } = Astro.props
+
+const { tag } = FEATURES
+const tagEnabled = Array.isArray(tag) && tag[0] && pageTag
+
+interface ResearchItem {
+  idx: number
+  id: CollectionEntry<'blog'>['id']
+  data: CollectionEntry<'blog'>['data']
+  minutesRead: ReturnType<typeof getMinutesRead>
+}
+
+const posts = getSortedPosts(await getFilteredPosts())
+
+const enrichedPosts: ResearchItem[] = await Promise.all(
+  posts.map(async (post, idx) => {
+    const { data, id } = post
+    const { remarkPluginFrontmatter } = await render(post)
+
+    return {
+      idx,
+      id,
+      data,
+      minutesRead: getMinutesRead(
+        data.minutesRead,
+        remarkPluginFrontmatter.minutesRead
+      ),
+    }
+  })
+)
+
+const tags = tagEnabled
+  ? enrichedPosts
+      .map((post) => post.data.tags)
+      .filter((postTags) => postTags.length > 0)
+  : []
+---
+
+<DesktopAside {tags} />
+<MobileControl {tags} />
+
+<div aria-label="Research list">
+  {
+    enrichedPosts.length === 0 ? (
+      <div class="py-2 op-50">No research published yet.</div>
+    ) : (
+      enrichedPosts.map(({ data, id, minutesRead, idx }) => (
+        <ListItem
+          {idx}
+          postSlug={id}
+          title={data.title}
+          reportType={data.reportType}
+          assetClass={data.assetClass}
+          sector={data.sector}
+          tags={data.tags}
+          date={data.pubDate}
+          minutesRead={minutesRead}
+          radio={data.radio}
+          video={data.video}
+          platform={data.platform}
+          redirect={data.redirect}
+        />
+      ))
+    )
+  }
+</div>

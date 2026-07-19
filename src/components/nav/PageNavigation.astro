@@ -1,0 +1,61 @@
+---
+import Link from '~/components/base/Link.astro'
+import { withBasePath } from '~/utils/path'
+
+type PageKey = 'home' | 'research' | 'models' | 'about'
+
+interface Props {
+  current?: PageKey
+}
+
+interface PageLink {
+  key: PageKey
+  label: string
+  href: string
+  className: string
+}
+
+const { current } = Astro.props
+
+const pages: PageLink[] = [
+  {
+    key: 'home',
+    label: 'Home',
+    href: '/',
+    className: 'btn-slate',
+  },
+  {
+    key: 'research',
+    label: 'Research',
+    href: '/research/',
+    className: 'btn-blue',
+  },
+  {
+    key: 'models',
+    label: 'Models',
+    href: '/models/',
+    className: 'btn-emerald',
+  },
+  {
+    key: 'about',
+    label: 'About',
+    href: '/about/',
+    className: 'btn-violet',
+  },
+]
+
+const visiblePages = pages.filter((page) => page.key !== current)
+---
+
+<nav
+  class="mt-10 not-prose flex flex-wrap items-center gap-2.5"
+  aria-label="Explore SM Research"
+>
+  {
+    visiblePages.map((page) => (
+      <Link class={page.className} href={withBasePath(page.href)}>
+        {page.label}
+      </Link>
+    ))
+  }
+</nav>
