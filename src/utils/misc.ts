@@ -5,9 +5,7 @@ export function lockScroll() {
   const bodyEl = document.body
 
   const scrollbarWidth = window.innerWidth - bodyEl.clientWidth
-  const hasRose = document.getElementById('bg-rose')
-  if (scrollbarWidth > 0 && !hasRose)
-    bodyEl.style.paddingRight = `${scrollbarWidth}px`
+  if (scrollbarWidth > 0) bodyEl.style.paddingRight = `${scrollbarWidth}px`
   bodyEl.style.overflow = 'hidden'
 }
 

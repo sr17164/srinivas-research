@@ -14,8 +14,6 @@
 </button>
 
 <script>
-  import { withClientBasePath } from '~/utils/misc'
-
   // related to #45
   const chooseFill = (): FillMode => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -31,28 +29,6 @@
     return 'none'
   }
   const fill = chooseFill()
-
-  const changeGiscusTheme = (isDark: boolean) => {
-    const newTheme = isDark
-      ? withClientBasePath('giscus/dark.css')
-      : withClientBasePath('giscus/light.css')
-
-    const giscusScript = document.getElementById('giscus-script')
-    if (giscusScript) {
-      giscusScript.setAttribute('data-theme', newTheme)
-      const iframe = document.querySelector('iframe.giscus-frame')
-      if (
-        iframe &&
-        iframe instanceof HTMLIFrameElement &&
-        iframe.contentWindow
-      ) {
-        iframe.contentWindow.postMessage(
-          { giscus: { setConfig: { theme: newTheme } } },
-          'https://giscus.app'
-        )
-      }
-    }
-  }
 
   const updateAria = (isDark: boolean, buttonElement: HTMLElement | null) => {
     buttonElement?.setAttribute('aria-checked', isDark ? 'true' : 'false')
@@ -82,7 +58,6 @@
     buttonElement = getThemeSwitchButton()
   ) => {
     document.documentElement.classList.toggle('dark', isDark)
-    changeGiscusTheme(isDark)
     updateAria(isDark, buttonElement)
     setColorScheme(isDark)
     setThemeColor()

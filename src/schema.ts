@@ -25,7 +25,7 @@ export const pageSchema = z.object({
       'Provides a brief description, used in meta tags for SEO and sharing purposes. If not needed, leave the field as an empty string or delete it, and the `SITE.description` will be used directly.'
     ),
   bgType: z
-    .union([z.literal(false), z.enum(['plum', 'dot', 'rose', 'particle'])])
+    .union([z.literal(false), z.enum(['plum', 'dot'])])
     .default(false)
     .describe(
       'Specifies whether to apply a background on this page and select its type. It is also used as the page-specific OG image background; if not needed, delete the field or set to `false`.'
@@ -187,7 +187,7 @@ export const postSchema = ({ image }: SchemaContext) =>
       ),
 
     bgType: z
-      .union([z.literal(false), z.enum(['plum', 'dot', 'rose', 'particle'])])
+      .union([z.literal(false), z.enum(['plum', 'dot'])])
       .default(false)
       .describe(
         'Specifies whether to apply a background on this post and select its type. It is also used as the page-specific OG image background; if not needed, delete the field or set to `false`.'

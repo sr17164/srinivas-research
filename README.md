@@ -62,16 +62,23 @@ Do not commit generated folders such as `node_modules`, `.astro` or `dist`. Verc
 
 The repository is intended to be connected to Vercel through GitHub. Each push to `main` triggers a production build; other branches can receive preview deployments.
 
-After Vercel assigns the final production address, update `SITE.website` in `src/config.ts`:
-
-```ts
-website: 'https://your-project.vercel.app/',
-```
-
-Keep the trailing slash. This value supplies canonical URLs, the sitemap, RSS metadata, Open Graph metadata and structured data.
+`SITE.website` is derived automatically from Vercel's production-domain environment variable. This keeps canonical URLs, the sitemap, RSS metadata, Open Graph metadata and structured data aligned with the final `.vercel.app` or custom domain without a manual code edit.
 
 ## Project maintenance
 
 The site intentionally omits the inherited theme demo content, sponsorship configuration, sample workflows, unused visual assets and unused math-rendering dependencies. Dollar-denominated market ranges are rendered as normal prose rather than being interpreted as LaTeX.
 
 The project retains its upstream MIT licence and attribution in `LICENSE`.
+
+## Private traffic and performance analytics
+
+The production site includes Vercel Web Analytics and Speed Insights. Neither adds a public counter, badge or advertisement. Results are visible only inside the Vercel project dashboard to account members with project access.
+
+After importing the repository into Vercel:
+
+1. Open the project and enable **Analytics**.
+2. Open **Speed Insights** and enable it.
+3. Under **Settings → Environment Variables**, keep **Automatically expose System Environment Variables** enabled.
+4. Redeploy once after enabling both products.
+
+With system environment variables enabled, the site uses `VERCEL_PROJECT_PRODUCTION_URL` and falls back to `VERCEL_URL` for deployment metadata.

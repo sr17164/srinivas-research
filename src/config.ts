@@ -1,7 +1,13 @@
 import type { Site, Ui, Features } from './types'
 
+const productionHost =
+  process.env.VERCEL_PROJECT_PRODUCTION_URL ?? process.env.VERCEL_URL
+const website = (
+  productionHost ? `https://${productionHost}/` : 'http://localhost:4321/'
+) as Site['website']
+
 export const SITE: Site = {
-  website: 'https://your-final-domain.com/',
+  website,
   base: '/',
   title: 'SM Research',
   description:

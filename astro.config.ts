@@ -108,25 +108,9 @@ export default defineConfig({
     responsiveStyles: true,
     domains: SITE.imageDomains,
   },
-  security: {
-    // Allow Giscus iframe to load local styles
-    // 1. Allow Giscus through Astro's dev request filter without warning
-    allowedDomains: [
-      {
-        hostname: 'giscus.app',
-        protocol: 'https',
-      },
-    ],
-  },
   vite: {
     logLevel: 'warn',
     build: { chunkSizeWarningLimit: 1200 },
-    server: {
-      headers: {
-        // 2. Satisfy the browser's CORS check for Giscus theme CSS and fonts
-        'Access-Control-Allow-Origin': 'https://giscus.app',
-      },
-    },
   },
   logger: logHandlers.node({ level: 'info' }),
   experimental: {

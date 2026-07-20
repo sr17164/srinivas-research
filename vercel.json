@@ -2,15 +2,18 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "headers": [
     {
-      "source": "/giscus/(.*)",
+      "source": "/(.*)",
       "headers": [
-        { "key": "Access-Control-Allow-Origin", "value": "https://giscus.app" }
-      ]
-    },
-    {
-      "source": "/_astro/fonts/(.*)",
-      "headers": [
-        { "key": "Access-Control-Allow-Origin", "value": "https://giscus.app" }
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "X-Frame-Options", "value": "DENY" },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=()"
+        }
       ]
     }
   ]

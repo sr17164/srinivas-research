@@ -285,10 +285,28 @@ def main() -> int:
         )
 
     config = (ROOT / "src" / "config.ts").read_text(encoding="utf-8")
-    if "https://your-final-domain.com/" in config:
-        warnings.append(
-            "src/config.ts: SITE.website still uses the production-domain placeholder"
+    if "VERCEL_PROJECT_PRODUCTION_URL" not in config:
+        errors.append(
+            "src/config.ts: derive SITE.website from VERCEL_PROJECT_PRODUCTION_URL"
         )
+
+    base_layout = (ROOT / "src" / "layouts" / "BaseLayout.astro").read_text(
+        encoding="utf-8"
+    )
+    for integration in (
+        "@vercel/analytics/astro",
+        "@vercel/speed-insights/astro",
+    ):
+        if integration not in base_layout:
+            errors.append(
+                f"src/layouts/BaseLayout.astro: missing {integration}"
+            )
+
+    for removed_dependency in ("p5", "@types/p5"):
+        if removed_dependency in dependencies:
+            errors.append(
+                f"package.json: remove unused {removed_dependency} dependency"
+            )
 
     errors = list(dict.fromkeys(errors))
     warnings = list(dict.fromkeys(warnings))
