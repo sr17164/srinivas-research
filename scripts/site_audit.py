@@ -7,6 +7,7 @@ It catches editorial, linking and packaging errors that are easy to miss.
 
 from __future__ import annotations
 
+import hashlib
 import json
 import re
 import sys
@@ -216,6 +217,71 @@ def main() -> int:
     for path in generated_files:
         errors.append(
             f"Remove generated Python cache: {path.relative_to(ROOT)}"
+        )
+
+
+    head = (ROOT / "src" / "components" / "base" / "Head.astro").read_text(
+        encoding="utf-8"
+    )
+    if "/icon-512.png" in head:
+        errors.append(
+            "src/components/base/Head.astro: browser favicon must use the SM favicon, not icon-512.png"
+        )
+    for required_icon in ("/favicon.ico?v=3", "/favicon-32.png?v=3"):
+        if required_icon not in head:
+            errors.append(
+                f"src/components/base/Head.astro: missing favicon reference {required_icon}"
+            )
+
+    inherited_astro_svg = PUBLIC / "favicon.svg"
+    if inherited_astro_svg.exists():
+        svg_text = inherited_astro_svg.read_text(encoding="utf-8", errors="ignore")
+        if "Astro" in svg_text or "vscodeIconsFileTypeLightAstro" in svg_text:
+            errors.append(
+                "public/favicon.svg: remove the inherited Astro favicon"
+            )
+
+    for icon_name in (
+        "favicon.ico",
+        "favicon-16.png",
+        "favicon-32.png",
+        "apple-touch-icon.png",
+        "icon-192.png",
+        "icon-512.png",
+        "icon-mask.png",
+    ):
+        icon_path = PUBLIC / icon_name
+        if not icon_path.exists():
+            errors.append(f"Missing SM icon: {icon_path.relative_to(ROOT)}")
+
+    inherited_astro_icon_hashes = {
+        "2bdf29165175136c1b756461bebbd2a45cadde6ea4af74cf592c61ab859eb72d",
+        "3e0dd854b9c66d3376ce1b347de7c990d9b123e13b5669013407fd90020718a1",
+        "5c6c45ae48cbfae2dda4d8549199175f77f06d68738503fa36dea650fc3c404e",
+    }
+    for icon_name in ("apple-touch-icon.png", "icon-192.png", "icon-512.png"):
+        icon_path = PUBLIC / icon_name
+        if icon_path.exists():
+            digest = hashlib.sha256(icon_path.read_bytes()).hexdigest()
+            if digest in inherited_astro_icon_hashes:
+                errors.append(
+                    f"{icon_path.relative_to(ROOT)}: inherited Astro icon restored"
+                )
+
+    research_index = (ROOT / "src" / "pages" / "research" / "index.astro").read_text(
+        encoding="utf-8"
+    )
+    if '<PageNavigation current="research" />' not in research_index:
+        errors.append(
+            "src/pages/research/index.astro: add the landing-page navigation row"
+        )
+
+    back_link = (
+        ROOT / "src" / "components" / "widgets" / "BackLink.astro"
+    ).read_text(encoding="utf-8")
+    if "cd .." in back_link:
+        errors.append(
+            "src/components/widgets/BackLink.astro: replace inherited 'cd ..' copy"
         )
 
     config = (ROOT / "src" / "config.ts").read_text(encoding="utf-8")

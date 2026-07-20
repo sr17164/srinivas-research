@@ -1,12 +1,20 @@
 ---
 import Link from '~/components/base/Link.astro'
-import { ensureTrailingSlash } from '~/utils/path'
+import { withBasePath } from '~/utils/path'
 
-const pathSegments = ensureTrailingSlash(Astro.url.pathname)
-  .split('/')
-  .slice(0, -2)
-const href = pathSegments.length > 1 ? pathSegments.join('/') + '/' : '/'
+const pathname = Astro.url.pathname
+
+const destination = pathname.startsWith(withBasePath('/research/'))
+  ? { href: '/research/', label: '← Back to research' }
+  : pathname.startsWith(withBasePath('/models/')) ||
+      pathname.startsWith(withBasePath('/projects/'))
+    ? { href: '/models/', label: '← Back to models' }
+    : { href: '/', label: '← Back home' }
 ---
 
-<span class="font-mono op-50">&gt; </span>
-<Link class="font-mono op-50!" {href}>cd ..</Link>
+<Link
+  class="text-sm op-55! no-underline! transition-opacity hover:op-100!"
+  href={withBasePath(destination.href)}
+>
+  {destination.label}
+</Link>

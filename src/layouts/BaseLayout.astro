@@ -42,6 +42,15 @@ const {
 const hasCustomCursor =
   newTab && cursorType.length > 0 && cursorType !== 'pointer'
 if (hasCustomCursor) style['--external-link-cursor'] = cursorType
+
+const pathname = Astro.url.pathname
+const landingPages = [
+  withBasePath('/'),
+  withBasePath('/research/'),
+  withBasePath('/models/'),
+  withBasePath('/about/'),
+]
+const showBackLink = !landingPages.includes(pathname)
 ---
 
 <!doctype html>
@@ -76,7 +85,7 @@ if (hasCustomCursor) style['--external-link-cursor'] = cursorType
       <slot />
       <!-- Share -->
       {
-        Astro.url.pathname !== withBasePath('/') && (
+        showBackLink && (
           <footer class="slide-enter animate-delay-1000! prose mx-auto mt-8 print:hidden">
             <slot name="share" />
             <br />

@@ -159,17 +159,24 @@ const webPageData = {
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />
 
-<!-- Icon -->
+<!-- Icons -->
+<link rel="icon" href={withBasePath('/favicon.ico?v=3')} sizes="any" />
 <link
   rel="icon"
   type="image/png"
-  sizes="512x512"
-  href={withBasePath('/icon-512.png')}
+  sizes="32x32"
+  href={withBasePath('/favicon-32.png?v=3')}
+/>
+<link
+  rel="icon"
+  type="image/png"
+  sizes="16x16"
+  href={withBasePath('/favicon-16.png?v=3')}
 />
 <link
   rel="apple-touch-icon"
   sizes="180x180"
-  href={withBasePath('/apple-touch-icon.png')}
+  href={withBasePath('/apple-touch-icon.png?v=3')}
 />
 
 <!-- Manifest -->

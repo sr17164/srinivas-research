@@ -31,7 +31,7 @@ pnpm validate
 
 The command runs Astro diagnostics, ESLint, Prettier, the custom content audit and a full production build.
 
-The custom audit validates frontmatter, duplicate slugs and titles, methodology and source sections, current-view article links, featured-article consistency and required downloadable assets.
+The custom audit validates frontmatter, duplicate slugs and titles, methodology and source sections, current-view article links, featured-article consistency, navigation, favicon configuration and required downloadable assets.
 
 ## Publishing research
 
@@ -44,6 +44,10 @@ Research articles are stored in `src/content/blog` as MDX files. Each public art
 - a dated source list and informational-use disclaimer
 
 Homepage market views are maintained in `src/data/currentViews.ts`. When a view has a completed article, set its `href` to the article slug and remove any `researchStatus` placeholder.
+
+## Branding and icons
+
+The standalone SM favicon is generated from `public/favicon.png`. The browser uses the versioned 16px, 32px and ICO variants declared in `src/components/base/Head.astro`; the PWA manifest uses the 192px and 512px SM variants. Do not restore the inherited Astro icon files.
 
 ## Models and downloads
 

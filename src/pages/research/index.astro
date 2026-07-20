@@ -2,6 +2,7 @@
 import BaseLayout from '~/layouts/BaseLayout.astro'
 import StandardLayout from '~/layouts/StandardLayout.astro'
 import ListView from '~/components/views/ListView.astro'
+import PageNavigation from '~/components/nav/PageNavigation.astro'
 ---
 
 <BaseLayout
@@ -27,6 +28,8 @@ import ListView from '~/components/views/ListView.astro'
       </header>
 
       <ListView pageTag={true} />
+
+      <PageNavigation current="research" />
     </section>
   </StandardLayout>
 </BaseLayout>
