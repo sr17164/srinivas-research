@@ -2,13 +2,17 @@
 interface Props {
   investmentView?: 'Bullish' | 'Bearish' | 'Neutral'
   timeHorizon?: string
+  outcome?: 'Successful' | 'Unsuccessful' | 'Mixed' | 'Open'
   drivers?: string[]
 }
 
-const { investmentView, timeHorizon, drivers = [] } = Astro.props
+const { investmentView, timeHorizon, outcome, drivers = [] } = Astro.props
 
 const hasFactsheet =
-  Boolean(investmentView) || Boolean(timeHorizon) || drivers.length > 0
+  Boolean(investmentView) ||
+  Boolean(timeHorizon) ||
+  Boolean(outcome) ||
+  drivers.length > 0
 ---
 
 {
@@ -33,6 +37,20 @@ const hasFactsheet =
           <div class="research-fact">
             <span class="research-fact-label">Time horizon</span>
             <span class="research-fact-value">{timeHorizon}</span>
+          </div>
+        )}
+
+        {outcome && (
+          <div class="research-fact">
+            <span class="research-fact-label">Outcome</span>
+            <span
+              class:list={[
+                'research-outcome',
+                `research-outcome-${outcome.toLowerCase()}`,
+              ]}
+            >
+              {outcome}
+            </span>
           </div>
         )}
       </div>
@@ -85,7 +103,8 @@ const hasFactsheet =
   }
 
   .research-fact-value,
-  .research-view {
+  .research-view,
+  .research-outcome {
     font-size: 0.95rem;
     font-weight: 600;
     line-height: 1.35;
@@ -118,6 +137,37 @@ const hasFactsheet =
     color: #777;
   }
 
+  .research-outcome {
+    display: inline-flex;
+    width: fit-content;
+    align-items: center;
+    gap: 0.45rem;
+  }
+
+  .research-outcome::before {
+    width: 0.42rem;
+    height: 0.42rem;
+    border-radius: 999px;
+    background: currentColor;
+    content: '';
+  }
+
+  .research-outcome-successful {
+    color: #1f7a4f;
+  }
+
+  .research-outcome-unsuccessful {
+    color: #a33a3a;
+  }
+
+  .research-outcome-mixed {
+    color: #82764f;
+  }
+
+  .research-outcome-open {
+    color: #4f6f91;
+  }
+
   :global(html.dark) .research-view-bullish {
     color: #67c995;
   }
@@ -128,6 +178,22 @@ const hasFactsheet =
 
   :global(html.dark) .research-view-neutral {
     color: #aaa;
+  }
+
+  :global(html.dark) .research-outcome-successful {
+    color: #67c995;
+  }
+
+  :global(html.dark) .research-outcome-unsuccessful {
+    color: #e88383;
+  }
+
+  :global(html.dark) .research-outcome-mixed {
+    color: #c7b878;
+  }
+
+  :global(html.dark) .research-outcome-open {
+    color: #8fb7de;
   }
 
   .research-drivers {

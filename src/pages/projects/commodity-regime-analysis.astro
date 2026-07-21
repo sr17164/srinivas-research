@@ -1,4 +1,7 @@
 ---
+import { readFileSync } from 'node:fs'
+import { resolve } from 'node:path'
+
 import Link from '~/components/base/Link.astro'
 import PageNavigation from '~/components/nav/PageNavigation.astro'
 import BaseLayout from '~/layouts/BaseLayout.astro'
@@ -6,6 +9,16 @@ import StandardLayout from '~/layouts/StandardLayout.astro'
 import { withBasePath } from '~/utils/path'
 
 const projectRoot = '/projects/commodity-regime-analysis'
+
+const analysisSummary = JSON.parse(
+  readFileSync(
+    resolve(
+      process.cwd(),
+      'public/projects/commodity-regime-analysis/outputs/analysis_summary.json'
+    ),
+    'utf8'
+  )
+) as { observations: number }
 
 const groups = [
   {
@@ -96,6 +109,14 @@ const groups = [
         label: 'Brent robustness figure',
         path: 'figures/brent-threshold-robustness.png',
       },
+      {
+        label: 'Cross-threshold robustness figure',
+        path: 'figures/commodity-threshold-robustness-dark.png',
+      },
+      {
+        label: 'Regime-difference figure',
+        path: 'figures/commodity-regime-differences-dark.png',
+      },
     ],
   },
 ]
@@ -123,10 +144,32 @@ const hrefFor = (path: string) => withBasePath(`${projectRoot}/${path}`)
         review model.
       </p>
 
+      <div class="project-preview-grid not-prose">
+        <figure>
+          <img
+            src={withBasePath(
+              '/models/commodity-regime-sensitivities-dark.png'
+            )}
+            alt="Dark-themed grouped bar chart of commodity-equity sensitivities by inflation regime"
+            loading="lazy"
+          />
+          <figcaption>Primary regime comparison</figcaption>
+        </figure>
+
+        <figure>
+          <img
+            src={withBasePath('/models/commodity-regime-thresholds-dark.png')}
+            alt="Dark-themed line chart of robustness across inflation thresholds"
+            loading="lazy"
+          />
+          <figcaption>Robustness across thresholds</figcaption>
+        </figure>
+      </div>
+
       <div class="project-meta not-prose">
         <div>
           <span>Usable sample</span>
-          <strong>89 monthly observations</strong>
+          <strong>{analysisSummary.observations} monthly observations</strong>
         </div>
         <div>
           <span>Primary model</span>
@@ -171,7 +214,7 @@ const hrefFor = (path: string) => withBasePath(`${projectRoot}/${path}`)
       <div class="project-download not-prose">
         <div>
           <span>Complete archive</span>
-          <strong>Code, model, data, documentation and original files</strong>
+          <strong>Code, model, retained data and documentation</strong>
         </div>
 
         <Link
@@ -206,6 +249,34 @@ const hrefFor = (path: string) => withBasePath(`${projectRoot}/${path}`)
 </BaseLayout>
 
 <style>
+  .project-preview-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    margin: 1.4rem 0 2rem;
+  }
+
+  .project-preview-grid figure {
+    margin: 0;
+  }
+
+  .project-preview-grid img {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 0;
+    border: 1px solid color-mix(in srgb, currentColor 12%, transparent);
+    border-radius: 0.55rem;
+    background: #07111b;
+  }
+
+  .project-preview-grid figcaption {
+    margin-top: 0.7rem;
+    font-size: 0.76rem;
+    line-height: 1.4;
+    opacity: 0.58;
+  }
+
   .project-meta {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -318,6 +389,7 @@ const hrefFor = (path: string) => withBasePath(`${projectRoot}/${path}`)
   }
 
   @media (max-width: 680px) {
+    .project-preview-grid,
     .project-meta,
     .project-groups {
       grid-template-columns: 1fr;

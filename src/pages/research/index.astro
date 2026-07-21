@@ -3,6 +3,8 @@ import BaseLayout from '~/layouts/BaseLayout.astro'
 import StandardLayout from '~/layouts/StandardLayout.astro'
 import ListView from '~/components/views/ListView.astro'
 import PageNavigation from '~/components/nav/PageNavigation.astro'
+import Link from '~/components/base/Link.astro'
+import { withBasePath } from '~/utils/path'
 ---
 
 <BaseLayout
@@ -19,15 +21,23 @@ import PageNavigation from '~/components/nav/PageNavigation.astro'
         <h1>Research</h1>
 
         <p class="research-index-intro">
-          Independent research across commodity markets, macroeconomic forces
-          and global market structure, focused on catalysts, asymmetry and
-          downside risk.
+          Long-form research across commodity markets and macroeconomic forces,
+          with explicit catalysts, risks, implementation frameworks and
+          invalidation conditions.
         </p>
+
+        <Link
+          href={withBasePath('/outcomes/')}
+          class="research-index-outcomes border-b-none!"
+        >
+          View the decision log
+          <span aria-hidden="true">↗</span>
+        </Link>
 
         <div class="research-index-rule"></div>
       </header>
 
-      <ListView pageTag={true} />
+      <ListView pageTag={false} />
 
       <PageNavigation current="research" />
     </section>

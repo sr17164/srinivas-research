@@ -26,6 +26,9 @@ REQUIRED_FRONTMATTER = {
     "reportType",
     "assetClass",
     "sector",
+    "market",
+    "outcome",
+    "outcomeSummary",
     "draft",
 }
 
@@ -103,6 +106,17 @@ def main() -> int:
         slug = clean_scalar(fm.get("slug", ""))
         draft = clean_scalar(fm.get("draft", "false")).lower() == "true"
         featured = clean_scalar(fm.get("featured", "false")).lower() == "true"
+
+        outcome = clean_scalar(fm.get("outcome", ""))
+        valid_outcomes = {"Successful", "Unsuccessful", "Mixed", "Open"}
+        if outcome and outcome not in valid_outcomes:
+            errors.append(
+                f"{path.relative_to(ROOT)}: invalid outcome {outcome!r}"
+            )
+        if outcome and outcome != "Open" and "## Outcome and Reflection" not in text:
+            errors.append(
+                f"{path.relative_to(ROOT)}: resolved view needs an outcome section"
+            )
 
         if title:
             if title in titles:
@@ -306,6 +320,101 @@ def main() -> int:
         if removed_dependency in dependencies:
             errors.append(
                 f"package.json: remove unused {removed_dependency} dependency"
+            )
+
+    outcomes_page = ROOT / "src" / "pages" / "outcomes.astro"
+    if not outcomes_page.exists():
+        errors.append("Missing recruiter-facing decision log: src/pages/outcomes.astro")
+    else:
+        outcomes_text = outcomes_page.read_text(encoding="utf-8")
+        if "audited portfolio returns" not in outcomes_text:
+            errors.append(
+                "src/pages/outcomes.astro: clarify that outcomes are not audited returns"
+            )
+        if "hit rate" in outcomes_text.lower():
+            errors.append(
+                "src/pages/outcomes.astro: do not present a student research hit rate"
+            )
+
+    if "path: '/outcomes'" not in config:
+        errors.append("src/config.ts: add Outcomes to the primary navigation")
+
+    footer_text = (ROOT / "src" / "components" / "base" / "Footer.astro").read_text(
+        encoding="utf-8"
+    )
+    if "'/outcomes/'" not in footer_text:
+        errors.append("src/components/base/Footer.astro: add Outcomes link")
+
+    investment_summary = (
+        ROOT / "src" / "components" / "research" / "InvestmentSummary.astro"
+    ).read_text(encoding="utf-8")
+    for required_rule in (
+        "list-style: none",
+        ".summary-drivers li::before",
+        "padding-left: 1rem",
+    ):
+        if required_rule not in investment_summary:
+            errors.append(
+                "src/components/research/InvestmentSummary.astro: "
+                f"missing bullet-overlap fix ({required_rule})"
+            )
+
+    analysis_script = (
+        PUBLIC
+        / "projects"
+        / "commodity-regime-analysis"
+        / "commodity_regime_analysis.py"
+    ).read_text(encoding="utf-8")
+    if "contained 104 monthly rows" in analysis_script:
+        errors.append(
+            "commodity_regime_analysis.py: generated narrative still hardcodes raw row count"
+        )
+    if "write_summary(raw, model_data" not in analysis_script:
+        errors.append(
+            "commodity_regime_analysis.py: pass raw data into write_summary"
+        )
+
+    methodology = (
+        PUBLIC
+        / "projects"
+        / "commodity-regime-analysis"
+        / "docs"
+        / "methodology.md"
+    ).read_text(encoding="utf-8")
+    if "median of the available lagged headline-CPI series" not in methodology:
+        errors.append(
+            "docs/methodology.md: explain the 2.68% robustness threshold"
+        )
+
+    results_csv = (
+        PUBLIC
+        / "projects"
+        / "commodity-regime-analysis"
+        / "outputs"
+        / "primary_relationship_results.csv"
+    )
+    if results_csv.exists():
+        header = results_csv.read_text(encoding="utf-8").splitlines()[0]
+        if "Model" not in header.split(","):
+            errors.append(
+                "primary_relationship_results.csv: add a Model column"
+            )
+
+    model_methodology_page = (
+        ROOT / "src" / "pages" / "models" / "commodity-regime-analysis.mdx"
+    ).read_text(encoding="utf-8")
+    if "CommodityRegimeResults" not in model_methodology_page:
+        errors.append(
+            "commodity-regime-analysis.mdx: render results from generated outputs"
+        )
+    if "walk-forward testing" not in model_methodology_page:
+        errors.append(
+            "commodity-regime-analysis.mdx: disclose that contemporaneous sensitivity is not a trading signal"
+        )
+    for hardcoded_result in ("-0.030</td>", "0.493</td>", "0.016</td>"):
+        if hardcoded_result in model_methodology_page:
+            errors.append(
+                "commodity-regime-analysis.mdx: remove hardcoded result table"
             )
 
     errors = list(dict.fromkeys(errors))

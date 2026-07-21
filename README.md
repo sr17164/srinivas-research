@@ -9,6 +9,7 @@ Independent investment research by Srinivas Medida, covering commodity markets, 
 - UnoCSS
 - Pagefind search
 - Static deployment on Vercel
+- Public decision log generated from article frontmatter
 
 ## Local development
 
@@ -31,7 +32,7 @@ pnpm validate
 
 The command runs Astro diagnostics, ESLint, Prettier, the custom content audit and a full production build.
 
-The custom audit validates frontmatter, duplicate slugs and titles, methodology and source sections, current-view article links, featured-article consistency, navigation, favicon configuration and required downloadable assets.
+The custom audit validates frontmatter, duplicate slugs and titles, methodology and source sections, current-view article links, decision-log coverage, featured-article consistency, navigation, favicon configuration and required downloadable assets.
 
 ## Publishing research
 

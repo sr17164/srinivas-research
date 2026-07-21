@@ -1,0 +1,410 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro'
+import StandardLayout from '~/layouts/StandardLayout.astro'
+import Link from '~/components/base/Link.astro'
+import PageNavigation from '~/components/nav/PageNavigation.astro'
+
+import { getFilteredPosts, getSortedPosts } from '~/utils/data'
+import { formatDate } from '~/utils/datetime'
+import { withBasePath } from '~/utils/path'
+
+const posts = getSortedPosts(await getFilteredPosts())
+type Outcome = 'Successful' | 'Unsuccessful' | 'Mixed' | 'Open'
+const openViews = posts.filter((post) => post.data.outcome === 'Open').length
+const resolvedViews = posts.length - openViews
+
+const statusClass = (outcome: Outcome) =>
+  `decision-status decision-status-${outcome.toLowerCase()}`
+---
+
+<BaseLayout
+  title="Decision Log"
+  description="A transparent record of published investment views and how they resolved against their stated horizons and implementation."
+  bgType="plum"
+  ogImage={true}
+>
+  <StandardLayout class="max-w-260 group/content" isCentered={false}>
+    <section slot="article" class="decision-log">
+      <header class="decision-log-header">
+        <p class="decision-log-eyebrow">Accountability</p>
+        <h1>Decision Log</h1>
+        <p>
+          Every published view remains visible after its horizon has passed.
+          This page records what the thesis argued, how it resolved and where
+          the reasoning or implementation failed. The classifications are not
+          audited portfolio returns.
+        </p>
+      </header>
+
+      <dl class="decision-summary" aria-label="Decision log coverage">
+        <div>
+          <dt>Published views</dt>
+          <dd>{posts.length}</dd>
+        </div>
+        <div>
+          <dt>Resolved reviews</dt>
+          <dd>{resolvedViews}</dd>
+        </div>
+        <div>
+          <dt>Open views</dt>
+          <dd>{openViews}</dd>
+        </div>
+      </dl>
+
+      <div class="decision-table-wrapper">
+        <table class="decision-table">
+          <thead>
+            <tr>
+              <th scope="col">Market</th>
+              <th scope="col">Published</th>
+              <th scope="col">View</th>
+              <th scope="col">Outcome</th>
+              <th scope="col">Assessment</th>
+              <th scope="col"><span class="sr-only">Open research</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              posts.map((post) => (
+                <tr>
+                  <th scope="row" class="decision-market">
+                    {post.data.market}
+                  </th>
+                  <td class="decision-date">
+                    <time datetime={post.data.pubDate.toISOString()}>
+                      {formatDate(post.data.pubDate, true, true)}
+                    </time>
+                  </td>
+                  <td class="decision-view">
+                    {post.data.investmentView ?? '—'}
+                  </td>
+                  <td>
+                    <span class={statusClass(post.data.outcome)}>
+                      {post.data.outcome}
+                    </span>
+                  </td>
+                  <td class="decision-assessment">
+                    {post.data.outcomeSummary}
+                  </td>
+                  <td class="decision-link-cell">
+                    <Link
+                      href={withBasePath(`/research/${post.id}/`)}
+                      class="decision-link border-b-none!"
+                      aria-label={`Read ${post.data.title}`}
+                    >
+                      Read <span aria-hidden="true">↗</span>
+                    </Link>
+                  </td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <p class="decision-note">
+        “Mixed” is used where the research direction and implementation
+        diverged, or where a multi-idea report produced different outcomes. Open
+        views remain subject to revision as new evidence arrives.
+      </p>
+
+      <PageNavigation current="outcomes" />
+    </section>
+  </StandardLayout>
+</BaseLayout>
+
+<style>
+  .decision-log {
+    width: min(100%, 68rem);
+    margin: 0 auto;
+  }
+
+  .decision-log-header {
+    max-width: 48rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .decision-log-eyebrow {
+    margin: 0 0 0.8rem;
+    font-size: 0.72rem;
+    font-weight: 650;
+    line-height: 1;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0.48;
+  }
+
+  .decision-log h1 {
+    margin: 0 0 1.15rem;
+    font-family: Georgia, Cambria, 'Times New Roman', Times, serif;
+    font-size: clamp(3.1rem, 8vw, 5.75rem);
+    font-weight: 500;
+    line-height: 0.95;
+    letter-spacing: -0.055em;
+  }
+
+  .decision-log-header > p:last-child {
+    margin: 0;
+    font-size: clamp(1rem, 1.8vw, 1.15rem);
+    line-height: 1.68;
+    opacity: 0.64;
+  }
+
+  .decision-summary {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin: 0 0 2.5rem;
+    border: 1px solid color-mix(in srgb, var(--c-text) 14%, transparent);
+    border-radius: 0.45rem;
+    background: color-mix(in srgb, var(--c-text) 2.5%, transparent);
+  }
+
+  .decision-summary > div {
+    padding: 1rem 1.05rem;
+  }
+
+  .decision-summary > div + div {
+    border-left: 1px solid color-mix(in srgb, var(--c-text) 11%, transparent);
+  }
+
+  .decision-summary dt {
+    margin-bottom: 0.35rem;
+    font-size: 0.62rem;
+    font-weight: 650;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.45;
+  }
+
+  .decision-summary dd {
+    margin: 0;
+    font-family: Georgia, Cambria, 'Times New Roman', Times, serif;
+    font-size: 1.35rem;
+    line-height: 1;
+  }
+
+  .decision-table-wrapper {
+    overflow-x: auto;
+    border-top: 1px solid color-mix(in srgb, var(--c-text) 17%, transparent);
+    border-bottom: 1px solid color-mix(in srgb, var(--c-text) 17%, transparent);
+  }
+
+  .decision-table {
+    width: 100%;
+    min-width: 62rem;
+    border-collapse: collapse;
+    table-layout: fixed;
+    font-size: 0.8rem;
+  }
+
+  .decision-table th,
+  .decision-table td {
+    padding: 1rem 0.75rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--c-text) 10%, transparent);
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .decision-table tbody tr:last-child th,
+  .decision-table tbody tr:last-child td {
+    border-bottom: 0;
+  }
+
+  .decision-table thead th {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    font-size: 0.62rem;
+    font-weight: 650;
+    letter-spacing: 0.085em;
+    text-transform: uppercase;
+    opacity: 0.45;
+  }
+
+  .decision-table th:nth-child(1) {
+    width: 16%;
+  }
+
+  .decision-table th:nth-child(2) {
+    width: 11%;
+  }
+
+  .decision-table th:nth-child(3) {
+    width: 10%;
+  }
+
+  .decision-table th:nth-child(4) {
+    width: 13%;
+  }
+
+  .decision-table th:nth-child(5) {
+    width: 43%;
+  }
+
+  .decision-table th:nth-child(6) {
+    width: 7%;
+  }
+
+  .decision-market {
+    font-family: Georgia, Cambria, 'Times New Roman', Times, serif;
+    font-size: 0.98rem;
+    font-weight: 500;
+    line-height: 1.35;
+  }
+
+  .decision-date,
+  .decision-view {
+    white-space: nowrap;
+    opacity: 0.56;
+  }
+
+  .decision-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.7rem;
+    font-weight: 650;
+    white-space: nowrap;
+  }
+
+  .decision-status::before {
+    width: 0.38rem;
+    height: 0.38rem;
+    border-radius: 999px;
+    background: currentColor;
+    content: '';
+  }
+
+  .decision-status-successful {
+    color: color-mix(in srgb, #228b5b 80%, var(--c-text));
+  }
+
+  .decision-status-unsuccessful {
+    color: color-mix(in srgb, #b44747 80%, var(--c-text));
+  }
+
+  .decision-status-mixed {
+    color: color-mix(in srgb, #82764f 72%, var(--c-text));
+  }
+
+  .decision-status-open {
+    color: color-mix(in srgb, #4f78a3 76%, var(--c-text));
+  }
+
+  .decision-assessment {
+    line-height: 1.55;
+    opacity: 0.7;
+  }
+
+  .decision-link-cell {
+    text-align: right !important;
+  }
+
+  .decision-link {
+    display: inline-flex;
+    gap: 0.3rem;
+    align-items: center;
+    color: inherit;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-decoration: none;
+    opacity: 0.46;
+    transition: opacity 160ms ease;
+  }
+
+  .decision-link:hover {
+    opacity: 1;
+  }
+
+  .decision-note {
+    max-width: 48rem;
+    margin: 1rem 0 0;
+    font-size: 0.72rem;
+    line-height: 1.55;
+    opacity: 0.46;
+  }
+
+  @media (max-width: 720px) {
+    .decision-summary {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .decision-summary > div {
+      padding-inline: 0.7rem;
+    }
+
+    .decision-table-wrapper {
+      overflow: visible;
+      border-bottom: 0;
+    }
+
+    .decision-table,
+    .decision-table tbody,
+    .decision-table tr,
+    .decision-table th,
+    .decision-table td {
+      display: block;
+      width: 100%;
+      min-width: 0;
+    }
+
+    .decision-table thead {
+      position: absolute;
+      overflow: hidden;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      border: 0;
+      margin: -1px;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+    }
+
+    .decision-table tr {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 0.55rem 1rem;
+      padding: 1.35rem 0;
+      border-bottom: 1px solid
+        color-mix(in srgb, var(--c-text) 12%, transparent);
+    }
+
+    .decision-table th,
+    .decision-table td {
+      padding: 0;
+      border: 0;
+    }
+
+    .decision-market {
+      grid-column: 1;
+      font-size: 1.2rem;
+    }
+
+    .decision-date {
+      grid-column: 2;
+      grid-row: 1;
+      text-align: right;
+    }
+
+    .decision-view,
+    .decision-table td:nth-child(4) {
+      grid-column: 1 / -1;
+    }
+
+    .decision-assessment {
+      grid-column: 1 / -1;
+      margin-top: 0.25rem;
+    }
+
+    .decision-link-cell {
+      grid-column: 1 / -1;
+      margin-top: 0.2rem;
+      text-align: left !important;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .decision-link {
+      transition: none;
+    }
+  }
+</style>

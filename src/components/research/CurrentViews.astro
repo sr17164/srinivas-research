@@ -36,9 +36,9 @@ const getStanceClass = (stance: string) => {
       <h2 id="current-views-title">Current Views</h2>
 
       <p class="current-views-intro">
-        A concise record of current directional views, monitored against
-        changing market conditions and updated when the underlying evidence
-        changes.
+        Live directional views with stated horizons and concise rationales. Each
+        is revised when the underlying evidence or invalidation conditions
+        change.
       </p>
     </div>
 
@@ -91,9 +91,9 @@ const getStanceClass = (stance: string) => {
                   <Link
                     href={withBasePath(view.href)}
                     class="current-view-link border-b-none!"
-                    aria-label={`Read supporting research for ${view.market}`}
+                    aria-label={`${view.linkLabel ?? 'Read supporting research'} for ${view.market}`}
                   >
-                    Read research
+                    {view.linkLabel ?? 'Read research'}
                     <span aria-hidden="true">↗</span>
                   </Link>
                 ) : view.researchStatus ? (
@@ -108,8 +108,8 @@ const getStanceClass = (stance: string) => {
   </div>
 
   <p class="current-views-note">
-    These views reflect current evidence for the stated investment horizon and
-    are updated when the underlying evidence changes.
+    These are research views, not portfolio recommendations. Each is assessed
+    against its stated horizon and retained in the decision log.
   </p>
 </section>
 

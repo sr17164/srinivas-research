@@ -33,6 +33,12 @@ export const UI: Ui = {
       text: 'Models',
     },
     {
+      path: '/outcomes',
+      title: 'Outcomes',
+      displayMode: 'alwaysText',
+      text: 'Decisions',
+    },
+    {
       path: '/about',
       title: 'About',
       displayMode: 'alwaysText',

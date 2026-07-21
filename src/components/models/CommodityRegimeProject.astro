@@ -1,0 +1,133 @@
+---
+import { readFileSync } from 'node:fs'
+import { resolve } from 'node:path'
+
+import ModelProject from '~/components/models/ModelProject.astro'
+
+interface AnalysisSummary {
+  sample_start: string
+  sample_end: string
+  observations: number
+  excluded_artificial_zero_rows: number
+}
+
+interface ResultRow {
+  Relationship: string
+  Lower_Inflation_Beta: number
+  High_Inflation_Beta: number
+  Difference_HAC_PValue: number
+}
+
+const projectRoot = resolve(
+  process.cwd(),
+  'public/projects/commodity-regime-analysis'
+)
+
+const summary = JSON.parse(
+  readFileSync(resolve(projectRoot, 'outputs/analysis_summary.json'), 'utf8')
+) as AnalysisSummary
+
+const csv = readFileSync(
+  resolve(projectRoot, 'outputs/primary_relationship_results.csv'),
+  'utf8'
+).trim()
+const [headerLine = '', ...dataLines] = csv.split(/\r?\n/)
+const headers = headerLine.split(',')
+const rows = dataLines.map((line) => {
+  const values = line.split(',')
+  const raw = Object.fromEntries(
+    headers.map((header, index) => [header, values[index] ?? ''])
+  )
+  return {
+    Relationship: raw.Relationship,
+    Lower_Inflation_Beta: Number(raw.Lower_Inflation_Beta),
+    High_Inflation_Beta: Number(raw.High_Inflation_Beta),
+    Difference_HAC_PValue: Number(raw.Difference_HAC_PValue),
+  } satisfies ResultRow
+})
+
+const byCommodity = Object.fromEntries(
+  rows.map((row) => [row.Relationship.split(' ')[0], row])
+) as Record<string, ResultRow>
+
+const getResult = (commodity: string) => {
+  const result = byCommodity[commodity]
+  if (!result)
+    throw new Error(`Missing commodity-regime result for ${commodity}`)
+  return result
+}
+
+const brent = getResult('Brent')
+const gold = getResult('Gold')
+const copper = getResult('Copper')
+---
+
+<ModelProject
+  category="Revised empirical study"
+  title="Inflation Regimes and Commodity-Producer Equity Sensitivity"
+  date="May–July 2026"
+  description="An audited Python and Excel study of whether the sensitivity of commodity-producer equity returns to underlying commodity returns changes when inflation is elevated."
+  facts={[
+    {
+      label: 'Sample',
+      value: `${summary.observations} usable monthly observations`,
+    },
+    {
+      label: 'Method',
+      value: 'Interaction OLS · Newey–West/HAC inference',
+    },
+    { label: 'Tools', value: 'Python · Excel · statsmodels' },
+  ]}
+  image="/models/commodity-regime-sensitivities-dark.png"
+  imageAlt="Estimated Brent, gold and copper return sensitivities in lower- and higher-inflation regimes"
+  actions={[
+    {
+      label: 'Read methodology',
+      href: '/models/commodity-regime-analysis/',
+    },
+    {
+      label: 'Browse project files',
+      href: '/projects/commodity-regime-analysis/',
+    },
+    {
+      label: 'Download Excel model',
+      href: '/downloads/commodity-regime-model.xlsx',
+      download: true,
+    },
+    {
+      label: 'Download full project',
+      href: '/downloads/commodity-regime-analysis.zip',
+      download: true,
+    },
+  ]}
+  note="The original specification and write-up are retained inside the full project archive. The published conclusions reflect the corrected model."
+>
+  <p>
+    A data audit identified {summary.excluded_artificial_zero_rows} observations created
+    by forward-filling missing futures prices before calculating returns. The revised
+    study excludes those artificial zero-return months, classifies the regime using
+    the previous month's headline CPI rate and estimates full-sample interaction models
+    with Newey–West standard errors.
+  </p>
+
+  <ul>
+    <li>
+      Brent's estimated sensitivity to energy-equity returns increased from{' '}
+      {brent.Lower_Inflation_Beta.toFixed(3)} in lower-inflation months to{' '}
+      {brent.High_Inflation_Beta.toFixed(3)} in high-inflation months; the difference
+      was statistically significant (HAC p ={' '}
+      {brent.Difference_HAC_PValue.toFixed(3)}).
+    </li>
+    <li>
+      The original claim of a reliable high-inflation increase in gold
+      sensitivity was withdrawn after the correction (interaction p ={' '}
+      {gold.Difference_HAC_PValue.toFixed(3)}).
+    </li>
+    <li>
+      Copper remained positively associated with mining-equity returns, but the
+      estimated regime difference was not statistically precise at the primary
+      3% threshold (interaction p ={' '}
+      {copper.Difference_HAC_PValue.toFixed(3)}).
+    </li>
+  </ul>
+</ModelProject>

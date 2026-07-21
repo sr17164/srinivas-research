@@ -2,7 +2,7 @@
 import Link from '~/components/base/Link.astro'
 import { withBasePath } from '~/utils/path'
 
-type PageKey = 'home' | 'research' | 'models' | 'about'
+type PageKey = 'home' | 'research' | 'models' | 'outcomes' | 'about'
 
 interface Props {
   current?: PageKey
@@ -35,6 +35,12 @@ const pages: PageLink[] = [
     label: 'Models',
     href: '/models/',
     className: 'btn-emerald',
+  },
+  {
+    key: 'outcomes',
+    label: 'Decision Log',
+    href: '/outcomes/',
+    className: 'btn-amber',
   },
   {
     key: 'about',

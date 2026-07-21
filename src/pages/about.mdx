@@ -1,7 +1,7 @@
 ---
 title: About SM Research
-description: Why SM Research exists, how its investment research is produced and how views are evaluated over time.
-subtitle: A public record of investment theses, models and decisions under uncertainty.
+description: Why SM Research exists, how its investment research is produced and how published views are reviewed over time.
+subtitle: A public record of research, models and decisions under uncertainty.
 bgType: plum
 ogImage: true
 ---
@@ -9,6 +9,9 @@ ogImage: true
 import BaseLayout from '~/layouts/BaseLayout.astro'
 import StandardLayout from '~/layouts/StandardLayout.astro'
 import PageNavigation from '~/components/nav/PageNavigation.astro'
+import ResearchPanel from '~/components/research/ResearchPanel.astro'
+import Link from '~/components/base/Link.astro'
+import { withBasePath } from '~/utils/path'
 
 <BaseLayout
   title={frontmatter.title}
@@ -23,231 +26,142 @@ import PageNavigation from '~/components/nav/PageNavigation.astro'
     isCentered={false}
   >
     <div slot="article" class="prose mx-auto">
-      <h2>Why It Exists</h2>
+      <ResearchPanel
+        label="At a glance"
+        title="What this site is intended to demonstrate"
+        compact
+      >
+        <ul>
+          <li>
+            Independent market views with explicit horizons, catalysts and
+            invalidation conditions
+          </li>
+          <li>
+            Commodity and macro research grounded in primary and institutional
+            sources
+          </li>
+          <li>
+            Financial modelling and empirical work with reviewable assumptions
+            and reproducible files
+          </li>
+          <li>
+            A decision log that retains failed theses and separates original
+            reasoning from hindsight
+          </li>
+        </ul>
+      </ResearchPanel>
 
-      <p>
-        SM Research is an independent investment research publication and a
-        public record of how I analyse markets.
-      </p>
+          <h2>Why I Built It</h2>
 
-      <p>
-        An investment thesis can appear convincing while it remains informal.
-        Writing it down creates a higher standard. The opportunity must be
-        defined, the assumptions made explicit, the relevant evidence
-        separated from narrative and the conditions that would invalidate the
-        conclusion stated in advance.
-      </p>
+          <p>
+            SM Research is a public record of how I analyse markets. Writing a view
+            down imposes a higher standard than holding an informal opinion:
+            assumptions become visible, evidence can be challenged and the
+            conditions that would invalidate the conclusion must be stated in
+            advance.
+          </p>
 
-      <p>
-        The purpose is not simply to publish market opinions or assemble a
-        catalogue of successful calls. It is to make the reasoning behind each
-        decision inspectable and to create a body of work through which that
-        reasoning can be evaluated over time.
-      </p>
+          <p>
+            The objective is not to present a catalogue of successful calls. It is
+            to show how I frame questions, test evidence, size uncertainty and
+            revise conclusions when the facts change. SM Research is the work of an
+            individual analyst, not an investment firm or advisory service.
+          </p>
 
-      <p>
-        SM Research is not presented as an investment firm or advisory service.
-        It is the research record of an individual analyst developing a more
-        disciplined approach to markets, valuation and capital allocation.
-      </p>
+          <h2>Why Commodities</h2>
 
-      <h2>Where It Began</h2>
+          <p>
+            My interest in markets began with risk transfer in the real economy.
+            My mother's side of the family comes from a farming background, so the
+            effects of weather, harvest conditions and commodity prices never felt
+            abstract. Learning how futures can protect the value of a harvest,
+            manage an airline's fuel exposure or secure an industrial input changed
+            how I understood finance.
+          </p>
 
-      <p>
-        My interest in markets began with uncertainty and risk transfer rather
-        than with stock prices.
-      </p>
+          <p>
+            Many of the earliest reports here originated while I served as
+            Commodities Sector Head at Queen's Tower Capital, Imperial College
+            London's student-managed investment fund. I led five analysts,
+            coordinated sector coverage and presented recommendations through the
+            fund's investment process.
+          </p>
 
-      <p>
-        My mother's side of the family comes from a farming background, so
-        agriculture never felt like an abstract component of the economy.
-        Livelihoods could be affected by weather, harvest conditions and
-        commodity prices that changed materially from one season to the next.
-      </p>
+          <h2>How I Work</h2>
 
-      <p>
-        Learning how futures markets allow producers to hedge prices changed
-        the way I understood finance. Behind a contract may be a farmer
-        protecting the value of a harvest, an airline managing fuel exposure or
-        a manufacturer securing the cost of a critical input. Markets became
-        mechanisms through which businesses transfer, price and manage
-        uncertainty.
-      </p>
+          <p>
+            Each report begins with a defined investment question rather than a
+            predetermined conclusion. The analysis considers physical supply and
+            demand, market structure, macroeconomic conditions, valuation,
+            positioning, catalysts and principal risks. Where the evidence permits,
+            I specify a horizon, reference level, implementation framework and
+            invalidation conditions.
+          </p>
 
-      <p>
-        Many of the earliest reports published here originated while I served
-        as Commodities Sector Head at Queen's Tower Capital, Imperial College
-        London's student-managed investment fund. I researched and prepared the
-        underlying commodity work before presenting recommendations through the
-        fund's investment process and coordinating coverage across a team of
-        five analysts.
-      </p>
+          <p>
+            I prefer primary data and institutional sources, and try to keep facts,
+            assumptions and interpretation visibly separate. Models are used where
+            they make assumptions clearer or scenarios more testable. They are not
+            used to add complexity for its own sake.
+          </p>
 
-      <p>
-        Those presentations have not been reproduced unchanged. Each has been
-        rewritten as a long-form SM Research report, with material figures
-        checked against public sources and the original investment case
-        separated from information that became available later. Retrospective
-        outcomes are presented independently so that subsequent developments do
-        not alter the original reasoning.
-      </p>
+          <p>
+            Material errors are corrected rather than defended. The commodity-regime
+            project, for example, preserves the original workflow while withdrawing
+            conclusions that did not survive a data and specification audit.
+          </p>
 
-      <h2>Research Approach</h2>
+          <h2>Experience Informing the Work</h2>
 
-      <p>
-        Each report begins with a defined investment question rather than a
-        predetermined conclusion. The analysis then considers the market
-        structure, supply and demand balance, macroeconomic environment,
-        valuation, positioning, catalysts and principal risks relevant to that
-        question.
-      </p>
+          <p>
+            I study Economics, Finance & Data Science at Imperial College London.
+            Programmes at Barings, BNP Paribas and Millennium have exposed me to
+            high-yield credit, cross-asset markets, market making and systematic
+            research. Competitive projects have also tested my ability to research,
+            build and communicate under time pressure, including a first-place team
+            finish in QuantChallenge 2025.
+          </p>
 
-      <p>
-        A useful thesis should identify more than a directional view. Where the
-        evidence permits, it should define an investment horizon, reference
-        price, expected catalysts, target framework and the conditions under
-        which the view should be reconsidered.
-      </p>
+          <h2>Accountability</h2>
 
-      <p>
-        Sources are selected with preference for primary data and institutional
-        research. Facts, assumptions and interpretations should remain
-        distinguishable. Where a number cannot be supported with sufficient
-        confidence, it should be qualified or removed rather than presented
-        with false precision.
-      </p>
+          <p>
+            Failed theses remain published. Removing them would create a cleaner
+            record, but a less credible one. The decision log reviews each view
+            against its stated horizon and implementation without presenting the
+            classifications as audited portfolio returns.
+          </p>
 
-      <p>
-        Financial models and quantitative methods are used where they improve
-        the analysis. They are intended to make assumptions clearer and
-        scenarios more testable, not to replace economic reasoning with
-        complexity.
-      </p>
+          <p>
+            The standard I am trying to develop is conviction without attachment:
+            enough conviction to act on a well-supported view, but enough
+            flexibility to change it when better evidence arrives. Both the process
+            and the outcome matter.
+          </p>
 
-      <h2>Publication Standard</h2>
+          <div class="not-prose my-6 flex flex-wrap gap-3">
+            <Link class="btn-blue" href={withBasePath('/research/')}>
+              Read research
+            </Link>
+            <Link class="btn-amber" href={withBasePath('/outcomes/')}>
+              View decision log
+            </Link>
+            <Link class="btn-emerald" href={withBasePath('/models/')}>
+              Explore models
+            </Link>
+          </div>
 
-      <p>
-        Historical reports distinguish between the evidence available when a
-        view was formed and information learned later. Outcome sections are
-        therefore retrospective evaluations rather than revisions of the
-        original record.
-      </p>
+          <h2>About the Author</h2>
 
-      <p>
-        Where a model can be shared responsibly, the supporting code, data,
-        outputs and limitations are published alongside it. Where third-party
-        assessment material or proprietary templates cannot be redistributed,
-        the methodology and conclusions are documented without exposing the
-        underlying file.
-      </p>
+          <p>
+            SM Research is written and edited by Srinivas Medida. My interests sit
+            at the intersection of commodity markets, macroeconomics, financial
+            modelling and quantitative analysis. The publication is intended to
+            remain a continuing record of how that analytical framework develops.
+          </p>
 
-      <p>
-        Material errors are corrected rather than defended. The revised
-        commodity-regime project, for example, preserves its original analysis
-        while withdrawing conclusions that did not survive a data and
-        specification audit. A correction that narrows a result is more useful
-        than precision unsupported by the evidence.
-      </p>
+          <PageNavigation current="about" />
+        </div>
 
-      <h2>Experience Informing the Research</h2>
+      </StandardLayout>
 
-      <p>
-        I study Economics, Finance & Data Science at Imperial College London.
-        Short programmes at Barings, BNP Paribas and Millennium have exposed me
-        to high-yield credit, cross-asset markets, market making and systematic
-        research. These experiences inform the questions I ask, but they are
-        not presented as authority for a conclusion; the evidence in each
-        report must stand on its own.
-      </p>
-
-      <p>
-        Competitive projects have also shaped the way I work under uncertainty.
-        My teams placed first in QuantChallenge 2025 and received Jump Trading's
-        Most Creative Algorithm award at Imperial Algothon 2026. The value of
-        those exercises was not only the result, but the need to convert a view
-        into testable rules, manage execution constraints and update quickly as
-        new information arrived.
-      </p>
-
-      <h2>Evaluating a Thesis</h2>
-
-      <p>
-        Investment research should remain open to revision. An update should
-        explain what changed, which assumptions survived, which weakened and
-        whether the original risk framework remains appropriate.
-      </p>
-
-      <p>
-        Failed theses will remain available. Removing unsuccessful ideas would
-        create a cleaner record, but a less credible and less useful one. The
-        important questions are whether the original process was reasonable,
-        whether the risks were identified honestly and which assumption
-        ultimately proved incorrect.
-      </p>
-
-      <p>
-        Correct conclusions can also result from weak reasoning or favourable
-        luck. Outcomes are therefore evaluated alongside the quality of the
-        process rather than treated as a substitute for it.
-      </p>
-
-      <h2>How I Think About Uncertainty</h2>
-
-      <p>
-        One principle that has influenced my approach comes from the Bhagavad
-        Gita: focus on the quality of your actions rather than becoming attached
-        to their outcomes.
-      </p>
-
-      <p>
-        In markets, that does not mean that outcomes are unimportant. It means
-        separating the quality of a decision from the noise and randomness that
-        may shape its immediate result. A carefully researched decision can
-        lose money, while a poorly reasoned decision can occasionally be
-        rewarded.
-      </p>
-
-      <p>
-        The factors within my control are the depth of the research, the
-        clarity of the assumptions, the treatment of risk and the willingness
-        to change a view when better evidence emerges. A thesis should be held
-        with enough conviction to act on it, but not with so much attachment
-        that contradictory evidence is ignored.
-      </p>
-
-      <p>
-        Criticism is therefore useful. A competing interpretation may reveal a
-        missing variable, an underestimated risk or a weakness in the causal
-        reasoning. Research improves when it is explicit enough to be
-        challenged.
-      </p>
-
-      <h2>Current Focus</h2>
-
-      <ul>
-        <li>Commodity markets, physical balances and global supply chains</li>
-        <li>Macroeconomic forces, positioning and market structure</li>
-        <li>Financial modelling, valuation and capital allocation</li>
-        <li>Quantitative analysis of markets and investment regimes</li>
-      </ul>
-
-      <h2>About the Author</h2>
-
-      <p>
-        SM Research is written and edited by Srinivas Medida, an Economics,
-        Finance & Data Science student at Imperial College London.
-      </p>
-
-      <p>
-        My interests sit at the intersection of commodity markets,
-        macroeconomics, financial modelling and quantitative analysis. SM
-        Research is intended to become a continuing record of how those
-        interests, and the analytical framework supporting them, develop over
-        time.
-      </p>
-
-      <PageNavigation current="about" />
-    </div>
-
-  </StandardLayout>
-</BaseLayout>
+  </BaseLayout>

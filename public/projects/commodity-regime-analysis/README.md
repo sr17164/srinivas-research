@@ -18,7 +18,7 @@ The revised workflow:
 - estimates full-sample interaction models;
 - uses Newey-West/HAC standard errors with three lags;
 - reports threshold robustness tests; and
-- preserves the original files in `archive/` for transparency.
+- preserves the original prepared dataset and data-quality log for transparency.
 
 ## Project structure
 
@@ -37,9 +37,8 @@ commodity-project/
 │   └── sources.md
 ├── figures/
 ├── outputs/
-├── model/
-│   └── commodity_regime_model.xlsx
-└── archive/
+└── model/
+    └── commodity_regime_model.xlsx
 ```
 
 ## Run the analysis
@@ -51,7 +50,7 @@ pip install -r requirements.txt
 python commodity_regime_analysis.py
 ```
 
-The script writes the cleaned model dataset, data-quality log, regression tables, robustness results, model summaries and figures.
+The script writes the cleaned model dataset, data-quality log, regression tables, robustness results, model summaries, figures and the generated findings note. Counts and dates in the findings note are derived from the retained data rather than maintained as separate text.
 
 ## Spreadsheet model
 

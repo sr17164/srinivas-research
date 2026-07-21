@@ -11,3 +11,6 @@ prs.mdx
 
 # Avoid whitespace affecting style
 Link.astro
+
+# Python-generated output: keep byte-stable across reruns
+public/projects/commodity-regime-analysis/outputs/analysis_summary.json

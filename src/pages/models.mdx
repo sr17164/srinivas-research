@@ -1,7 +1,7 @@
 ---
 title: Models
-subtitle: Financial modelling, valuation and quantitative analysis
-description: Financial models and quantitative projects developed to analyse markets, businesses and transactions.
+subtitle: Empirical research, financial modelling and investment case work
+description: Empirical research, financial models and investment case studies developed to analyse markets, businesses and transactions.
 bgType: dot
 ogImage: true
 ---
@@ -10,6 +10,7 @@ import BaseLayout from '~/layouts/BaseLayout.astro'
 import StandardLayout from '~/layouts/StandardLayout.astro'
 import PageNavigation from '~/components/nav/PageNavigation.astro'
 import ModelProject from '~/components/models/ModelProject.astro'
+import CommodityRegimeProject from '~/components/models/CommodityRegimeProject.astro'
 import SelectedWork from '~/components/models/SelectedWork.astro'
 
 <BaseLayout
@@ -26,20 +27,23 @@ import SelectedWork from '~/components/models/SelectedWork.astro'
   >
     <div slot="article" class="prose mx-auto">
       <p>
-        This section documents selected financial models, empirical research
-        and investment case studies. Each entry explains the analytical
-        question, methodology and principal outputs rather than presenting a
+        This section presents selected empirical research, financial modelling
+        and investment case work. The emphasis is on the analytical question,
+        assumptions, methodology and limitations rather than on displaying a
         spreadsheet or codebase without context.
       </p>
 
-      <h2>Financial Models</h2>
+      <h2>Empirical Research</h2>
+
+      <CommodityRegimeProject />
+
+      <h2>Financial Modelling</h2>
 
       <ModelProject
-        category="Valuation simulation"
+        category="Timed valuation case"
         title="Tesla Operating Model and Valuation"
         date="July 2026"
-        description="A timed Excel simulation covering revenue forecasting, integrated income-statement projections, cost of capital, discounted cash flow valuation and relative valuation."
-        result="Ranked 7th of 63 · 85%"
+        description="An integrated Excel case covering revenue forecasting, income-statement projections, cost of capital, discounted cash flow valuation and trading comparables."
         facts={[
           { label: 'Company', value: 'Tesla, Inc.' },
           {
@@ -48,7 +52,7 @@ import SelectedWork from '~/components/models/SelectedWork.astro'
           },
           { label: 'Format', value: 'Timed Excel assessment' },
         ]}
-        note="Completed within an AmplifyME valuation simulation. The underlying workbook is not publicly distributed because it contains third-party assessment material."
+        note="The underlying workbook is not publicly distributed because it contains third-party assessment material."
       >
         <p>
           The model forecast Tesla's income statement through 2030 using
@@ -74,106 +78,36 @@ import SelectedWork from '~/components/models/SelectedWork.astro'
         </ul>
       </ModelProject>
 
-      <h2>Empirical Research</h2>
-
-      <ModelProject
-        category="Revised empirical study"
-        title="Inflation Regimes and Commodity-Producer Equity Sensitivity"
-        date="May–July 2026"
-        description="An audited Python and Excel study of whether the sensitivity of commodity-producer equity returns to underlying commodity returns changes when inflation is elevated."
-        facts={[
-          { label: 'Sample', value: '89 usable monthly observations' },
-          {
-            label: 'Method',
-            value: 'Interaction OLS · Newey–West/HAC inference',
-          },
-          { label: 'Tools', value: 'Python · Excel · statsmodels' },
-        ]}
-        image="/models/commodity-equity-sensitivity.png"
-        imageAlt="Estimated Brent, gold and copper return sensitivities in lower- and higher-inflation regimes"
-        actions={[
-          {
-            label: 'Read methodology',
-            href: '/models/commodity-regime-analysis/',
-          },
-          {
-            label: 'Browse project files',
-            href: '/projects/commodity-regime-analysis/',
-          },
-          {
-            label: 'Download Excel model',
-            href: '/downloads/commodity-regime-model.xlsx',
-            download: true,
-          },
-          {
-            label: 'Download full project',
-            href: '/downloads/commodity-regime-analysis.zip',
-            download: true,
-          },
-        ]}
-        note="The original specification and write-up are retained inside the full project archive. The published conclusions reflect the corrected model."
-      >
-        <p>
-          A data audit identified 14 observations created by forward-filling
-          missing futures prices before calculating returns. The revised study
-          excludes those artificial zero-return months, classifies the regime
-          using the previous month's headline CPI rate and estimates
-          full-sample interaction models with Newey–West standard errors.
-        </p>
-
-        <ul>
-          <li>
-            Brent's estimated sensitivity to energy-equity returns increased
-            from −0.030 in lower-inflation months to 0.493 in high-inflation
-            months; the difference was statistically significant (HAC p =
-            0.016).
-          </li>
-          <li>
-            The original claim of a reliable high-inflation increase in gold
-            sensitivity was withdrawn after the correction (interaction p =
-            0.680).
-          </li>
-          <li>
-            Copper remained positively associated with mining-equity returns,
-            but the estimated regime difference was not statistically precise
-            at the primary 3% threshold (interaction p = 0.355).
-          </li>
-        </ul>
-      </ModelProject>
-
       <h2>Selected Analytical Work</h2>
 
       <p>
-        The projects below extend beyond the two fully published models. They
-        are included as concise records of the question and analytical process;
-        supporting files will only be published where they can be independently
-        checked and redistributed appropriately.
+        The projects below are concise records of the question and analytical
+        process. Supporting files are published only where they can be checked
+        independently and redistributed appropriately.
       </p>
 
       <SelectedWork
         items={[
           {
-            category: 'Quantitative competition',
-            title: 'QuantChallenge 2025',
-            date: '2025',
+            category: 'Systematic research',
+            title: 'Trading Strategy Research and Validation',
+            date: '2025–2026',
             description:
-              'Developed and tested a systematic trading approach in a team competition combining empirical signal research, model selection and live execution under changing market conditions.',
-            result: '1st of 1,417 teams · $10,000 Five Rings prize',
+              'Developed and tested systematic strategies with attention to overfitting, signal robustness, execution constraints and live behaviour under changing market conditions.',
           },
           {
             category: 'Algorithmic trading',
-            title: 'Imperial Algothon 2026',
+            title: 'Inventory-Aware Exchange Simulation',
             date: '2026',
             description:
-              'Built an automated Python trading system for a live exchange simulation, combining directional signals, inventory-aware market making and relative-value logic.',
-            result: "Jump Trading's Most Creative Algorithm award",
+              'Built an automated Python trading system combining directional signals, inventory-aware market making and relative-value logic in a live exchange simulation.',
           },
           {
             category: 'Private equity case study',
             title: 'Business Services Buyout Memorandum',
             date: 'May 2026',
             description:
-              'Analysed European business-services subsectors using comparable companies, precedent transactions and DCF, focusing on the valuation divide between AI-exposed transactional services and regulatory-facing recurring revenue.',
+              'Analysed European business-services subsectors using comparable companies, precedent transactions and DCF, focusing on the divide between AI-exposed transactional services and recurring regulatory-facing revenue.',
           },
           {
             category: 'Infrastructure case study',
@@ -193,9 +127,9 @@ import SelectedWork from '~/components/models/SelectedWork.astro'
       />
 
       <p>
-        These projects are presented as records of analytical process rather
-        than definitive forecasts. Methodological limitations, revisions and
-        failed assumptions remain part of the published record.
+        These projects are records of analytical process rather than definitive
+        forecasts. Methodological limitations, revisions and failed assumptions
+        remain part of the published record.
       </p>
 
       <PageNavigation current="models" />

@@ -1,4 +1,4 @@
-Threshold,Relationship,Dependent,Commodity,Lower_Inflation_Beta,High_Inflation_Beta,Regime_Difference,Difference_HAC_PValue,Lower_Beta_HAC_PValue,Model_R_Squared,Observations,High_Inflation_Observations,Lower_Inflation_Observations
-3.0,Brent → energy equities,EnergyETF,Brent,-0.03012554471511312,0.49294804160745626,0.5230735863225694,0.015558761377137008,0.8683512556729983,0.15398517600705086,89,35,54
-3.0,Gold → mining equities,MiningETF,Gold,0.2976915048579152,0.5164566986399638,0.21876519378204862,0.6802821470607383,0.22828567259136479,0.27065738024647057,89,35,54
-3.0,Copper → mining equities,MiningETF,Copper,0.42847427834935725,0.7565361293971229,0.32806185104776564,0.35529841364744574,0.026555480289091618,0.27065738024647057,89,35,54
+Threshold,Relationship,Model,Dependent,Commodity,Lower_Inflation_Beta,High_Inflation_Beta,Regime_Difference,Difference_HAC_PValue,Lower_Beta_HAC_PValue,Model_R_Squared,Observations,High_Inflation_Observations,Lower_Inflation_Observations
+3.0,Brent → energy equities,EnergyETF full interaction model,EnergyETF,Brent,-0.03012554471511312,0.49294804160745626,0.5230735863225694,0.015558761377137008,0.8683512556729983,0.15398517600705086,89,35,54
+3.0,Gold → mining equities,MiningETF full interaction model,MiningETF,Gold,0.2976915048579152,0.5164566986399638,0.21876519378204862,0.6802821470607383,0.22828567259136479,0.27065738024647057,89,35,54
+3.0,Copper → mining equities,MiningETF full interaction model,MiningETF,Copper,0.42847427834935725,0.7565361293971229,0.32806185104776564,0.35529841364744574,0.026555480289091618,0.27065738024647057,89,35,54

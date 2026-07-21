@@ -48,7 +48,7 @@
 }
 .prose ol > li {
   position: relative;
-  padding-left: 1.75em;
+  padding-left: 1.9em;
 }
 .prose ol > li::before {
   content: counter(list-item, var(--list-counter-style, decimal)) '.';
@@ -59,7 +59,7 @@
 }
 .prose ul > li {
   position: relative;
-  padding-left: 1.75em;
+  padding-left: 1.9em;
 }
 .prose ul > li::before {
   content: '';
@@ -69,7 +69,7 @@
   width: 0.375em;
   height: 0.375em;
   top: calc(0.875em - 0.1875em);
-  left: 0.25em;
+  left: 0.35em;
 }
 .prose hr {
   border-color: rgba(125, 125, 125, 0.3);

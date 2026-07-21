@@ -100,6 +100,29 @@ export const postSchema = ({ image }: SchemaContext) =>
         'Defines the principal sector, industry or market covered by the report.'
       ),
 
+    market: z
+      .string()
+      .trim()
+      .min(1)
+      .describe(
+        'Names the specific market or security used in the decision log.'
+      ),
+
+    outcome: z
+      .enum(['Successful', 'Unsuccessful', 'Mixed', 'Open'])
+      .describe(
+        'Records how the published thesis resolved against its stated horizon and implementation. This is not a portfolio-return measure.'
+      ),
+
+    outcomeSummary: z
+      .string()
+      .trim()
+      .min(1)
+      .max(240)
+      .describe(
+        'Provides a concise, recruiter-readable assessment of the thesis outcome.'
+      ),
+
     featured: z
       .boolean()
       .default(false)

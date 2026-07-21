@@ -10,6 +10,8 @@ import BaseLayout from '~/layouts/BaseLayout.astro'
 import StandardLayout from '~/layouts/StandardLayout.astro'
 import PageNavigation from '~/components/nav/PageNavigation.astro'
 import Link from '~/components/base/Link.astro'
+import CommodityRegimeResults from '~/components/models/CommodityRegimeResults.astro'
+import CommodityRegimeHighlights from '~/components/models/CommodityRegimeHighlights.astro'
 import { withBasePath } from '~/utils/path'
 
 <BaseLayout
@@ -38,10 +40,12 @@ import { withBasePath } from '~/utils/path'
 
       <p>
         The initial workflow forward-filled missing monthly futures prices
-        before calculating returns. That produced 14 observations in which
-        Brent, gold and copper returns were all exactly zero while the producer
-        equity ETFs moved. Treating those rows as genuine observations would
-        mechanically weaken the estimated commodity-equity relationships.
+        before calculating returns. That produced observations in which Brent,
+        gold and copper returns were all exactly zero while the producer-equity
+        ETFs moved. Treating those rows as genuine observations would
+        mechanically weaken the estimated commodity-equity relationships. The
+        current exclusion count is read directly from the generated audit output
+        below.
       </p>
 
       <p>
@@ -53,8 +57,11 @@ import { withBasePath } from '~/utils/path'
 
       <h2>Revised Specification</h2>
 
+      <CommodityRegimeResults mode="snapshot" />
+
+      <CommodityRegimeHighlights />
+
       <ul>
-        <li>89 usable monthly observations from May 2017 to December 2025.</li>
         <li>
           High inflation is defined using the previous month's headline CPI
           rate, with 3% as the primary threshold.
@@ -69,49 +76,14 @@ import { withBasePath } from '~/utils/path'
           autocorrelation-consistent standard errors with three lags.
         </li>
         <li>
-          Robustness tests repeat the model at 2.68%, 3%, 3.5% and 4% CPI
-          thresholds.
+          Robustness tests repeat the model at the 2.68% sample-median
+          threshold and at 3%, 3.5% and 4% CPI thresholds.
         </li>
       </ul>
 
       <h2>Primary Results</h2>
 
-      <div class="not-prose overflow-x-auto">
-        <table class="my-6 w-full min-w-168 border-collapse text-xs">
-          <thead>
-            <tr>
-              <th class="border-t border-[#8883] px-3 py-3 text-left text-[0.65rem] font-650 tracking-[0.07em] uppercase op-50">Relationship</th>
-              <th class="border-t border-[#8883] px-3 py-3 text-right text-[0.65rem] font-650 tracking-[0.07em] uppercase op-50">Lower inflation</th>
-              <th class="border-t border-[#8883] px-3 py-3 text-right text-[0.65rem] font-650 tracking-[0.07em] uppercase op-50">High inflation</th>
-              <th class="border-t border-[#8883] px-3 py-3 text-right text-[0.65rem] font-650 tracking-[0.07em] uppercase op-50">Difference</th>
-              <th class="border-t border-[#8883] px-3 py-3 text-right text-[0.65rem] font-650 tracking-[0.07em] uppercase op-50">HAC p-value</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th class="border-t border-[#8883] px-3 py-3 text-left font-600">Brent to energy equities</th>
-              <td class="border-t border-[#8883] px-3 py-3 text-right">-0.030</td>
-              <td class="border-t border-[#8883] px-3 py-3 text-right">0.493</td>
-              <td class="border-t border-[#8883] px-3 py-3 text-right">0.523</td>
-              <td class="border-t border-[#8883] px-3 py-3 text-right">0.016</td>
-            </tr>
-            <tr>
-              <th class="border-t border-[#8883] px-3 py-3 text-left font-600">Gold to mining equities</th>
-              <td class="border-t border-[#8883] px-3 py-3 text-right">0.298</td>
-              <td class="border-t border-[#8883] px-3 py-3 text-right">0.516</td>
-              <td class="border-t border-[#8883] px-3 py-3 text-right">0.219</td>
-              <td class="border-t border-[#8883] px-3 py-3 text-right">0.680</td>
-            </tr>
-            <tr>
-              <th class="border-t border-[#8883] px-3 py-3 text-left font-600">Copper to mining equities</th>
-              <td class="border-t border-[#8883] px-3 py-3 text-right">0.428</td>
-              <td class="border-t border-[#8883] px-3 py-3 text-right">0.757</td>
-              <td class="border-t border-[#8883] px-3 py-3 text-right">0.328</td>
-              <td class="border-t border-[#8883] px-3 py-3 text-right">0.355</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <CommodityRegimeResults mode="table" />
 
       <p>
         The narrow defensible result is that Brent returns had a materially
@@ -122,15 +94,38 @@ import { withBasePath } from '~/utils/path'
         precise at the primary threshold.
       </p>
 
-      <figure>
+      <div class="not-prose commodity-figure-grid">
+        <figure>
+          <img
+            src={withBasePath('/models/commodity-regime-sensitivities-dark.png')}
+            alt="Dark-themed grouped bar chart showing Brent, gold and copper return sensitivities in lower- and higher-inflation regimes"
+            loading="lazy"
+          />
+          <figcaption>
+            Primary 3% threshold estimates: Brent, gold and copper sensitivities under lower- and higher-inflation regimes.
+          </figcaption>
+        </figure>
+
+        <figure>
+          <img
+            src={withBasePath('/models/commodity-regime-differences-dark.png')}
+            alt="Dark-themed bar chart showing regime-difference estimates and p-values for Brent, gold and copper"
+            loading="lazy"
+          />
+          <figcaption>
+            The economically strongest and statistically cleanest result is the positive Brent regime effect.
+          </figcaption>
+        </figure>
+      </div>
+
+      <figure class="not-prose commodity-figure-single">
         <img
-          src={withBasePath('/models/commodity-equity-sensitivity.png')}
-          alt="Estimated Brent, gold and copper sensitivities in lower- and higher-inflation regimes"
+          src={withBasePath('/models/commodity-regime-thresholds-dark.png')}
+          alt="Dark-themed line chart showing regime-difference estimates across inflation thresholds for Brent, gold and copper"
           loading="lazy"
         />
         <figcaption>
-          Estimated commodity-equity sensitivities under the primary 3% lagged
-          headline-CPI threshold.
+          Robustness across lagged-CPI thresholds: Brent remains positive and significant, while copper becomes material only at the higher thresholds.
         </figcaption>
       </figure>
 
@@ -172,10 +167,27 @@ import { withBasePath } from '~/utils/path'
           interpreted cautiously in a multiple-testing setting.
         </li>
         <li>
+          The regressions estimate same-month sensitivity, not a predictive
+          trading signal. A strategy-oriented extension would require lagged
+          features, walk-forward testing, transaction costs and a genuinely
+          out-of-sample evaluation.
+        </li>
+        <li>
           Inflation thresholds are modelling choices rather than natural
           economic boundaries.
         </li>
       </ul>
+
+      <figure class="not-prose commodity-figure-single">
+        <img
+          src={withBasePath('/models/commodity-regime-audit-dark.png')}
+          alt="Dark-themed process diagram showing 104 prepared rows, 14 excluded artificial zero-return rows and 89 final model observations"
+          loading="lazy"
+        />
+        <figcaption>
+          The corrected release makes the data audit visible: the usable sample is smaller, but the modelling choices are reviewable and reproducible.
+        </figcaption>
+      </figure>
 
       <h2>Files and Reproducibility</h2>
 
@@ -214,6 +226,7 @@ import { withBasePath } from '~/utils/path'
         This project is an empirical association study, not a causal estimate
         or an investment recommendation.
       </p>
+
 
       <PageNavigation current="models" />
     </div>

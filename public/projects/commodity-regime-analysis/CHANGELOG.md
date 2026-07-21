@@ -11,3 +11,8 @@
 - Withdrew the original claim that gold sensitivity changes reliably in high-inflation regimes.
 - Narrowed the conclusion to the robust Brent-to-energy-equity regime effect.
 - Added a data-quality log, source documentation and spreadsheet review model.
+- Derived the generated findings note's sample counts and dates directly from the retained data.
+- Added a model identifier to the relationship-results CSV so shared model-level statistics are explicit.
+- Documented the 2.68% robustness threshold as the median of the available lagged headline-CPI series.
+
+- Removed run timestamps from the committed regression summaries so repeated executions remain byte-stable.

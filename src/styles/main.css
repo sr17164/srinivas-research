@@ -68,6 +68,23 @@ body {
   background: color-mix(in srgb, var(--c-text) 18%, transparent);
 }
 
+.research-index-outcomes {
+  display: inline-flex;
+  gap: 0.45rem;
+  align-items: center;
+  margin-top: 1.25rem;
+  color: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-decoration: none;
+  opacity: 0.52;
+  transition: opacity 160ms ease;
+}
+
+.research-index-outcomes:hover {
+  opacity: 1;
+}
+
 /* Remove generic prose spacing from the archive list */
 .research-index .research-list-item {
   margin: 0;
@@ -248,5 +265,47 @@ body {
   .research-list-title,
   .research-list-arrow {
     transition: none;
+  }
+}
+
+/* Commodity regime analysis visuals */
+.commodity-figure-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 1.6rem 0 2rem;
+}
+
+.commodity-figure-single {
+  margin: 1.6rem 0 2rem;
+}
+
+.commodity-figure-grid figure,
+.commodity-figure-single {
+  margin: 0;
+}
+
+.commodity-figure-grid img,
+.commodity-figure-single img {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 0;
+  border: 1px solid color-mix(in srgb, currentColor 12%, transparent);
+  border-radius: 0.55rem;
+  background: #07111b;
+}
+
+.commodity-figure-grid figcaption,
+.commodity-figure-single figcaption {
+  margin-top: 0.8rem;
+  font-size: 0.76rem;
+  line-height: 1.55;
+  opacity: 0.58;
+}
+
+@media (max-width: 860px) {
+  .commodity-figure-grid {
+    grid-template-columns: 1fr;
   }
 }

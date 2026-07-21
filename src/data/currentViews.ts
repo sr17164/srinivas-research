@@ -7,6 +7,7 @@ export interface CurrentView {
   timeHorizon: string
   rationale: string
   href?: string
+  linkLabel?: string
   researchStatus?: string
 }
 
@@ -18,8 +19,9 @@ export const currentViews: CurrentView[] = [
     stance: 'Mildly Bullish',
     timeHorizon: '3–6 months',
     rationale:
-      'Structural central-bank demand and policy uncertainty provide support, while the near-term baseline remains more balanced unless growth or rate expectations weaken.',
+      'Structural central-bank demand and policy uncertainty remain supportive, but this is a new, lower-conviction stance rather than a continuation of the failed early-2026 trade.',
     href: '/research/why-i-remained-bullish-gold/',
+    linkLabel: 'Review prior thesis',
   },
   {
     market: 'Brent Crude',

@@ -16,12 +16,15 @@ const useCoverAltAsCaption = UI.postView.useCoverAltAsCaption
 {
   cover &&
     (typeof cover === 'string' ? (
-      <Image
+      <img
         class="mb-0! mt--4!"
         src={cover}
-        alt={coverAlt}
-        priority
-        inferSize
+        alt={coverAlt || 'Research cover'}
+        width="1600"
+        height="900"
+        loading="eager"
+        decoding="async"
+        fetchpriority="high"
       />
     ) : (
       <Image

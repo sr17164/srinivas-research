@@ -1,0 +1,251 @@
+---
+import { readFileSync } from 'node:fs'
+import { resolve } from 'node:path'
+
+interface SummaryRow {
+  Threshold: number
+  Relationship: string
+  Model: string
+  Dependent: string
+  Commodity: string
+  Lower_Inflation_Beta: number
+  High_Inflation_Beta: number
+  Regime_Difference: number
+  Difference_HAC_PValue: number
+  Observations: number
+}
+
+interface AnalysisSummary {
+  sample_start: string
+  sample_end: string
+  observations: number
+  excluded_artificial_zero_rows: number
+  raw_sample_start: string
+  raw_sample_end: string
+  raw_rows: number
+  primary_threshold_percent: number
+  robustness_thresholds_percent: number[]
+  hac_lags: number
+}
+
+interface Props {
+  mode: 'snapshot' | 'table'
+}
+
+const { mode } = Astro.props
+
+const projectRoot = resolve(
+  process.cwd(),
+  'public/projects/commodity-regime-analysis'
+)
+
+const summary = JSON.parse(
+  readFileSync(resolve(projectRoot, 'outputs/analysis_summary.json'), 'utf8')
+) as AnalysisSummary
+
+const csv = readFileSync(
+  resolve(projectRoot, 'outputs/primary_relationship_results.csv'),
+  'utf8'
+).trim()
+
+const [headerLine = '', ...dataLines] = csv.split(/\r?\n/)
+const headers = headerLine.split(',')
+const rows = dataLines.map((line) => {
+  const values = line.split(',')
+  const raw = Object.fromEntries(
+    headers.map((header, index) => [header, values[index] ?? ''])
+  )
+
+  return {
+    Threshold: Number(raw.Threshold),
+    Relationship: raw.Relationship,
+    Model: raw.Model,
+    Dependent: raw.Dependent,
+    Commodity: raw.Commodity,
+    Lower_Inflation_Beta: Number(raw.Lower_Inflation_Beta),
+    High_Inflation_Beta: Number(raw.High_Inflation_Beta),
+    Regime_Difference: Number(raw.Regime_Difference),
+    Difference_HAC_PValue: Number(raw.Difference_HAC_PValue),
+    Observations: Number(raw.Observations),
+  } satisfies SummaryRow
+})
+
+const monthLabel = (value: string) => {
+  const [year, month] = value.split('-').map(Number)
+  return new Intl.DateTimeFormat('en-GB', {
+    month: 'short',
+    year: 'numeric',
+    timeZone: 'UTC',
+  }).format(new Date(Date.UTC(year, (month ?? 1) - 1, 1)))
+}
+
+const samplePeriod = `${monthLabel(summary.sample_start)}–${monthLabel(summary.sample_end)}`
+---
+
+{
+  mode === 'snapshot' ? (
+    <dl class="regime-snapshot not-prose" aria-label="Model sample summary">
+      <div>
+        <dt>Prepared rows</dt>
+        <dd>{summary.raw_rows}</dd>
+      </div>
+      <div>
+        <dt>Excluded artefacts</dt>
+        <dd>{summary.excluded_artificial_zero_rows}</dd>
+      </div>
+      <div>
+        <dt>Model observations</dt>
+        <dd>{summary.observations}</dd>
+      </div>
+      <div>
+        <dt>Usable sample</dt>
+        <dd>{samplePeriod}</dd>
+      </div>
+    </dl>
+  ) : (
+    <div class="regime-results not-prose">
+      <div class="regime-results-scroll">
+        <table>
+          <caption class="sr-only">
+            Primary interaction-model estimates generated from the committed CSV
+            output
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col">Relationship</th>
+              <th scope="col">Lower inflation</th>
+              <th scope="col">High inflation</th>
+              <th scope="col">Difference</th>
+              <th scope="col">HAC p-value</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((row) => (
+              <tr>
+                <th scope="row">{row.Relationship}</th>
+                <td>{row.Lower_Inflation_Beta.toFixed(3)}</td>
+                <td>{row.High_Inflation_Beta.toFixed(3)}</td>
+                <td>{row.Regime_Difference.toFixed(3)}</td>
+                <td>{row.Difference_HAC_PValue.toFixed(3)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p>
+        Figures are read directly from the Python-generated output at build
+        time. Gold and copper are coefficients from the same multivariate
+        MiningETF model, which is why they share the model-level R² in the
+        downloadable CSV.
+      </p>
+    </div>
+  )
+}
+
+<style>
+  .regime-snapshot {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin: 1.4rem 0 2rem;
+    border: 1px solid color-mix(in srgb, currentColor 14%, transparent);
+    border-radius: 0.45rem;
+    background: color-mix(in srgb, currentColor 2.5%, transparent);
+  }
+
+  .regime-snapshot > div {
+    min-width: 0;
+    padding: 1rem 1.05rem;
+  }
+
+  .regime-snapshot > div + div {
+    border-left: 1px solid color-mix(in srgb, currentColor 11%, transparent);
+  }
+
+  .regime-snapshot dt {
+    margin-bottom: 0.38rem;
+    font-size: 0.64rem;
+    font-weight: 650;
+    line-height: 1.25;
+    letter-spacing: 0.085em;
+    text-transform: uppercase;
+    opacity: 0.45;
+  }
+
+  .regime-snapshot dd {
+    margin: 0;
+    font-size: 0.9rem;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  .regime-results {
+    margin: 1.4rem 0 2rem;
+  }
+
+  .regime-results-scroll {
+    overflow-x: auto;
+    border-top: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+    border-bottom: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+  }
+
+  table {
+    width: 100%;
+    min-width: 42rem;
+    border-collapse: collapse;
+    font-size: 0.78rem;
+  }
+
+  th,
+  td {
+    padding: 0.85rem 0.75rem;
+    border-bottom: 1px solid color-mix(in srgb, currentColor 10%, transparent);
+    text-align: right;
+    vertical-align: top;
+  }
+
+  tbody tr:last-child th,
+  tbody tr:last-child td {
+    border-bottom: 0;
+  }
+
+  thead th {
+    font-size: 0.62rem;
+    font-weight: 650;
+    letter-spacing: 0.075em;
+    text-transform: uppercase;
+    opacity: 0.48;
+  }
+
+  th:first-child {
+    text-align: left;
+  }
+
+  tbody th {
+    font-weight: 600;
+  }
+
+  .regime-results > p {
+    margin: 0.8rem 0 0;
+    font-size: 0.7rem;
+    line-height: 1.55;
+    opacity: 0.48;
+  }
+
+  @media (max-width: 680px) {
+    .regime-snapshot {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .regime-snapshot > div + div {
+      border-left: 0;
+    }
+
+    .regime-snapshot > div:nth-child(even) {
+      border-left: 1px solid color-mix(in srgb, currentColor 11%, transparent);
+    }
+
+    .regime-snapshot > div:nth-child(n + 3) {
+      border-top: 1px solid color-mix(in srgb, currentColor 11%, transparent);
+    }
+  }
+</style>

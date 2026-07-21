@@ -7,8 +7,8 @@ EnergyETF
 Dep. Variable:              EnergyETF   R-squared:                       0.154
 Model:                            OLS   Adj. R-squared:                  0.069
 Method:                 Least Squares   F-statistic:                     6.542
-Date:                Sun, 19 Jul 2026   Prob (F-statistic):           1.54e-06
-Time:                        11:57:15   Log-Likelihood:                -306.40
+Date:               reproducible   Prob (F-statistic):           1.54e-06
+Time:               reproducible   Log-Likelihood:                -306.40
 No. Observations:                  89   AIC:                             630.8
 Df Residuals:                      80   BIC:                             653.2
 Df Model:                           8                                         
@@ -43,8 +43,8 @@ MiningETF
 Dep. Variable:              MiningETF   R-squared:                       0.271
 Model:                            OLS   Adj. R-squared:                  0.198
 Method:                 Least Squares   F-statistic:                     5.622
-Date:                Sun, 19 Jul 2026   Prob (F-statistic):           1.17e-05
-Time:                        11:57:15   Log-Likelihood:                -305.76
+Date:               reproducible   Prob (F-statistic):           1.17e-05
+Time:               reproducible   Log-Likelihood:                -305.76
 No. Observations:                  89   AIC:                             629.5
 Df Residuals:                      80   BIC:                             651.9
 Df Model:                           8                                         
