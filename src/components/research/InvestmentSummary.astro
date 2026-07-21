@@ -9,8 +9,8 @@ interface Props {
 const { stance, position, horizon, drivers = [] } = Astro.props
 
 const facts = [
-  position ? { label: 'Position', value: position } : null,
-  horizon ? { label: 'Time Horizon', value: horizon } : null,
+  position ? { label: 'Position:', value: position } : null,
+  horizon ? { label: 'Time horizon:', value: horizon } : null,
 ].filter(
   (
     item
@@ -23,7 +23,7 @@ const facts = [
 
 <aside class="investment-summary" aria-label="Investment summary">
   <div class="summary-heading">
-    <span class="summary-eyebrow">Investment view</span>
+    <span class="summary-eyebrow">Investment view:</span>
     <strong class="summary-stance">{stance}</strong>
   </div>
 
@@ -43,7 +43,7 @@ const facts = [
   {
     drivers.length > 0 && (
       <div class="summary-drivers">
-        <span class="drivers-label">Key drivers</span>
+        <span class="drivers-label">Key drivers:</span>
 
         <ul>
           {drivers.map((driver) => (
@@ -55,7 +55,7 @@ const facts = [
   }
 </aside>
 
-<style>
+<style is:global>
   .investment-summary {
     width: 100%;
     box-sizing: border-box;
@@ -116,7 +116,7 @@ const facts = [
     border-right: 0;
   }
 
-  dt {
+  .investment-summary dt {
     margin-bottom: 0.35rem;
     font-size: 0.72rem;
     font-weight: 600;
@@ -125,7 +125,7 @@ const facts = [
     opacity: 0.5;
   }
 
-  dd {
+  .investment-summary dd {
     margin: 0;
     font-size: 0.96rem;
     font-weight: 600;

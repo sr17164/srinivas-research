@@ -34,7 +34,9 @@ const classifications = [assetClass, sector].filter(Boolean)
     {
       minutesRead > 0 && (
         <>
-          <span class="divider">•</span>
+          <span class="divider" aria-hidden="true">
+            ·
+          </span>
           <span>{minutesRead} min read</span>
         </>
       )
@@ -46,7 +48,11 @@ const classifications = [assetClass, sector].filter(Boolean)
       <div class="classification-line">
         {classifications.map((classification, index) => (
           <>
-            {index > 0 && <span class="classification-divider">·</span>}
+            {index > 0 && (
+              <span class="classification-divider" aria-hidden="true">
+                ·
+              </span>
+            )}
             <span>{classification}</span>
           </>
         ))}
@@ -65,7 +71,7 @@ const classifications = [assetClass, sector].filter(Boolean)
   }
 </div>
 
-<style>
+<style is:global>
   .post-meta {
     margin-top: -0.4rem;
   }

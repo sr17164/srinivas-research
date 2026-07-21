@@ -21,7 +21,7 @@ const hasFactsheet =
       <div class="research-factsheet-grid">
         {investmentView && (
           <div class="research-fact">
-            <span class="research-fact-label">Investment view</span>
+            <span class="research-fact-label">Investment view:</span>
             <span
               class:list={[
                 'research-view',
@@ -35,14 +35,14 @@ const hasFactsheet =
 
         {timeHorizon && (
           <div class="research-fact">
-            <span class="research-fact-label">Time horizon</span>
+            <span class="research-fact-label">Time horizon:</span>
             <span class="research-fact-value">{timeHorizon}</span>
           </div>
         )}
 
         {outcome && (
           <div class="research-fact">
-            <span class="research-fact-label">Outcome</span>
+            <span class="research-fact-label">Outcome:</span>
             <span
               class:list={[
                 'research-outcome',
@@ -57,7 +57,7 @@ const hasFactsheet =
 
       {drivers.length > 0 && (
         <div class="research-drivers">
-          <span class="research-fact-label">Primary drivers</span>
+          <span class="research-fact-label">Primary drivers:</span>
 
           <ul>
             {drivers.map((driver) => (
@@ -70,7 +70,7 @@ const hasFactsheet =
   )
 }
 
-<style>
+<style is:global>
   .research-factsheet {
     margin: 2rem 0 3rem;
     padding: 1.5rem 0;

@@ -1,7 +1,4 @@
 ---
-import { existsSync } from 'node:fs'
-import { resolve } from 'node:path'
-
 import { render } from 'astro:content'
 
 import BaseLayout from '~/layouts/BaseLayout.astro'
@@ -57,12 +54,6 @@ const sector = frontmatter.sector
 const isDraft = frontmatter.draft
 const cover = frontmatter.cover
 const coverAlt = frontmatter.coverAlt
-const generatedCover = `/research-covers/${post.id}.png`
-const generatedCoverExists = existsSync(
-  resolve(process.cwd(), 'public', generatedCover.slice(1))
-)
-const derivedCover = cover || (generatedCoverExists ? generatedCover : '')
-const derivedCoverAlt = coverAlt || ''
 
 const investmentView = frontmatter.investmentView
 const timeHorizon = frontmatter.timeHorizon
@@ -122,11 +113,7 @@ const draftWarning = `
         )
       }
 
-      {
-        derivedCover && (
-          <PostCover cover={derivedCover} coverAlt={derivedCoverAlt} />
-        )
-      }
+      {cover && <PostCover {cover} {coverAlt} />}
 
       <hr class="research-divider" />
 
