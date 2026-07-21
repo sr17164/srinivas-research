@@ -110,12 +110,20 @@ const groups = [
         path: 'figures/brent-threshold-robustness.png',
       },
       {
-        label: 'Cross-threshold robustness figure',
-        path: 'figures/commodity-threshold-robustness-dark.png',
+        label: 'Polished sensitivity figure',
+        path: 'figures/commodity-regime-sensitivities.svg',
       },
       {
-        label: 'Regime-difference figure',
-        path: 'figures/commodity-regime-differences-dark.png',
+        label: 'Polished robustness figure',
+        path: 'figures/commodity-regime-thresholds.svg',
+      },
+      {
+        label: 'Polished regime-difference figure',
+        path: 'figures/commodity-regime-differences.svg',
+      },
+      {
+        label: 'Data-audit figure',
+        path: 'figures/commodity-regime-audit.svg',
       },
     ],
   },
@@ -147,9 +155,7 @@ const hrefFor = (path: string) => withBasePath(`${projectRoot}/${path}`)
       <div class="project-preview-grid not-prose">
         <figure>
           <img
-            src={withBasePath(
-              '/models/commodity-regime-sensitivities-dark.png'
-            )}
+            src={withBasePath('/models/commodity-regime-sensitivities.svg')}
             alt="Dark-themed grouped bar chart of commodity-equity sensitivities by inflation regime"
             loading="lazy"
           />
@@ -158,7 +164,7 @@ const hrefFor = (path: string) => withBasePath(`${projectRoot}/${path}`)
 
         <figure>
           <img
-            src={withBasePath('/models/commodity-regime-thresholds-dark.png')}
+            src={withBasePath('/models/commodity-regime-thresholds.svg')}
             alt="Dark-themed line chart of robustness across inflation thresholds"
             loading="lazy"
           />
@@ -251,8 +257,8 @@ const hrefFor = (path: string) => withBasePath(`${projectRoot}/${path}`)
 <style>
   .project-preview-grid {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1rem;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
     margin: 1.4rem 0 2rem;
   }
 

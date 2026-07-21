@@ -97,7 +97,7 @@ import { withBasePath } from '~/utils/path'
       <div class="not-prose commodity-figure-grid">
         <figure>
           <img
-            src={withBasePath('/models/commodity-regime-sensitivities-dark.png')}
+            src={withBasePath('/models/commodity-regime-sensitivities.svg')}
             alt="Dark-themed grouped bar chart showing Brent, gold and copper return sensitivities in lower- and higher-inflation regimes"
             loading="lazy"
           />
@@ -108,7 +108,7 @@ import { withBasePath } from '~/utils/path'
 
         <figure>
           <img
-            src={withBasePath('/models/commodity-regime-differences-dark.png')}
+            src={withBasePath('/models/commodity-regime-differences.svg')}
             alt="Dark-themed bar chart showing regime-difference estimates and p-values for Brent, gold and copper"
             loading="lazy"
           />
@@ -120,7 +120,7 @@ import { withBasePath } from '~/utils/path'
 
       <figure class="not-prose commodity-figure-single">
         <img
-          src={withBasePath('/models/commodity-regime-thresholds-dark.png')}
+          src={withBasePath('/models/commodity-regime-thresholds.svg')}
           alt="Dark-themed line chart showing regime-difference estimates across inflation thresholds for Brent, gold and copper"
           loading="lazy"
         />
@@ -138,18 +138,6 @@ import { withBasePath } from '~/utils/path'
         sensitive to the chosen regime boundary. The models identify
         conditional associations, not causal effects.
       </p>
-
-      <figure>
-        <img
-          src={withBasePath('/models/brent-threshold-robustness.png')}
-          alt="Brent high-minus-lower inflation interaction coefficient across four CPI thresholds"
-          loading="lazy"
-        />
-        <figcaption>
-          The estimated Brent regime difference across alternative lagged-CPI
-          thresholds.
-        </figcaption>
-      </figure>
 
       <h2>Limitations</h2>
 
@@ -180,7 +168,7 @@ import { withBasePath } from '~/utils/path'
 
       <figure class="not-prose commodity-figure-single">
         <img
-          src={withBasePath('/models/commodity-regime-audit-dark.png')}
+          src={withBasePath('/models/commodity-regime-audit.svg')}
           alt="Dark-themed process diagram showing 104 prepared rows, 14 excluded artificial zero-return rows and 89 final model observations"
           loading="lazy"
         />

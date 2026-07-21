@@ -7,6 +7,7 @@ interface Props {
 }
 
 const { stance, position, horizon, drivers = [] } = Astro.props
+const stanceClass = stance.toLowerCase().replace(/[^a-z]+/g, '-')
 
 const facts = [
   position ? { label: 'Position:', value: position } : null,
@@ -21,7 +22,10 @@ const facts = [
 )
 ---
 
-<aside class="investment-summary" aria-label="Investment summary">
+<aside
+  class:list={['investment-summary', `investment-summary--${stanceClass}`]}
+  aria-label="Investment summary"
+>
   <div class="summary-heading">
     <span class="summary-eyebrow">Investment view:</span>
     <strong class="summary-stance">{stance}</strong>
@@ -65,6 +69,42 @@ const facts = [
     border-left-width: 3px;
     border-radius: 0.45rem;
     background: color-mix(in srgb, currentColor 3.5%, transparent);
+  }
+
+  .investment-summary--bullish {
+    border-left-color: #35a96f;
+  }
+
+  .investment-summary--bearish {
+    border-left-color: #c75555;
+  }
+
+  .investment-summary--neutral {
+    border-left-color: #6f94b8;
+  }
+
+  .investment-summary--bullish .summary-stance {
+    color: #2f9665;
+  }
+
+  .investment-summary--bearish .summary-stance {
+    color: #b94b4b;
+  }
+
+  .investment-summary--neutral .summary-stance {
+    color: #5f83a6;
+  }
+
+  :global(html.dark) .investment-summary--bullish .summary-stance {
+    color: #67c995;
+  }
+
+  :global(html.dark) .investment-summary--bearish .summary-stance {
+    color: #e88383;
+  }
+
+  :global(html.dark) .investment-summary--neutral .summary-stance {
+    color: #8fb7de;
   }
 
   .summary-heading {

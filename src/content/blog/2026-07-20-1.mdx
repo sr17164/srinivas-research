@@ -31,6 +31,7 @@ featured: true
 
 import InvestmentSummary from '~/components/research/InvestmentSummary.astro'
 import ResearchPanel from '~/components/research/ResearchPanel.astro'
+import ResearchFigure from '~/components/research/ResearchFigure.astro'
 
 ## Executive Summary
 
@@ -134,6 +135,13 @@ The correct implementation is therefore asymmetric: avoid uncapped short exposur
 | EIA 4Q26 Brent forecast      |              $70/bbl | Directional anchor for the base-case range          |
 
 Figures are source estimates rather than independently modelled forecasts.
+
+<ResearchFigure
+  src="/research-figures/brent-balance-and-price-outlook.svg"
+  alt="Two-panel chart showing the EIA oil inventory balance shifting from draws in the second and third quarters of 2026 to builds in the fourth quarter and 2027, alongside a declining Brent price forecast"
+  caption="The bearish case is a timing thesis: the EIA expects inventory draws to moderate before the balance turns to builds, with Brent prices declining as supply recovers."
+  source="US Energy Information Administration, Short-Term Energy Outlook, July 2026"
+/>
 
 ## Catalysts
 

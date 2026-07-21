@@ -268,20 +268,80 @@ body {
   }
 }
 
+/* Shared editorial layout */
+.research-header,
+.research-article {
+  width: min(100%, 46rem);
+}
+
+.research-header {
+  margin-bottom: 2.5rem;
+}
+
+.research-header h1 {
+  margin-bottom: 1rem;
+  font-family: Georgia, Cambria, 'Times New Roman', Times, serif;
+  font-size: clamp(2.65rem, 6vw, 4.35rem);
+  font-weight: 500;
+  line-height: 1.02;
+  letter-spacing: -0.05em;
+  text-wrap: balance;
+}
+
+.research-subtitle {
+  max-width: 42rem;
+  margin: -0.15rem 0 1.8rem;
+  font-size: 1rem;
+  line-height: 1.65;
+  opacity: 0.58;
+  text-wrap: pretty;
+}
+
+.research-divider {
+  margin: 2.5rem 0 3rem;
+  border-color: color-mix(in srgb, var(--c-text) 14%, transparent);
+}
+
+.research-article h2 {
+  margin-top: 2.35em;
+  font-family: Georgia, Cambria, 'Times New Roman', Times, serif;
+  font-size: clamp(1.7rem, 3vw, 2rem);
+  font-weight: 500;
+  line-height: 1.22;
+  letter-spacing: -0.025em;
+}
+
+.research-article h3 {
+  margin-top: 1.9em;
+  font-size: 1.18rem;
+  font-weight: 650;
+  line-height: 1.45;
+}
+
+.research-article table {
+  display: block;
+  overflow-x: auto;
+  max-width: 100%;
+  padding-bottom: 0.35rem;
+}
+
+.research-article small {
+  line-height: 1.6;
+}
+
 /* Commodity regime analysis visuals */
 .commodity-figure-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
-  margin: 1.6rem 0 2rem;
+  grid-template-columns: 1fr;
+  gap: 1.6rem;
+  margin: 1.8rem 0 2.4rem;
 }
 
 .commodity-figure-single {
-  margin: 1.6rem 0 2rem;
+  margin: 1.8rem 0 2.4rem;
 }
 
-.commodity-figure-grid figure,
-.commodity-figure-single {
+.commodity-figure-grid figure {
   margin: 0;
 }
 
@@ -294,6 +354,7 @@ body {
   border: 1px solid color-mix(in srgb, currentColor 12%, transparent);
   border-radius: 0.55rem;
   background: #07111b;
+  box-shadow: 0 1.2rem 3rem rgb(0 0 0 / 10%);
 }
 
 .commodity-figure-grid figcaption,
@@ -304,8 +365,16 @@ body {
   opacity: 0.58;
 }
 
-@media (max-width: 860px) {
-  .commodity-figure-grid {
-    grid-template-columns: 1fr;
+@media (max-width: 720px) {
+  .research-header {
+    margin-bottom: 2rem;
+  }
+
+  .research-header h1 {
+    font-size: clamp(2.5rem, 12vw, 3.7rem);
+  }
+
+  .research-subtitle {
+    font-size: 0.96rem;
   }
 }

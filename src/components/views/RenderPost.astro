@@ -58,7 +58,6 @@ const coverAlt = frontmatter.coverAlt
 const investmentView = frontmatter.investmentView
 const timeHorizon = frontmatter.timeHorizon
 const outcome = frontmatter.outcome
-const drivers = frontmatter.drivers
 
 const tocEnabled = Array.isArray(toc) && toc[0] && frontmatter.toc && pageToc
 
@@ -98,7 +97,7 @@ const draftWarning = `
         {sector}
       />
 
-      <ResearchFactsheet {investmentView} {timeHorizon} {outcome} {drivers} />
+      <ResearchFactsheet {investmentView} {timeHorizon} {outcome} />
     </Fragment>
 
     <Fragment slot="article">

@@ -33,6 +33,14 @@ const latestPosts = enrichedPosts
   .filter((post) => post.id !== featuredPost?.id)
   .slice(0, 4)
 
+const featuredVisual =
+  featuredPost?.id === 'why-i-am-bearish-brent-crude-into-late-2026'
+    ? {
+        src: '/research-figures/brent-balance-and-price-outlook.svg',
+        alt: 'EIA inventory balance and Brent price outlook supporting the featured bearish thesis',
+      }
+    : undefined
+
 const siteSections = [
   {
     label: 'Research',
@@ -122,6 +130,17 @@ const siteSections = [
                 )}
               </div>
             </div>
+
+            {featuredVisual && (
+              <div class="featured-report-visual">
+                <img
+                  src={withBasePath(featuredVisual.src)}
+                  alt={featuredVisual.alt}
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+            )}
 
             <span class="featured-report-arrow" aria-hidden="true">
               ↗
@@ -314,7 +333,7 @@ const siteSections = [
 
   .featured-report {
     display: grid;
-    grid-template-columns: 10rem minmax(0, 1fr) 2rem;
+    grid-template-columns: 9rem minmax(0, 1fr) minmax(16rem, 22rem) 1.5rem;
     gap: 2.5rem;
 
     padding: clamp(1.8rem, 4vw, 3.25rem);
@@ -401,6 +420,22 @@ const siteSections = [
   .latest-research-details > span + span::before {
     margin-right: 0.85rem;
     content: '·';
+  }
+
+  .featured-report-visual {
+    overflow: hidden;
+    align-self: stretch;
+    min-height: 13rem;
+    border: 1px solid color-mix(in srgb, var(--c-text) 12%, transparent);
+    background: #07111b;
+  }
+
+  .featured-report-visual img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
   }
 
   .featured-report-arrow,
@@ -552,6 +587,22 @@ const siteSections = [
     margin-top: 0.75rem;
   }
 
+  @media (max-width: 980px) {
+    .featured-report {
+      grid-template-columns: 8rem minmax(0, 1fr) 1.5rem;
+    }
+
+    .featured-report-visual {
+      grid-column: 2 / -1;
+      min-height: 15rem;
+    }
+
+    .featured-report-arrow {
+      grid-column: 3;
+      grid-row: 1;
+    }
+  }
+
   @media (max-width: 720px) {
     .featured-report,
     .latest-research-link {
@@ -576,6 +627,11 @@ const siteSections = [
     .featured-report-content,
     .latest-research-content {
       grid-column: 1;
+    }
+
+    .featured-report-visual {
+      grid-column: 1 / -1;
+      min-height: 12rem;
     }
 
     .featured-report-arrow,

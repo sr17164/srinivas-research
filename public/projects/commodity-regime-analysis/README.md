@@ -50,7 +50,9 @@ pip install -r requirements.txt
 python commodity_regime_analysis.py
 ```
 
-The script writes the cleaned model dataset, data-quality log, regression tables, robustness results, model summaries, figures and the generated findings note. Counts and dates in the findings note are derived from the retained data rather than maintained as separate text.
+The script writes the cleaned model dataset, data-quality log, regression tables, robustness results, model summaries, analytical figures and the generated findings note. Counts and dates in the findings note are derived from the retained data rather than maintained as separate text.
+
+The website also includes presentation-layer SVG figures generated from the committed CSV and JSON outputs. These are visually reformatted for the publication but do not change the underlying estimates.
 
 ## Spreadsheet model
 

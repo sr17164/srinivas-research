@@ -50,12 +50,22 @@ Homepage market views are maintained in `src/data/currentViews.ts`. When a view 
 
 The standalone SM favicon is generated from `public/favicon.png`. The browser uses the versioned 16px, 32px and ICO variants declared in `src/components/base/Head.astro`; the PWA manifest uses the 192px and 512px SM variants. Do not restore the inherited Astro icon files.
 
-## Models and downloads
+## Models, figures and downloads
 
 - Public model summaries: `src/pages/models/`
 - Public project page: `src/pages/projects/`
 - Downloadable files: `public/downloads/`
 - Reproducibility package: `public/projects/commodity-regime-analysis/`
+- Article evidence figures: `public/research-figures/`
+- Figure generator: `scripts/generate_research_figures.py`
+
+Regenerate the website-native SVG figures after changing the committed model outputs or the cited article inputs:
+
+```bash
+python3 scripts/generate_research_figures.py
+```
+
+The article figures are used selectively. They should visualise a sourced balance, valuation, inventory, yield or demand relationship that materially supports the thesis; they should not be added as decoration.
 
 Do not commit generated folders such as `node_modules`, `.astro` or `dist`. Vercel installs dependencies from `package.json` and `pnpm-lock.yaml` and creates the production build automatically.
 

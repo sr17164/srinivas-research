@@ -193,14 +193,31 @@ def main() -> int:
     expected_assets = [
         PUBLIC / "downloads" / "commodity-regime-analysis.zip",
         PUBLIC / "downloads" / "commodity-regime-model.xlsx",
-        PUBLIC / "models" / "commodity-equity-sensitivity.png",
-        PUBLIC / "models" / "brent-threshold-robustness.png",
+        PUBLIC / "models" / "commodity-regime-sensitivities.svg",
+        PUBLIC / "models" / "commodity-regime-differences.svg",
+        PUBLIC / "models" / "commodity-regime-thresholds.svg",
+        PUBLIC / "models" / "commodity-regime-audit.svg",
+        PUBLIC / "research-figures" / "brent-balance-and-price-outlook.svg",
+        PUBLIC / "research-figures" / "copper-valuation-and-supply-gap.svg",
+        PUBLIC / "research-figures" / "gold-real-yield-and-official-demand.svg",
+        ROOT / "scripts" / "generate_research_figures.py",
         ROOT / "src" / "pages" / "projects" / "commodity-regime-analysis.astro",
     ]
 
     for path in expected_assets:
         if not path.exists():
             errors.append(f"Missing public asset: {path.relative_to(ROOT)}")
+
+
+    research_figure_pattern = re.compile(r'src=["\'](/research-figures/[^"\']+)["\']')
+    for path in articles:
+        text = path.read_text(encoding="utf-8")
+        for asset_url in research_figure_pattern.findall(text):
+            asset_path = PUBLIC / asset_url.lstrip("/")
+            if not asset_path.exists():
+                errors.append(
+                    f"{path.relative_to(ROOT)}: missing research figure {asset_url}"
+                )
 
     legacy_project_index = (
         PUBLIC / "projects" / "commodity-regime-analysis" / "index.html"
