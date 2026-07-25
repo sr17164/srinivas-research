@@ -417,6 +417,136 @@ def main() -> int:
                 "primary_relationship_results.csv: add a Model column"
             )
 
+    global_markets_page = (
+        ROOT / "src" / "pages" / "models" / "global-markets-simulation.mdx"
+    )
+    global_markets_data = ROOT / "src" / "data" / "globalMarketsSimulation.ts"
+    selected_work_component = (
+        ROOT / "src" / "components" / "models" / "SelectedWork.astro"
+    )
+
+    for required_path in (
+        global_markets_page,
+        global_markets_data,
+        ROOT / "src" / "components" / "models" / "GlobalMarketsOverview.astro",
+        ROOT / "src" / "components" / "models" / "GlobalMarketsAllocation.astro",
+        ROOT / "src" / "components" / "models" / "GlobalMarketsMetrics.astro",
+        ROOT / "src" / "components" / "models" / "GlobalMarketsLimitations.astro",
+        ROOT / "src" / "components" / "models" / "GlobalMarketsSessionComparison.astro",
+        ROOT / "src" / "components" / "models" / "ModelBreadcrumb.astro",
+    ):
+        if not required_path.exists():
+            errors.append(
+                f"Missing Global Markets project file: {required_path.relative_to(ROOT)}"
+            )
+
+    if global_markets_page.exists() and global_markets_data.exists():
+        global_markets_page_text = global_markets_page.read_text(encoding="utf-8")
+        global_markets_data_text = global_markets_data.read_text(encoding="utf-8")
+        global_markets_component_text = "\n".join(
+            required_path.read_text(encoding="utf-8")
+            for required_path in (
+                ROOT / "src" / "components" / "models" / "GlobalMarketsOverview.astro",
+                ROOT / "src" / "components" / "models" / "GlobalMarketsAllocation.astro",
+                ROOT / "src" / "components" / "models" / "GlobalMarketsMetrics.astro",
+                ROOT / "src" / "components" / "models" / "GlobalMarketsLimitations.astro",
+                ROOT / "src" / "components" / "models" / "GlobalMarketsSessionComparison.astro",
+            )
+            if required_path.exists()
+        )
+        combined_global_markets_text = "\n".join(
+            (
+                global_markets_page_text,
+                global_markets_data_text,
+                global_markets_component_text,
+            )
+        )
+        normalized_global_markets_text = re.sub(
+            r"\s+", " ", combined_global_markets_text
+        ).lower()
+
+        required_global_markets_values = {
+            "asset-management P&L": "2_907_448",
+            "asset-management return": "returnOnInitialFunds: 14.5",
+            "portfolio value": "22_690_856.4",
+            "Sharpe ratio": "sharpeRatio: 0.66",
+            "average equity allocation": "equities: 55.9",
+            "final equity allocation": "equities: 26.4",
+            "final cash allocation": "cash: 73.6",
+            "asset-management P&L rank": "pnlRank: 4",
+            "sell-side trading P&L": "tradingPnl: 677_563",
+            "sell-side commission": "commissionRevenue: 100_405",
+            "sell-side total P&L": "totalPnl: 777_968",
+            "sell-side rank": "overallLeaderboardRank: 13",
+            "exchange trades": "exchangeTrades: 392",
+            "zero exchange fat fingers": "exchangeFatFingers: 0",
+            "zero client fat fingers": "clientFatFingers: 0",
+            "prior-session date": "date: '2026-07-15'",
+            "prior-session composite rank": "compositeLeaderboardRank: 53",
+            "prior-session score": "exactSessionScore: 60.73",
+            "prior-session trading P&L": "tradingPnl: 1_836_906",
+            "prior-session commission": "commissionPaid: -312_673",
+            "prior-session portfolio value": "portfolioValue: 21_879_661.96",
+            "prior-session BSRM": "buySideRiskManagement: 73.33",
+            "prior-session execution": "execution: 42.86",
+            "prior-session fat fingers": "fatFingerCount: 1",
+            "current buy-side fat fingers": "fatFingerIncidents: 0",
+        }
+
+        for label, value in required_global_markets_values.items():
+            if value not in combined_global_markets_text:
+                errors.append(
+                    f"Global Markets simulation: missing exact {label} value ({value})"
+                )
+
+        for forbidden_claim in (
+            "4th/148",
+            "4th of 148",
+            "4th/153",
+            "4th of 153",
+            "top 3%",
+        ):
+            if forbidden_claim.lower() in global_markets_page_text.lower():
+                errors.append(
+                    "global-markets-simulation.mdx: remove unresolved P&L-rank "
+                    f"denominator or percentile claim ({forbidden_claim})"
+                )
+
+        for required_phrase in (
+            "simulated rather than real capital",
+            "weighting formula is unavailable",
+            "denominator is deliberately left unpublished",
+            "No raw transaction export",
+            "different cohorts, market paths and P&amp;L field definitions",
+        ):
+            if required_phrase.lower() not in normalized_global_markets_text:
+                errors.append(
+                    "global-markets-simulation.mdx: missing limitation or "
+                    f"interpretation wording ({required_phrase})"
+                )
+
+    models_page_text = (ROOT / "src" / "pages" / "models.mdx").read_text(
+        encoding="utf-8"
+    )
+    for required_models_copy in (
+        "Dual-Role Global Markets Simulation",
+        "href: '/models/global-markets-simulation/'",
+        "Ranked fourth by asset-management P&L",
+    ):
+        if required_models_copy not in models_page_text:
+            errors.append(
+                f"src/pages/models.mdx: missing Global Markets card copy ({required_models_copy})"
+            )
+
+    if selected_work_component.exists():
+        selected_work_text = selected_work_component.read_text(encoding="utf-8")
+        for required_link_support in ("href?: string", "linkLabel?: string"):
+            if required_link_support not in selected_work_text:
+                errors.append(
+                    "src/components/models/SelectedWork.astro: missing linked-card "
+                    f"support ({required_link_support})"
+                )
+
     model_methodology_page = (
         ROOT / "src" / "pages" / "models" / "commodity-regime-analysis.mdx"
     ).read_text(encoding="utf-8")

@@ -1,10 +1,16 @@
 ---
+import Link from '~/components/base/Link.astro'
+import { withBasePath } from '~/utils/path'
+
 interface Item {
   category: string
   title: string
   date: string
   description: string
   result?: string
+  href?: string
+  linkLabel?: string
+  id?: string
 }
 
 interface Props {
@@ -12,21 +18,54 @@ interface Props {
 }
 
 const { items } = Astro.props
+
+const slugify = (value: string) =>
+  value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')
 ---
 
 <div class="selected-work not-prose">
   {
     items.map((item) => (
-      <article class="selected-work-item">
+      <article
+        class:list={[
+          'selected-work-item',
+          item.href && 'selected-work-item--linked',
+        ]}
+        id={item.id ?? slugify(item.title)}
+      >
         <div class="selected-work-meta">
           <span>{item.category}</span>
           <time>{item.date}</time>
         </div>
 
-        <h3>{item.title}</h3>
+        <h3>
+          {item.href ? (
+            <Link
+              href={withBasePath(item.href)}
+              class="selected-work-title-link border-b-none!"
+            >
+              {item.title}
+            </Link>
+          ) : (
+            item.title
+          )}
+        </h3>
         <p>{item.description}</p>
 
         {item.result && <strong>{item.result}</strong>}
+
+        {item.href && (
+          <Link
+            href={withBasePath(item.href)}
+            class="selected-work-link border-b-none!"
+          >
+            {item.linkLabel ?? 'Review project'}
+            <span aria-hidden="true">→</span>
+          </Link>
+        )}
       </article>
     ))
   }
@@ -45,6 +84,11 @@ const { items } = Astro.props
     border: 1px solid color-mix(in srgb, currentColor 14%, transparent);
     border-radius: 0.5rem;
     background: color-mix(in srgb, currentColor 2.5%, transparent);
+  }
+
+  .selected-work-item--linked {
+    display: flex;
+    flex-direction: column;
   }
 
   .selected-work-meta {
@@ -75,6 +119,11 @@ const { items } = Astro.props
     letter-spacing: -0.02em;
   }
 
+  .selected-work-title-link {
+    color: inherit;
+    text-decoration: none;
+  }
+
   .selected-work-item p {
     margin: 0.7rem 0 0;
     font-size: 0.82rem;
@@ -91,9 +140,38 @@ const { items } = Astro.props
     opacity: 0.62;
   }
 
+  .selected-work-link {
+    display: inline-flex;
+    gap: 0.45rem;
+    align-items: center;
+    width: fit-content;
+    margin-top: auto;
+    padding-top: 1rem;
+    color: inherit;
+    font-size: 0.72rem;
+    font-weight: 650;
+    line-height: 1.3;
+    text-decoration: none;
+    opacity: 0.58;
+    transition:
+      opacity 160ms ease,
+      transform 160ms ease;
+  }
+
+  .selected-work-link:hover {
+    transform: translateX(0.1rem);
+    opacity: 1;
+  }
+
   @media (max-width: 680px) {
     .selected-work {
       grid-template-columns: 1fr;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .selected-work-link {
+      transition: none;
     }
   }
 </style>

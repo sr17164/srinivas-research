@@ -12,6 +12,7 @@ import PageNavigation from '~/components/nav/PageNavigation.astro'
 import Link from '~/components/base/Link.astro'
 import CommodityRegimeResults from '~/components/models/CommodityRegimeResults.astro'
 import CommodityRegimeHighlights from '~/components/models/CommodityRegimeHighlights.astro'
+import ModelBreadcrumb from '~/components/models/ModelBreadcrumb.astro'
 import { withBasePath } from '~/utils/path'
 
 <BaseLayout
@@ -26,6 +27,8 @@ import { withBasePath } from '~/utils/path'
     subtitle={frontmatter.subtitle}
     isCentered={false}
   >
+    <ModelBreadcrumb slot="head" current={frontmatter.title} />
+
     <div slot="article" class="prose mx-auto">
       <h2>Research Question</h2>
 

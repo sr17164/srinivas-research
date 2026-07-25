@@ -53,6 +53,7 @@ The standalone SM favicon is generated from `public/favicon.png`. The browser us
 ## Models, figures and downloads
 
 - Public model summaries: `src/pages/models/`
+- Global Markets simulation data: `src/data/globalMarketsSimulation.ts`
 - Public project page: `src/pages/projects/`
 - Downloadable files: `public/downloads/`
 - Reproducibility package: `public/projects/commodity-regime-analysis/`
@@ -66,6 +67,8 @@ python3 scripts/generate_research_figures.py
 ```
 
 The article figures are used selectively. They should visualise a sourced balance, valuation, inventory, yield or demand relationship that materially supports the thesis; they should not be added as decoration.
+
+The Global Markets simulation page is generated from a single typed data file. Keep the asset-management P&L rank denominator unpublished until the 148-versus-153 participant-count discrepancy is resolved.
 
 Do not commit generated folders such as `node_modules`, `.astro` or `dist`. Vercel installs dependencies from `package.json` and `pnpm-lock.yaml` and creates the production build automatically.
 

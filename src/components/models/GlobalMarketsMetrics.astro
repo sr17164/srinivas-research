@@ -1,0 +1,339 @@
+---
+import { globalMarketsSimulation as simulation } from '~/data/globalMarketsSimulation'
+
+interface Props {
+  mode: 'buy-side' | 'sell-side' | 'scores'
+}
+
+const { mode } = Astro.props
+
+const usd = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+  maximumFractionDigits: 0,
+})
+
+const usdTwoDecimals = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+})
+
+const numberTwoDecimals = new Intl.NumberFormat('en-US', {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+})
+
+const buySideRows = [
+  [
+    'Ending portfolio value',
+    usdTwoDecimals.format(simulation.buySide.financials.portfolioValue),
+  ],
+  ['Commission', usd.format(simulation.buySide.financials.commission)],
+  ['Total P&L', usd.format(simulation.buySide.financials.totalPnl)],
+  [
+    'Return on initial funds',
+    `${simulation.buySide.financials.returnOnInitialFunds}%`,
+  ],
+  ['Sharpe ratio', simulation.buySide.financials.sharpeRatio.toFixed(2)],
+  [
+    'Average net exposure',
+    usd.format(simulation.buySide.financials.averageNetExposure),
+  ],
+  [
+    'Average contract exposure',
+    numberTwoDecimals.format(
+      simulation.buySide.financials.averageContractExposure
+    ),
+  ],
+  [
+    'Chat and voice trades',
+    String(simulation.buySide.brokerDealing.chatAndVoiceTrades),
+  ],
+  ['Exchange trades', String(simulation.buySide.brokerDealing.exchangeTrades)],
+  ['Quote trades', String(simulation.buySide.brokerDealing.quoteTrades)],
+  ['CMM trades', String(simulation.buySide.brokerDealing.cmmTrades)],
+]
+
+const sellSideRows = [
+  ['Trading P&L', usd.format(simulation.sellSide.financials.tradingPnl)],
+  [
+    'Commission revenue',
+    usd.format(simulation.sellSide.financials.commissionRevenue),
+  ],
+  ['Total P&L', usd.format(simulation.sellSide.financials.totalPnl)],
+  [
+    'Facilitation ratio',
+    `${simulation.sellSide.financials.facilitationRatio}%`,
+  ],
+  [
+    'Average net exposure',
+    usd.format(simulation.sellSide.financials.averageNetExposure),
+  ],
+  [
+    'Average contract exposure',
+    numberTwoDecimals.format(
+      simulation.sellSide.financials.averageContractExposure
+    ),
+  ],
+  ['Exchange trades', String(simulation.sellSide.clientDealing.exchangeTrades)],
+  ['Chat trades', String(simulation.sellSide.clientDealing.chatTrades)],
+  ['Quote trades', String(simulation.sellSide.clientDealing.quoteTrades)],
+  [
+    'Average recorded exchange impact',
+    `${simulation.sellSide.marketImpactAndControls.averageExchangeImpact}%`,
+  ],
+  [
+    'Exchange fat-finger incidents',
+    String(simulation.sellSide.marketImpactAndControls.exchangeFatFingers),
+  ],
+  [
+    'Client fat-finger incidents',
+    String(simulation.sellSide.marketImpactAndControls.clientFatFingers),
+  ],
+]
+
+const rows = mode === 'buy-side' ? buySideRows : sellSideRows
+---
+
+{
+  mode === 'scores' ? (
+    <section
+      class="gm-score-section not-prose"
+      aria-label="Platform score comparison"
+    >
+      <div class="gm-score-intro">
+        <div>
+          <span>Asset management</span>
+          <strong>{simulation.buySide.exactSessionScore.toFixed(2)}%</strong>
+          <p>
+            Composite rank {simulation.buySide.compositeLeaderboardRank}th of{' '}
+            {simulation.event.participantCount}
+          </p>
+        </div>
+        <div>
+          <span>Sell-side trading</span>
+          <strong>{simulation.sellSide.exactSessionScore.toFixed(2)}%</strong>
+          <p>
+            Overall rank {simulation.sellSide.overallLeaderboardRank}th of{' '}
+            {simulation.event.participantCount}
+          </p>
+        </div>
+      </div>
+
+      <div class="gm-score-grid">
+        <article>
+          <h3>Asset-management subscores</h3>
+          <dl>
+            {simulation.buySide.portalSubscores.map((score) => (
+              <div>
+                <dt>{score.label}</dt>
+                <dd>{score.display}</dd>
+              </div>
+            ))}
+          </dl>
+        </article>
+
+        <article>
+          <h3>Sell-side subscores</h3>
+          <dl>
+            {simulation.sellSide.portalSubscores.map((score) => (
+              <div>
+                <dt>{score.label}</dt>
+                <dd>{score.display}</dd>
+              </div>
+            ))}
+          </dl>
+        </article>
+      </div>
+
+      <p class="gm-score-note">
+        BSRM, ES, RA, CT and SSRM are retained as portal labels because the
+        available material does not establish complete official definitions or
+        the weighting formula. No causal attribution is made from these
+        subscores to the composite ranking.
+      </p>
+    </section>
+  ) : (
+    <div class="gm-metrics not-prose">
+      <div class="gm-metrics-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Metric</th>
+              <th scope="col">Result</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map(([label, value]) => (
+              <tr>
+                <th scope="row">{label}</th>
+                <td>{value}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  )
+}
+
+<style>
+  .gm-metrics,
+  .gm-score-section {
+    margin: 1.4rem 0 2.2rem;
+  }
+
+  .gm-metrics-scroll {
+    overflow-x: auto;
+    border-top: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+    border-bottom: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+  }
+
+  .gm-metrics table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8rem;
+  }
+
+  .gm-metrics th,
+  .gm-metrics td {
+    padding: 0.76rem 0.7rem;
+    border-bottom: 1px solid color-mix(in srgb, currentColor 9%, transparent);
+  }
+
+  .gm-metrics tr:last-child th,
+  .gm-metrics tr:last-child td {
+    border-bottom: 0;
+  }
+
+  .gm-metrics thead th {
+    font-size: 0.64rem;
+    font-weight: 650;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.46;
+  }
+
+  .gm-metrics th {
+    text-align: left;
+  }
+
+  .gm-metrics td,
+  .gm-metrics thead th:last-child {
+    text-align: right;
+  }
+
+  .gm-metrics tbody th {
+    font-weight: 550;
+    opacity: 0.72;
+  }
+
+  .gm-metrics tbody td {
+    font-weight: 650;
+  }
+
+  .gm-score-intro {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    border-top: 1px solid color-mix(in srgb, currentColor 15%, transparent);
+    border-bottom: 1px solid color-mix(in srgb, currentColor 15%, transparent);
+  }
+
+  .gm-score-intro > div {
+    padding: 1rem 1.1rem;
+  }
+
+  .gm-score-intro > div + div {
+    border-left: 1px solid color-mix(in srgb, currentColor 11%, transparent);
+  }
+
+  .gm-score-intro span,
+  .gm-score-grid dt {
+    display: block;
+    font-size: 0.64rem;
+    font-weight: 650;
+    line-height: 1.3;
+    letter-spacing: 0.085em;
+    text-transform: uppercase;
+    opacity: 0.46;
+  }
+
+  .gm-score-intro strong {
+    display: block;
+    margin-top: 0.35rem;
+    font-family: Georgia, Cambria, 'Times New Roman', Times, serif;
+    font-size: 1.55rem;
+    font-weight: 500;
+    line-height: 1.2;
+  }
+
+  .gm-score-intro p {
+    margin: 0.35rem 0 0;
+    font-size: 0.72rem;
+    line-height: 1.45;
+    opacity: 0.52;
+  }
+
+  .gm-score-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.85rem;
+    margin-top: 0.85rem;
+  }
+
+  .gm-score-grid article {
+    padding: 1rem 1.1rem;
+    border: 1px solid color-mix(in srgb, currentColor 14%, transparent);
+    border-radius: 0.5rem;
+    background: color-mix(in srgb, currentColor 2.5%, transparent);
+  }
+
+  .gm-score-grid h3 {
+    margin: 0 0 0.75rem;
+    font-family: Georgia, Cambria, 'Times New Roman', Times, serif;
+    font-size: 1.05rem;
+    font-weight: 500;
+    line-height: 1.3;
+  }
+
+  .gm-score-grid dl {
+    margin: 0;
+  }
+
+  .gm-score-grid dl div {
+    display: flex;
+    gap: 1rem;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: 0.58rem 0;
+    border-top: 1px solid color-mix(in srgb, currentColor 9%, transparent);
+  }
+
+  .gm-score-grid dd {
+    margin: 0;
+    font-size: 0.78rem;
+    font-weight: 650;
+    text-align: right;
+  }
+
+  .gm-score-note {
+    margin: 0.85rem 0 0;
+    font-size: 0.7rem;
+    line-height: 1.6;
+    opacity: 0.48;
+  }
+
+  @media (max-width: 680px) {
+    .gm-score-intro,
+    .gm-score-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .gm-score-intro > div + div {
+      border-top: 1px solid color-mix(in srgb, currentColor 11%, transparent);
+      border-left: 0;
+    }
+  }
+</style>

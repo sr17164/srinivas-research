@@ -1,0 +1,53 @@
+---
+import Link from '~/components/base/Link.astro'
+import { withBasePath } from '~/utils/path'
+
+interface Props {
+  current: string
+}
+
+const { current } = Astro.props
+---
+
+<nav class="model-breadcrumb not-prose" aria-label="Breadcrumb">
+  <ol>
+    <li>
+      <Link href={withBasePath('/models/')} class="border-b-none!">Models</Link>
+    </li>
+    <li aria-current="page">{current}</li>
+  </ol>
+</nav>
+
+<style>
+  .model-breadcrumb {
+    margin-top: 1.2rem;
+  }
+
+  .model-breadcrumb ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.72rem;
+    line-height: 1.4;
+    opacity: 0.52;
+  }
+
+  .model-breadcrumb li + li::before {
+    margin-right: 0.45rem;
+    content: '/';
+    opacity: 0.5;
+  }
+
+  .model-breadcrumb :global(a) {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .model-breadcrumb :global(a:hover) {
+    opacity: 1;
+  }
+</style>

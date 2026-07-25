@@ -1,0 +1,290 @@
+---
+import { globalMarketsSimulation as simulation } from '~/data/globalMarketsSimulation'
+
+const usd = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+  maximumFractionDigits: 0,
+})
+
+const usdTwoDecimals = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+})
+
+const ordinal = (value: number) => {
+  const mod100 = value % 100
+  if (mod100 >= 11 && mod100 <= 13) return `${value}th`
+
+  switch (value % 10) {
+    case 1:
+      return `${value}st`
+    case 2:
+      return `${value}nd`
+    case 3:
+      return `${value}rd`
+    default:
+      return `${value}th`
+  }
+}
+---
+
+<section class="gm-overview not-prose" aria-label="Simulation overview">
+  <div class="gm-project-meta">
+    <span>{simulation.event.provider}</span>
+    <span>{simulation.event.name}</span>
+    <time datetime={simulation.event.date}>{simulation.event.displayDate}</time>
+  </div>
+
+  <div class="gm-kpi-grid">
+    <article>
+      <span>Asset-management P&amp;L rank</span>
+      <strong>{ordinal(simulation.buySide.pnlRank)}</strong>
+      <p>Denominator intentionally unpublished pending reconciliation.</p>
+    </article>
+
+    <article>
+      <span>Asset-management P&amp;L</span>
+      <strong>{usd.format(simulation.buySide.financials.totalPnl)}</strong>
+      <p>
+        {simulation.buySide.financials.returnOnInitialFunds}% return on initial
+        funds.
+      </p>
+    </article>
+
+    <article>
+      <span>Ending portfolio value</span>
+      <strong
+        >{
+          usdTwoDecimals.format(simulation.buySide.financials.portfolioValue)
+        }</strong
+      >
+      <p>
+        Sharpe ratio of {simulation.buySide.financials.sharpeRatio.toFixed(2)}.
+      </p>
+    </article>
+
+    <article>
+      <span>Sell-side overall rank</span>
+      <strong
+        >{simulation.sellSide.overallLeaderboardRank}th of {
+          simulation.event.participantCount
+        }</strong
+      >
+      <p>
+        {usd.format(simulation.sellSide.financials.totalPnl)} of total P&amp;L.
+      </p>
+    </article>
+  </div>
+
+  <div class="gm-role-comparison">
+    <article>
+      <header>
+        <p>Buy side</p>
+        <h2>Asset management</h2>
+      </header>
+
+      <dl>
+        <div>
+          <dt>Total P&amp;L</dt>
+          <dd>{usd.format(simulation.buySide.financials.totalPnl)}</dd>
+        </div>
+        <div>
+          <dt>Composite score</dt>
+          <dd>{simulation.buySide.exactSessionScore.toFixed(2)}%</dd>
+        </div>
+        <div>
+          <dt>Composite rank</dt>
+          <dd>
+            {simulation.buySide.compositeLeaderboardRank}th of {
+              simulation.event.participantCount
+            }
+          </dd>
+        </div>
+        <div>
+          <dt>Return</dt>
+          <dd>{simulation.buySide.financials.returnOnInitialFunds}%</dd>
+        </div>
+      </dl>
+    </article>
+
+    <article>
+      <header>
+        <p>Sell side</p>
+        <h2>Dealer trading</h2>
+      </header>
+
+      <dl>
+        <div>
+          <dt>Total P&amp;L</dt>
+          <dd>{usd.format(simulation.sellSide.financials.totalPnl)}</dd>
+        </div>
+        <div>
+          <dt>Composite score</dt>
+          <dd>{simulation.sellSide.exactSessionScore.toFixed(2)}%</dd>
+        </div>
+        <div>
+          <dt>Overall rank</dt>
+          <dd>
+            {simulation.sellSide.overallLeaderboardRank}th of {
+              simulation.event.participantCount
+            }
+          </dd>
+        </div>
+        <div>
+          <dt>Exchange trades</dt>
+          <dd>{simulation.sellSide.clientDealing.exchangeTrades}</dd>
+        </div>
+      </dl>
+    </article>
+  </div>
+</section>
+
+<style>
+  .gm-overview {
+    margin: 1.5rem 0 2.5rem;
+  }
+
+  .gm-project-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem 0.9rem;
+    margin-bottom: 1rem;
+    font-size: 0.68rem;
+    font-weight: 650;
+    line-height: 1.4;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    opacity: 0.48;
+  }
+
+  .gm-project-meta > * + *::before {
+    margin-right: 0.9rem;
+    content: '·';
+  }
+
+  .gm-kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.85rem;
+  }
+
+  .gm-kpi-grid article,
+  .gm-role-comparison article {
+    border: 1px solid color-mix(in srgb, currentColor 14%, transparent);
+    border-radius: 0.55rem;
+    background: color-mix(in srgb, currentColor 2.8%, transparent);
+  }
+
+  .gm-kpi-grid article {
+    padding: 1.05rem 1.1rem;
+  }
+
+  .gm-kpi-grid span,
+  .gm-role-comparison dt,
+  .gm-role-comparison header p {
+    display: block;
+    font-size: 0.64rem;
+    font-weight: 650;
+    line-height: 1.35;
+    letter-spacing: 0.085em;
+    text-transform: uppercase;
+    opacity: 0.46;
+  }
+
+  .gm-kpi-grid strong {
+    display: block;
+    margin-top: 0.42rem;
+    font-family: Georgia, Cambria, 'Times New Roman', Times, serif;
+    font-size: clamp(1.35rem, 3.5vw, 1.9rem);
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+  }
+
+  .gm-kpi-grid p {
+    margin: 0.45rem 0 0;
+    font-size: 0.74rem;
+    line-height: 1.5;
+    opacity: 0.5;
+  }
+
+  .gm-role-comparison {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.85rem;
+    margin-top: 0.85rem;
+  }
+
+  .gm-role-comparison article {
+    overflow: hidden;
+  }
+
+  .gm-role-comparison header {
+    padding: 1rem 1.1rem 0.9rem;
+    border-bottom: 1px solid color-mix(in srgb, currentColor 11%, transparent);
+  }
+
+  .gm-role-comparison header p {
+    margin: 0 0 0.35rem;
+  }
+
+  .gm-role-comparison h2 {
+    margin: 0;
+    font-family: Georgia, Cambria, 'Times New Roman', Times, serif;
+    font-size: 1.18rem;
+    font-weight: 500;
+    line-height: 1.25;
+    letter-spacing: -0.02em;
+  }
+
+  .gm-role-comparison dl {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin: 0;
+  }
+
+  .gm-role-comparison dl div {
+    min-width: 0;
+    padding: 0.9rem 1.1rem;
+    border-bottom: 1px solid color-mix(in srgb, currentColor 9%, transparent);
+  }
+
+  .gm-role-comparison dl div:nth-child(odd) {
+    border-right: 1px solid color-mix(in srgb, currentColor 9%, transparent);
+  }
+
+  .gm-role-comparison dl div:nth-last-child(-n + 2) {
+    border-bottom: 0;
+  }
+
+  .gm-role-comparison dd {
+    margin: 0.32rem 0 0;
+    font-size: 0.9rem;
+    font-weight: 650;
+    line-height: 1.35;
+  }
+
+  @media (max-width: 700px) {
+    .gm-kpi-grid,
+    .gm-role-comparison {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 460px) {
+    .gm-role-comparison dl {
+      grid-template-columns: 1fr;
+    }
+
+    .gm-role-comparison dl div:nth-child(odd) {
+      border-right: 0;
+    }
+
+    .gm-role-comparison dl div:nth-last-child(2) {
+      border-bottom: 1px solid color-mix(in srgb, currentColor 9%, transparent);
+    }
+  }
+</style>
