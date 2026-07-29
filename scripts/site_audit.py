@@ -433,6 +433,7 @@ def main() -> int:
         ROOT / "src" / "components" / "models" / "GlobalMarketsMetrics.astro",
         ROOT / "src" / "components" / "models" / "GlobalMarketsLimitations.astro",
         ROOT / "src" / "components" / "models" / "GlobalMarketsSessionComparison.astro",
+        ROOT / "src" / "components" / "models" / "GlobalMarketsSellSideComparison.astro",
         ROOT / "src" / "components" / "models" / "ModelBreadcrumb.astro",
     ):
         if not required_path.exists():
@@ -451,6 +452,7 @@ def main() -> int:
                 ROOT / "src" / "components" / "models" / "GlobalMarketsMetrics.astro",
                 ROOT / "src" / "components" / "models" / "GlobalMarketsLimitations.astro",
                 ROOT / "src" / "components" / "models" / "GlobalMarketsSessionComparison.astro",
+                ROOT / "src" / "components" / "models" / "GlobalMarketsSellSideComparison.astro",
             )
             if required_path.exists()
         )
@@ -474,11 +476,23 @@ def main() -> int:
             "final equity allocation": "equities: 26.4",
             "final cash allocation": "cash: 73.6",
             "asset-management P&L rank": "pnlRank: 4",
-            "sell-side trading P&L": "tradingPnl: 677_563",
-            "sell-side commission": "commissionRevenue: 100_405",
-            "sell-side total P&L": "totalPnl: 777_968",
-            "sell-side rank": "overallLeaderboardRank: 13",
-            "exchange trades": "exchangeTrades: 392",
+            "22 July sell-side trading P&L": "tradingPnl: 677_563",
+            "22 July sell-side commission": "commissionRevenue: 100_405",
+            "22 July sell-side total P&L": "totalPnl: 777_968",
+            "22 July sell-side rank": "overallLeaderboardRank: 13",
+            "22 July exchange trades": "exchangeTrades: 392",
+            "27 July sell-side score": "exactSessionScore: 88.89",
+            "27 July sell-side trading P&L": "tradingPnl: 842_052",
+            "27 July sell-side commission": "commissionRevenue: 153_635",
+            "27 July sell-side total P&L": "totalPnl: 995_687",
+            "27 July sell-side rank": "overallLeaderboardRank: 8",
+            "27 July participant count": "participantCount: 93",
+            "27 July exchange trades": "exchangeTrades: 499",
+            "27 July chat trades": "chatTrades: 13",
+            "27 July average net exposure": "averageNetExposure: -10_410_039",
+            "27 July average contract exposure": "averageContractExposure: -37_152",
+            "27 July commission metric": "value: 73.81",
+            "27 July SSRM": "value: 80.95",
             "zero exchange fat fingers": "exchangeFatFingers: 0",
             "zero client fat fingers": "clientFatFingers: 0",
             "prior-session date": "date: '2026-07-15'",
@@ -505,11 +519,22 @@ def main() -> int:
             "4th/153",
             "4th of 153",
             "top 3%",
+            "8th overall",
+            "89% combined",
+            "overall 89%",
         ):
             if forbidden_claim.lower() in global_markets_page_text.lower():
                 errors.append(
                     "global-markets-simulation.mdx: remove unresolved P&L-rank "
                     f"denominator or percentile claim ({forbidden_claim})"
+                )
+
+        for match in re.finditer(r"88\.89%", global_markets_page_text):
+            window_start = max(0, match.start() - 120)
+            window_end = min(len(global_markets_page_text), match.end() + 120)
+            if "sell-side" not in global_markets_page_text[window_start:window_end].lower():
+                errors.append(
+                    "global-markets-simulation.mdx: every 88.89% reference must be explicitly labelled sell-side"
                 )
 
         for required_phrase in (
@@ -518,6 +543,10 @@ def main() -> int:
             "denominator is deliberately left unpublished",
             "No raw transaction export",
             "different cohorts, market paths and P&amp;L field definitions",
+            "strongest buy-side and sell-side results came from different dates",
+            "larger on 27 July",
+            "88.89% sell-side composite score",
+            "two consecutive top-decile sell-side finishes",
         ):
             if required_phrase.lower() not in normalized_global_markets_text:
                 errors.append(
@@ -531,7 +560,9 @@ def main() -> int:
     for required_models_copy in (
         "Dual-Role Global Markets Simulation",
         "href: '/models/global-markets-simulation/'",
-        "Ranked fourth by asset-management P&L",
+        "ranked fourth by P&L",
+        "8th of 93",
+        "88.89% sell-side composite score",
     ):
         if required_models_copy not in models_page_text:
             errors.append(

@@ -108,16 +108,18 @@ const rows = mode === 'buy-side' ? buySideRows : sellSideRows
           <span>Asset management</span>
           <strong>{simulation.buySide.exactSessionScore.toFixed(2)}%</strong>
           <p>
-            Composite rank {simulation.buySide.compositeLeaderboardRank}th of{' '}
-            {simulation.event.participantCount}
+            {simulation.buySide.displayDate} · composite rank{' '}
+            {simulation.buySide.compositeLeaderboardRank}th of{' '}
+            {simulation.buySide.participantCount}
           </p>
         </div>
         <div>
-          <span>Sell-side trading</span>
+          <span>Sell-side trading · principal session</span>
           <strong>{simulation.sellSide.exactSessionScore.toFixed(2)}%</strong>
           <p>
-            Overall rank {simulation.sellSide.overallLeaderboardRank}th of{' '}
-            {simulation.event.participantCount}
+            {simulation.sellSide.displayDate} · sell-side rank{' '}
+            {simulation.sellSide.overallLeaderboardRank}th of{' '}
+            {simulation.sellSide.participantCount}
           </p>
         </div>
       </div>

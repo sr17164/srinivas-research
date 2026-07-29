@@ -2,19 +2,18 @@ export const globalMarketsSimulation = {
   event: {
     provider: 'AmplifyME',
     name: 'Finance Accelerator – Global Markets',
-    date: '2026-07-22',
-    displayDate: 'July 2026',
-    format: 'Timed, live, multi-participant market simulation',
-    participantCount: 153,
-    userReportedRankedParticipantCount: 148,
-    pnlRankDenominatorStatus:
-      'Unresolved — the public page does not attach a denominator to the asset-management P&L rank.',
+    date: '2026-07-27',
+    displayDate: 'Repeated sessions · July 2026',
+    format: 'Timed, live, multi-participant market simulations',
+    assetManagementPnlRankDenominatorStatus:
+      'Unresolved — the public page does not attach a denominator to the 22 July asset-management P&L rank.',
   },
   priorBuySideSession: {
     date: '2026-07-15',
     displayDate: '15 July 2026',
     role: 'Asset management',
     compositeLeaderboardRank: 53,
+    cohortDenominatorStatus: 'Not documented',
     exactSessionScore: 60.73,
     sessionNumber: 2,
     portalMetrics: {
@@ -33,7 +32,11 @@ export const globalMarketsSimulation = {
       'Descriptive only — cohort size, market path and P&L field definitions are not fully aligned with the 22 July session.',
   },
   buySide: {
+    date: '2026-07-22',
+    displayDate: '22 July 2026',
     role: 'Asset management',
+    participantCount: 153,
+    userReportedRankedParticipantCount: 148,
     overallDisplayScore: 79,
     exactSessionScore: 79.18,
     compositeLeaderboardRank: 25,
@@ -73,8 +76,11 @@ export const globalMarketsSimulation = {
     },
     peakEquityAllocation: 'approximately 90–94%',
   },
-  sellSide: {
+  priorSellSideSession: {
+    date: '2026-07-22',
+    displayDate: '22 July 2026',
     role: 'Sell-side trading',
+    participantCount: 153,
     overallDisplayScore: 80,
     exactSessionScore: 80.35,
     overallLeaderboardRank: 13,
@@ -106,5 +112,46 @@ export const globalMarketsSimulation = {
       { label: 'P&L metric', value: 81, display: 'approximately 81%' },
       { label: 'SSRM', value: 62.69, display: '62.69%' },
     ],
+  },
+  sellSide: {
+    date: '2026-07-27',
+    displayDate: '27 July 2026',
+    role: 'Sell-side trading',
+    participantCount: 93,
+    overallDisplayScore: 89,
+    exactSessionScore: 88.89,
+    overallLeaderboardRank: 8,
+    financials: {
+      commissionRevenue: 153_635,
+      tradingPnl: 842_052,
+      totalPnl: 995_687,
+      facilitationRatio: 548,
+      averageNetExposure: -10_410_039,
+      averageContractExposure: -37_152,
+    },
+    clientDealing: {
+      chatTrades: 13,
+      quoteTrades: 0,
+      exchangeTrades: 499,
+      ibdTrades: 0,
+    },
+    marketImpactAndControls: {
+      averageExchangeImpact: 0,
+      exchangeFatFingers: 0,
+      clientFatFingers: 0,
+    },
+    portalSubscores: [
+      { label: 'Commission metric', value: 73.81, display: '73.81%' },
+      { label: 'CT', value: 81, display: '81%' },
+      { label: 'Exchange-trade metric', value: 100, display: '100%' },
+      { label: 'Fat-finger control', value: 100, display: '100%' },
+      { label: 'P&L metric', value: 98, display: '98%' },
+      { label: 'SSRM', value: 80.95, display: '80.95%' },
+    ],
+  },
+  excludedPublicContext: {
+    july27AssetManagementScore: 48,
+    reason:
+      'Not surfaced in the hero or principal analysis because the 27 July evidence is used specifically as a sell-side case study and the strongest buy-side evidence comes from 22 July.',
   },
 } as const

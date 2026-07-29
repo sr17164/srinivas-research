@@ -1,0 +1,491 @@
+---
+import { globalMarketsSimulation as simulation } from '~/data/globalMarketsSimulation'
+
+const prior = simulation.priorSellSideSession
+const current = simulation.sellSide
+
+const usd = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+  maximumFractionDigits: 0,
+})
+
+const signedPercentage = (value: number) => `+${value.toFixed(1)}%`
+const signedPercentagePoint = (value: number) => `+${value.toFixed(2)}pp`
+
+const getScore = (
+  scores: readonly { label: string; value: number; display: string }[],
+  label: string
+) => {
+  const score = scores.find((item) => item.label === label)
+
+  if (!score) throw new Error(`Missing sell-side portal score: ${label}`)
+
+  return score.value
+}
+
+const scoreChange = current.exactSessionScore - prior.exactSessionScore
+const commissionChange =
+  current.financials.commissionRevenue - prior.financials.commissionRevenue
+const tradingPnlChange =
+  current.financials.tradingPnl - prior.financials.tradingPnl
+const totalPnlChange = current.financials.totalPnl - prior.financials.totalPnl
+const exchangeTradeChange =
+  current.clientDealing.exchangeTrades - prior.clientDealing.exchangeTrades
+const chatTradeChange =
+  current.clientDealing.chatTrades - prior.clientDealing.chatTrades
+const commissionMetricChange =
+  getScore(current.portalSubscores, 'Commission metric') -
+  getScore(prior.portalSubscores, 'Commission metric')
+const ssrmChange =
+  getScore(current.portalSubscores, 'SSRM') -
+  getScore(prior.portalSubscores, 'SSRM')
+
+const percentageChange = (currentValue: number, priorValue: number) =>
+  ((currentValue - priorValue) / priorValue) * 100
+
+const rows = [
+  {
+    label: 'Sell-side composite score',
+    prior: `${prior.exactSessionScore.toFixed(2)}%`,
+    current: `${current.exactSessionScore.toFixed(2)}%`,
+    change: signedPercentagePoint(scoreChange),
+    tone: 'positive',
+  },
+  {
+    label: 'Sell-side leaderboard rank',
+    prior: `${prior.overallLeaderboardRank}th of ${prior.participantCount}`,
+    current: `${current.overallLeaderboardRank}th of ${current.participantCount}`,
+    change: 'Two top-decile finishes',
+    tone: 'neutral',
+  },
+  {
+    label: 'Commission revenue',
+    prior: usd.format(prior.financials.commissionRevenue),
+    current: usd.format(current.financials.commissionRevenue),
+    change: `${usd.format(commissionChange)} · ${signedPercentage(
+      percentageChange(
+        current.financials.commissionRevenue,
+        prior.financials.commissionRevenue
+      )
+    )}`,
+    tone: 'positive',
+  },
+  {
+    label: 'Trading P&L',
+    prior: usd.format(prior.financials.tradingPnl),
+    current: usd.format(current.financials.tradingPnl),
+    change: `${usd.format(tradingPnlChange)} · ${signedPercentage(
+      percentageChange(
+        current.financials.tradingPnl,
+        prior.financials.tradingPnl
+      )
+    )}`,
+    tone: 'positive',
+  },
+  {
+    label: 'Total P&L',
+    prior: usd.format(prior.financials.totalPnl),
+    current: usd.format(current.financials.totalPnl),
+    change: `${usd.format(totalPnlChange)} · ${signedPercentage(
+      percentageChange(current.financials.totalPnl, prior.financials.totalPnl)
+    )}`,
+    tone: 'positive',
+  },
+  {
+    label: 'Exchange trades',
+    prior: String(prior.clientDealing.exchangeTrades),
+    current: String(current.clientDealing.exchangeTrades),
+    change: `+${exchangeTradeChange} · ${signedPercentage(
+      percentageChange(
+        current.clientDealing.exchangeTrades,
+        prior.clientDealing.exchangeTrades
+      )
+    )}`,
+    tone: 'positive',
+  },
+  {
+    label: 'Chat trades',
+    prior: String(prior.clientDealing.chatTrades),
+    current: String(current.clientDealing.chatTrades),
+    change: `+${chatTradeChange}`,
+    tone: 'positive',
+  },
+  {
+    label: 'Commission metric',
+    prior: `${getScore(prior.portalSubscores, 'Commission metric').toFixed(2)}%`,
+    current: `${getScore(current.portalSubscores, 'Commission metric').toFixed(2)}%`,
+    change: signedPercentagePoint(commissionMetricChange),
+    tone: 'positive',
+  },
+  {
+    label: 'SSRM',
+    prior: `${getScore(prior.portalSubscores, 'SSRM').toFixed(2)}%`,
+    current: `${getScore(current.portalSubscores, 'SSRM').toFixed(2)}%`,
+    change: signedPercentagePoint(ssrmChange),
+    tone: 'positive',
+  },
+  {
+    label: 'Average net exposure',
+    prior: usd.format(prior.financials.averageNetExposure),
+    current: usd.format(current.financials.averageNetExposure),
+    change: 'Larger absolute exposure',
+    tone: 'caution',
+  },
+  {
+    label: 'Average contract exposure',
+    prior: prior.financials.averageContractExposure.toLocaleString('en-US'),
+    current: current.financials.averageContractExposure.toLocaleString('en-US'),
+    change: 'Larger absolute exposure',
+    tone: 'caution',
+  },
+] as const
+
+const progression = [
+  {
+    label: 'Composite score',
+    prior: prior.exactSessionScore,
+    current: current.exactSessionScore,
+    priorDisplay: `${prior.exactSessionScore.toFixed(2)}%`,
+    currentDisplay: `${current.exactSessionScore.toFixed(2)}%`,
+  },
+  {
+    label: 'Commission revenue',
+    prior: prior.financials.commissionRevenue,
+    current: current.financials.commissionRevenue,
+    priorDisplay: usd.format(prior.financials.commissionRevenue),
+    currentDisplay: usd.format(current.financials.commissionRevenue),
+  },
+  {
+    label: 'Trading P&L',
+    prior: prior.financials.tradingPnl,
+    current: current.financials.tradingPnl,
+    priorDisplay: usd.format(prior.financials.tradingPnl),
+    currentDisplay: usd.format(current.financials.tradingPnl),
+  },
+  {
+    label: 'Total P&L',
+    prior: prior.financials.totalPnl,
+    current: current.financials.totalPnl,
+    priorDisplay: usd.format(prior.financials.totalPnl),
+    currentDisplay: usd.format(current.financials.totalPnl),
+  },
+] as const
+---
+
+<section
+  class="gm-sell-comparison not-prose"
+  aria-labelledby="gm-sell-comparison-title"
+>
+  <header>
+    <p>Repeated sell-side evidence</p>
+    <h3 id="gm-sell-comparison-title">
+      22 July baseline versus 27 July principal session
+    </h3>
+  </header>
+
+  <div class="gm-sell-summary">
+    <article>
+      <span>{prior.displayDate}</span>
+      <strong
+        >{prior.overallLeaderboardRank}th of {prior.participantCount}</strong
+      >
+      <p>
+        {prior.exactSessionScore.toFixed(2)}% sell-side score · {
+          usd.format(prior.financials.totalPnl)
+        } total P&amp;L
+      </p>
+    </article>
+    <article>
+      <span>{current.displayDate}</span>
+      <strong
+        >{current.overallLeaderboardRank}th of {
+          current.participantCount
+        }</strong
+      >
+      <p>
+        {current.exactSessionScore.toFixed(2)}% sell-side score · {
+          usd.format(current.financials.totalPnl)
+        } total P&amp;L
+      </p>
+    </article>
+  </div>
+
+  <div class="gm-progression" aria-label="Sell-side metric progression">
+    {
+      progression.map((metric) => {
+        const maximum = Math.max(metric.prior, metric.current)
+        const priorWidth = `${(metric.prior / maximum) * 100}%`
+        const currentWidth = `${(metric.current / maximum) * 100}%`
+
+        return (
+          <article>
+            <h4>{metric.label}</h4>
+            <div class="gm-progression-row">
+              <span>22 Jul</span>
+              <div class="gm-progression-track" aria-hidden="true">
+                <span style={`width:${priorWidth}`} />
+              </div>
+              <strong>{metric.priorDisplay}</strong>
+            </div>
+            <div class="gm-progression-row">
+              <span>27 Jul</span>
+              <div
+                class="gm-progression-track gm-progression-track--current"
+                aria-hidden="true"
+              >
+                <span style={`width:${currentWidth}`} />
+              </div>
+              <strong>{metric.currentDisplay}</strong>
+            </div>
+          </article>
+        )
+      })
+    }
+  </div>
+
+  <div class="gm-sell-table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Comparable measure</th>
+          <th scope="col">22 July</th>
+          <th scope="col">27 July</th>
+          <th scope="col">Change</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          rows.map((row) => (
+            <tr>
+              <th scope="row">{row.label}</th>
+              <td>{row.prior}</td>
+              <td>{row.current}</td>
+              <td class:list={[`gm-change-${row.tone}`]}>{row.change}</td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <p class="gm-sell-note">
+    The ordinal rank improved from 13th to 8th, while relative percentile
+    performance was broadly stable at approximately the top 8.5–8.6% of each
+    cohort. Financial output, commission generation and the portal SSRM score
+    improved, but average net and contract exposure were materially larger in
+    absolute magnitude. The comparison therefore supports stronger output, not a
+    claim that every improvement arose from lower risk.
+  </p>
+</section>
+
+<style>
+  .gm-sell-comparison {
+    margin: 1.5rem 0 2.3rem;
+    border: 1px solid color-mix(in srgb, currentColor 14%, transparent);
+    border-radius: 0.55rem;
+    background: color-mix(in srgb, currentColor 2.5%, transparent);
+  }
+
+  .gm-sell-comparison > header {
+    padding: 1.1rem 1.2rem 1rem;
+    border-bottom: 1px solid color-mix(in srgb, currentColor 10%, transparent);
+  }
+
+  .gm-sell-comparison > header p,
+  .gm-sell-summary span {
+    margin: 0 0 0.4rem;
+    font-size: 0.64rem;
+    font-weight: 650;
+    line-height: 1.3;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    opacity: 0.46;
+  }
+
+  .gm-sell-comparison h3 {
+    margin: 0;
+    font-family: Georgia, Cambria, 'Times New Roman', Times, serif;
+    font-size: 1.24rem;
+    font-weight: 500;
+    line-height: 1.3;
+    letter-spacing: -0.02em;
+  }
+
+  .gm-sell-summary {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    border-bottom: 1px solid color-mix(in srgb, currentColor 10%, transparent);
+  }
+
+  .gm-sell-summary article {
+    padding: 1rem 1.2rem;
+  }
+
+  .gm-sell-summary article + article {
+    border-left: 1px solid color-mix(in srgb, currentColor 10%, transparent);
+  }
+
+  .gm-sell-summary strong {
+    display: block;
+    font-family: Georgia, Cambria, 'Times New Roman', Times, serif;
+    font-size: 1.35rem;
+    font-weight: 500;
+    line-height: 1.2;
+  }
+
+  .gm-sell-summary p {
+    margin: 0.4rem 0 0;
+    font-size: 0.72rem;
+    line-height: 1.5;
+    opacity: 0.52;
+  }
+
+  .gm-progression {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.8rem;
+    padding: 1rem 1.2rem;
+    border-bottom: 1px solid color-mix(in srgb, currentColor 10%, transparent);
+  }
+
+  .gm-progression article {
+    padding: 0.85rem 0.9rem;
+    border: 1px solid color-mix(in srgb, currentColor 10%, transparent);
+    border-radius: 0.45rem;
+  }
+
+  .gm-progression h4 {
+    margin: 0 0 0.7rem;
+    font-size: 0.66rem;
+    font-weight: 650;
+    line-height: 1.3;
+    letter-spacing: 0.075em;
+    text-transform: uppercase;
+    opacity: 0.55;
+  }
+
+  .gm-progression-row {
+    display: grid;
+    grid-template-columns: 2.6rem minmax(4rem, 1fr) auto;
+    gap: 0.55rem;
+    align-items: center;
+  }
+
+  .gm-progression-row + .gm-progression-row {
+    margin-top: 0.48rem;
+  }
+
+  .gm-progression-row > span {
+    font-size: 0.65rem;
+    font-weight: 600;
+    opacity: 0.45;
+  }
+
+  .gm-progression-row strong {
+    font-size: 0.7rem;
+    font-weight: 650;
+    white-space: nowrap;
+  }
+
+  .gm-progression-track {
+    overflow: hidden;
+    height: 0.38rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, currentColor 8%, transparent);
+  }
+
+  .gm-progression-track span {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: color-mix(in srgb, currentColor 34%, transparent);
+  }
+
+  .gm-progression-track--current span {
+    background: #69c894;
+  }
+
+  .gm-sell-table-wrapper {
+    overflow-x: auto;
+  }
+
+  .gm-sell-comparison table {
+    width: 100%;
+    min-width: 50rem;
+    border-collapse: collapse;
+    font-size: 0.76rem;
+  }
+
+  .gm-sell-comparison th,
+  .gm-sell-comparison td {
+    padding: 0.72rem 0.8rem;
+    border-bottom: 1px solid color-mix(in srgb, currentColor 8%, transparent);
+    text-align: right;
+    vertical-align: top;
+  }
+
+  .gm-sell-comparison th:first-child,
+  .gm-sell-comparison tbody th {
+    text-align: left;
+  }
+
+  .gm-sell-comparison thead th {
+    font-size: 0.62rem;
+    font-weight: 650;
+    letter-spacing: 0.075em;
+    text-transform: uppercase;
+    opacity: 0.45;
+  }
+
+  .gm-sell-comparison tbody th {
+    font-weight: 550;
+    opacity: 0.7;
+  }
+
+  .gm-sell-comparison tbody td {
+    font-weight: 650;
+  }
+
+  .gm-change-positive {
+    color: #69c894;
+  }
+
+  .gm-change-neutral {
+    opacity: 0.56;
+  }
+
+  .gm-change-caution {
+    color: #c9a86a;
+  }
+
+  .gm-sell-note {
+    margin: 0;
+    padding: 0.9rem 1.2rem 1rem;
+    font-size: 0.7rem;
+    line-height: 1.6;
+    opacity: 0.52;
+  }
+
+  @media (max-width: 680px) {
+    .gm-sell-summary,
+    .gm-progression {
+      grid-template-columns: 1fr;
+    }
+
+    .gm-sell-summary article + article {
+      border-top: 1px solid color-mix(in srgb, currentColor 10%, transparent);
+      border-left: 0;
+    }
+  }
+
+  @media (max-width: 460px) {
+    .gm-progression-row {
+      grid-template-columns: 2.6rem minmax(3rem, 1fr);
+    }
+
+    .gm-progression-row strong {
+      grid-column: 2;
+    }
+  }
+</style>

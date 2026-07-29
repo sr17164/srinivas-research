@@ -42,7 +42,9 @@ const ordinal = (value: number) => {
     <article>
       <span>Asset-management P&amp;L rank</span>
       <strong>{ordinal(simulation.buySide.pnlRank)}</strong>
-      <p>Denominator intentionally unpublished pending reconciliation.</p>
+      <p>
+        {simulation.buySide.displayDate} · denominator unpublished pending reconciliation.
+      </p>
     </article>
 
     <article>
@@ -50,31 +52,26 @@ const ordinal = (value: number) => {
       <strong>{usd.format(simulation.buySide.financials.totalPnl)}</strong>
       <p>
         {simulation.buySide.financials.returnOnInitialFunds}% return on initial
-        funds.
+        funds · {simulation.buySide.displayDate}.
       </p>
     </article>
 
     <article>
-      <span>Ending portfolio value</span>
-      <strong
-        >{
-          usdTwoDecimals.format(simulation.buySide.financials.portfolioValue)
-        }</strong
-      >
-      <p>
-        Sharpe ratio of {simulation.buySide.financials.sharpeRatio.toFixed(2)}.
-      </p>
-    </article>
-
-    <article>
-      <span>Sell-side overall rank</span>
+      <span>Sell-side leaderboard rank</span>
       <strong
         >{simulation.sellSide.overallLeaderboardRank}th of {
-          simulation.event.participantCount
+          simulation.sellSide.participantCount
         }</strong
       >
+      <p>{simulation.sellSide.displayDate} · top-decile finish.</p>
+    </article>
+
+    <article>
+      <span>Sell-side composite score</span>
+      <strong>{simulation.sellSide.exactSessionScore.toFixed(2)}%</strong>
       <p>
-        {usd.format(simulation.sellSide.financials.totalPnl)} of total P&amp;L.
+        {usd.format(simulation.sellSide.financials.totalPnl)} of total simulated P&amp;L
+        · {simulation.sellSide.displayDate}.
       </p>
     </article>
   </div>
@@ -82,7 +79,7 @@ const ordinal = (value: number) => {
   <div class="gm-role-comparison">
     <article>
       <header>
-        <p>Buy side</p>
+        <p>Principal buy-side result · {simulation.buySide.displayDate}</p>
         <h2>Asset management</h2>
       </header>
 
@@ -99,20 +96,26 @@ const ordinal = (value: number) => {
           <dt>Composite rank</dt>
           <dd>
             {simulation.buySide.compositeLeaderboardRank}th of {
-              simulation.event.participantCount
+              simulation.buySide.participantCount
             }
           </dd>
         </div>
         <div>
-          <dt>Return</dt>
-          <dd>{simulation.buySide.financials.returnOnInitialFunds}%</dd>
+          <dt>Ending value</dt>
+          <dd>
+            {
+              usdTwoDecimals.format(
+                simulation.buySide.financials.portfolioValue
+              )
+            }
+          </dd>
         </div>
       </dl>
     </article>
 
     <article>
       <header>
-        <p>Sell side</p>
+        <p>Principal sell-side result · {simulation.sellSide.displayDate}</p>
         <h2>Dealer trading</h2>
       </header>
 
@@ -122,14 +125,14 @@ const ordinal = (value: number) => {
           <dd>{usd.format(simulation.sellSide.financials.totalPnl)}</dd>
         </div>
         <div>
-          <dt>Composite score</dt>
+          <dt>Sell-side score</dt>
           <dd>{simulation.sellSide.exactSessionScore.toFixed(2)}%</dd>
         </div>
         <div>
-          <dt>Overall rank</dt>
+          <dt>Sell-side rank</dt>
           <dd>
             {simulation.sellSide.overallLeaderboardRank}th of {
-              simulation.event.participantCount
+              simulation.sellSide.participantCount
             }
           </dd>
         </div>
