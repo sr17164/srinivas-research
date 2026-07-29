@@ -2,13 +2,13 @@ export const globalMarketsSimulation = {
   event: {
     provider: 'AmplifyME',
     name: 'Finance Accelerator – Global Markets',
-    date: '2026-07-27',
+    date: '2026-07-29',
     displayDate: 'Repeated sessions · July 2026',
     format: 'Timed, live, multi-participant market simulations',
-    assetManagementPnlRankDenominatorStatus:
-      'Unresolved — the public page does not attach a denominator to the 22 July asset-management P&L rank.',
+    comparisonStatus:
+      'Descriptive rather than causal — cohorts, market paths and news sequences differed across sessions.',
   },
-  priorBuySideSession: {
+  initialBuySideSession: {
     date: '2026-07-15',
     displayDate: '15 July 2026',
     role: 'Asset management',
@@ -24,27 +24,28 @@ export const globalMarketsSimulation = {
       fatFingerCount: 1,
     },
     financials: {
-      tradingPnl: 1_836_906,
+      portalPnl: 1_836_906,
+      portalPnlLabel: 'Trading P&L',
       commissionPaid: -312_673,
       portfolioValue: 21_879_661.96,
     },
-    comparisonStatus:
-      'Descriptive only — cohort size, market path and P&L field definitions are not fully aligned with the 22 July session.',
   },
-  buySide: {
+  priorBuySideSession: {
     date: '2026-07-22',
     displayDate: '22 July 2026',
     role: 'Asset management',
     participantCount: 153,
     userReportedRankedParticipantCount: 148,
-    overallDisplayScore: 79,
+    participantCountStatus:
+      'The asset-management P&L denominator remains unresolved between 153 total event participants and 148 manually counted ranked entries.',
     exactSessionScore: 79.18,
     compositeLeaderboardRank: 25,
     pnlRank: 4,
     financials: {
       portfolioValue: 22_690_856.4,
-      commission: -222_364,
-      totalPnl: 2_907_448,
+      commissionPaid: -222_364,
+      portalPnl: 2_907_448,
+      portalPnlLabel: 'Total P&L',
       returnOnInitialFunds: 14.5,
       sharpeRatio: 0.66,
       averageNetExposure: 8_456_939,
@@ -75,6 +76,56 @@ export const globalMarketsSimulation = {
       cash: 73.6,
     },
     peakEquityAllocation: 'approximately 90–94%',
+  },
+  buySide: {
+    date: '2026-07-29',
+    displayDate: '29 July 2026',
+    role: 'Asset management',
+    participantCount: 102,
+    displayedLeaderboardRank: 2,
+    postEventStatus:
+      'Highest valid result after the displayed first-place entry was voided',
+    exactSessionScore: 93.05,
+    overallDisplayScore: 93,
+    financials: {
+      portalPnl: 3_801_651,
+      detailViewPnlLabel: 'Total P&L',
+      leaderboardPnlLabel: 'Trading P&L',
+      returnOnInitialFunds: 19,
+      sharpeRatio: 1.2,
+      portfolioValueField: 21_536_948.55,
+      commissionPaid: -214_627,
+      averageNetExposure: 553_247,
+      averageContractExposure: -2_391.55,
+    },
+    brokerDealing: {
+      chatAndVoiceTrades: 7,
+      quoteTrades: 0,
+      exchangeTrades: 5,
+    },
+    controls: {
+      fatFingerIncidents: 0,
+    },
+    portalSubscores: [
+      { label: 'BSRM', value: 98.98, display: '98.98%' },
+      { label: 'Execution', value: 96.08, display: '96.08%' },
+      { label: 'FFC', value: 100, display: '100%' },
+      { label: 'RA', value: 70.19, display: '70.19%' },
+      { label: 'ROI', value: 100, display: '100%' },
+    ],
+    averageAllocation: {
+      equities: 70.2,
+      cash: 29.8,
+    },
+    finalAllocation: {
+      equities: 99.5,
+      cash: 0.5,
+    },
+    peakEquityAllocation: 'approximately 100%',
+    rankingNote:
+      'The portal retains the original displayed ordering. Event administration subsequently voided the first-place result, leaving this as the highest valid score. The displayed rank is reported alongside the post-event status.',
+    reconciliationNote:
+      'The platform labels the $3.80 million result differently across the detailed and leaderboard views, while the reported portfolio-value field does not mechanically reconcile with P&L and commission. The values are reproduced as separate portal-reported metrics rather than independently reconciled.',
   },
   priorSellSideSession: {
     date: '2026-07-22',
@@ -149,9 +200,45 @@ export const globalMarketsSimulation = {
       { label: 'SSRM', value: 80.95, display: '80.95%' },
     ],
   },
+  latestSellSideSession: {
+    date: '2026-07-29',
+    displayDate: '29 July 2026',
+    role: 'Sell-side trading',
+    participantCount: 104,
+    overallDisplayScore: 78,
+    exactSessionScore: 77.78,
+    overallLeaderboardRank: 15,
+    financials: {
+      commissionRevenue: 192_145,
+      tradingPnl: -496_309,
+      totalPnl: -304_164,
+      facilitationRatio: -258,
+      averageNetExposure: -5_981_568,
+      averageContractExposure: -5_638.87,
+    },
+    clientDealing: {
+      chatTrades: 21,
+      quoteTrades: 0,
+      exchangeTrades: 389,
+      ibdTrades: 0,
+    },
+    marketImpactAndControls: {
+      averageExchangeImpact: 0,
+      exchangeFatFingers: 0,
+      clientFatFingers: 0,
+    },
+    portalSubscores: [
+      { label: 'Commission metric', value: 81.25, display: '81.25%' },
+      { label: 'CT', value: 83, display: '83%' },
+      { label: 'Exchange-trade metric', value: 97.92, display: '97.92%' },
+      { label: 'Fat-finger control', value: 100, display: '100%' },
+      { label: 'P&L metric', value: 21, display: '21%' },
+      { label: 'SSRM', value: 83.33, display: '83.33%' },
+    ],
+  },
   excludedPublicContext: {
     july27AssetManagementScore: 48,
     reason:
-      'Not surfaced in the hero or principal analysis because the 27 July evidence is used specifically as a sell-side case study and the strongest buy-side evidence comes from 22 July.',
+      'Not surfaced because the 27 July evidence is used specifically as a sell-side case study and the principal buy-side result now comes from 29 July.',
   },
 } as const

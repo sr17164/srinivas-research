@@ -6,29 +6,6 @@ const usd = new Intl.NumberFormat('en-US', {
   currency: 'USD',
   maximumFractionDigits: 0,
 })
-
-const usdTwoDecimals = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
-  minimumFractionDigits: 2,
-  maximumFractionDigits: 2,
-})
-
-const ordinal = (value: number) => {
-  const mod100 = value % 100
-  if (mod100 >= 11 && mod100 <= 13) return `${value}th`
-
-  switch (value % 10) {
-    case 1:
-      return `${value}st`
-    case 2:
-      return `${value}nd`
-    case 3:
-      return `${value}rd`
-    default:
-      return `${value}th`
-  }
-}
 ---
 
 <section class="gm-overview not-prose" aria-label="Simulation overview">
@@ -40,41 +17,50 @@ const ordinal = (value: number) => {
 
   <div class="gm-kpi-grid">
     <article>
-      <span>Asset-management P&amp;L rank</span>
-      <strong>{ordinal(simulation.buySide.pnlRank)}</strong>
+      <span>Asset-management result</span>
+      <strong>Highest valid</strong>
       <p>
-        {simulation.buySide.displayDate} · denominator unpublished pending reconciliation.
+        Displayed 2nd of 102 on {simulation.buySide.displayDate}; the
+        first-place result was subsequently voided.
       </p>
     </article>
 
     <article>
-      <span>Asset-management P&amp;L</span>
-      <strong>{usd.format(simulation.buySide.financials.totalPnl)}</strong>
+      <span>Asset-management score</span>
+      <strong>{simulation.buySide.exactSessionScore.toFixed(2)}%</strong>
+      <p>{simulation.buySide.displayDate} · proprietary composite score.</p>
+    </article>
+
+    <article>
+      <span>Portal-reported P&amp;L</span>
+      <strong>{usd.format(simulation.buySide.financials.portalPnl)}</strong>
       <p>
-        {simulation.buySide.financials.returnOnInitialFunds}% return on initial
-        funds · {simulation.buySide.displayDate}.
+        {simulation.buySide.financials.returnOnInitialFunds.toFixed(1)}% return
+        · {simulation.buySide.financials.sharpeRatio.toFixed(2)} Sharpe ratio.
       </p>
     </article>
 
     <article>
-      <span>Sell-side leaderboard rank</span>
+      <span>Principal sell-side result</span>
       <strong
         >{simulation.sellSide.overallLeaderboardRank}th of {
           simulation.sellSide.participantCount
         }</strong
       >
-      <p>{simulation.sellSide.displayDate} · top-decile finish.</p>
-    </article>
-
-    <article>
-      <span>Sell-side composite score</span>
-      <strong>{simulation.sellSide.exactSessionScore.toFixed(2)}%</strong>
       <p>
-        {usd.format(simulation.sellSide.financials.totalPnl)} of total simulated P&amp;L
-        · {simulation.sellSide.displayDate}.
+        {simulation.sellSide.exactSessionScore.toFixed(2)}% sell-side score · {
+          simulation.sellSide.displayDate
+        }.
       </p>
     </article>
   </div>
+
+  <p class="gm-rank-note">
+    The portal retains the original displayed ordering. Event administration
+    subsequently voided the first-place asset-management result, leaving the 29
+    July session as the highest valid score. The displayed 2nd-of-102 rank is
+    reported alongside that post-event status.
+  </p>
 
   <div class="gm-role-comparison">
     <article>
@@ -85,28 +71,26 @@ const ordinal = (value: number) => {
 
       <dl>
         <div>
-          <dt>Total P&amp;L</dt>
-          <dd>{usd.format(simulation.buySide.financials.totalPnl)}</dd>
+          <dt>Portal P&amp;L field</dt>
+          <dd>{usd.format(simulation.buySide.financials.portalPnl)}</dd>
         </div>
         <div>
           <dt>Composite score</dt>
           <dd>{simulation.buySide.exactSessionScore.toFixed(2)}%</dd>
         </div>
         <div>
-          <dt>Composite rank</dt>
+          <dt>Displayed rank</dt>
           <dd>
-            {simulation.buySide.compositeLeaderboardRank}th of {
+            {simulation.buySide.displayedLeaderboardRank}nd of {
               simulation.buySide.participantCount
             }
           </dd>
         </div>
         <div>
-          <dt>Ending value</dt>
+          <dt>Return / Sharpe</dt>
           <dd>
-            {
-              usdTwoDecimals.format(
-                simulation.buySide.financials.portfolioValue
-              )
+            {simulation.buySide.financials.returnOnInitialFunds.toFixed(1)}% / {
+              simulation.buySide.financials.sharpeRatio.toFixed(2)
             }
           </dd>
         </div>
@@ -207,11 +191,19 @@ const ordinal = (value: number) => {
     letter-spacing: -0.03em;
   }
 
-  .gm-kpi-grid p {
+  .gm-kpi-grid p,
+  .gm-rank-note {
     margin: 0.45rem 0 0;
     font-size: 0.74rem;
     line-height: 1.5;
     opacity: 0.5;
+  }
+
+  .gm-rank-note {
+    margin-top: 0.85rem;
+    padding: 0.8rem 0.95rem;
+    border-left: 2px solid #89b9d9;
+    background: color-mix(in srgb, currentColor 2.8%, transparent);
   }
 
   .gm-role-comparison {

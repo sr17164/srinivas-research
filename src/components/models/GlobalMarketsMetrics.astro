@@ -26,17 +26,17 @@ const numberTwoDecimals = new Intl.NumberFormat('en-US', {
 })
 
 const buySideRows = [
-  [
-    'Ending portfolio value',
-    usdTwoDecimals.format(simulation.buySide.financials.portfolioValue),
-  ],
-  ['Commission', usd.format(simulation.buySide.financials.commission)],
-  ['Total P&L', usd.format(simulation.buySide.financials.totalPnl)],
+  ['Portal-reported P&L', usd.format(simulation.buySide.financials.portalPnl)],
   [
     'Return on initial funds',
-    `${simulation.buySide.financials.returnOnInitialFunds}%`,
+    `${simulation.buySide.financials.returnOnInitialFunds.toFixed(1)}%`,
   ],
   ['Sharpe ratio', simulation.buySide.financials.sharpeRatio.toFixed(2)],
+  [
+    'Portfolio-value field',
+    usdTwoDecimals.format(simulation.buySide.financials.portfolioValueField),
+  ],
+  ['Commission paid', usd.format(simulation.buySide.financials.commissionPaid)],
   [
     'Average net exposure',
     usd.format(simulation.buySide.financials.averageNetExposure),
@@ -53,7 +53,6 @@ const buySideRows = [
   ],
   ['Exchange trades', String(simulation.buySide.brokerDealing.exchangeTrades)],
   ['Quote trades', String(simulation.buySide.brokerDealing.quoteTrades)],
-  ['CMM trades', String(simulation.buySide.brokerDealing.cmmTrades)],
 ]
 
 const sellSideRows = [
@@ -105,12 +104,13 @@ const rows = mode === 'buy-side' ? buySideRows : sellSideRows
     >
       <div class="gm-score-intro">
         <div>
-          <span>Asset management</span>
+          <span>Asset management · principal session</span>
           <strong>{simulation.buySide.exactSessionScore.toFixed(2)}%</strong>
           <p>
-            {simulation.buySide.displayDate} · composite rank{' '}
-            {simulation.buySide.compositeLeaderboardRank}th of{' '}
-            {simulation.buySide.participantCount}
+            {simulation.buySide.displayDate} · displayed{' '}
+            {simulation.buySide.displayedLeaderboardRank}nd of{' '}
+            {simulation.buySide.participantCount}; highest valid after the
+            first-place result was voided.
           </p>
         </div>
         <div>
@@ -126,11 +126,11 @@ const rows = mode === 'buy-side' ? buySideRows : sellSideRows
 
       <div class="gm-score-grid">
         <article>
-          <h3>Asset-management subscores</h3>
+          <h3>Asset-management platform subscores</h3>
           <dl>
             {simulation.buySide.portalSubscores.map((score) => (
               <div>
-                <dt>{score.label}</dt>
+                <dt>{score.label} platform subscore</dt>
                 <dd>{score.display}</dd>
               </div>
             ))}
@@ -138,7 +138,7 @@ const rows = mode === 'buy-side' ? buySideRows : sellSideRows
         </article>
 
         <article>
-          <h3>Sell-side subscores</h3>
+          <h3>Sell-side platform subscores</h3>
           <dl>
             {simulation.sellSide.portalSubscores.map((score) => (
               <div>
@@ -151,10 +151,11 @@ const rows = mode === 'buy-side' ? buySideRows : sellSideRows
       </div>
 
       <p class="gm-score-note">
-        BSRM, ES, RA, CT and SSRM are retained as portal labels because the
-        available material does not establish complete official definitions or
-        the weighting formula. No causal attribution is made from these
-        subscores to the composite ranking.
+        The 100% ROI figure is a proprietary platform subscore, not a 100%
+        investment return. BSRM, FFC, RA, CT and SSRM are retained as portal
+        labels because complete official definitions and the weighting formula
+        are unavailable. Platform scoring is interpreted separately from actual
+        portfolio concentration and simulated P&amp;L.
       </p>
     </section>
   ) : (
@@ -177,6 +178,15 @@ const rows = mode === 'buy-side' ? buySideRows : sellSideRows
           </tbody>
         </table>
       </div>
+      {mode === 'buy-side' && (
+        <p class="gm-metrics-note">
+          The $3.80 million figure is reproduced as portal-reported P&amp;L. The
+          detailed view labels it total P&amp;L, while the leaderboard labels
+          the same value trading P&amp;L. The portfolio-value field is shown
+          separately because it does not mechanically reconcile with P&amp;L and
+          commission.
+        </p>
+      )}
     </div>
   )
 }
@@ -234,6 +244,14 @@ const rows = mode === 'buy-side' ? buySideRows : sellSideRows
 
   .gm-metrics tbody td {
     font-weight: 650;
+  }
+
+  .gm-metrics-note,
+  .gm-score-note {
+    margin: 0.85rem 0 0;
+    font-size: 0.7rem;
+    line-height: 1.6;
+    opacity: 0.5;
   }
 
   .gm-score-intro {
@@ -318,13 +336,6 @@ const rows = mode === 'buy-side' ? buySideRows : sellSideRows
     font-size: 0.78rem;
     font-weight: 650;
     text-align: right;
-  }
-
-  .gm-score-note {
-    margin: 0.85rem 0 0;
-    font-size: 0.7rem;
-    line-height: 1.6;
-    opacity: 0.48;
   }
 
   @media (max-width: 680px) {

@@ -10,93 +10,159 @@ const usd = new Intl.NumberFormat('en-US', {
   maximumFractionDigits: 0,
 })
 
-const usdTwoDecimals = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
-  minimumFractionDigits: 2,
-  maximumFractionDigits: 2,
-})
-
-const percentagePoint = (value: number) => `${value.toFixed(2)}pp`
-
-const getCurrentScore = (label: string) => {
-  const score = current.portalSubscores.find((item) => item.label === label)
-
-  if (!score) throw new Error(`Missing current-session portal score: ${label}`)
-
+const getScore = (
+  scores: readonly { label: string; value: number; display: string }[],
+  label: string
+) => {
+  const score = scores.find((item) => item.label === label)
+  if (!score) throw new Error(`Missing buy-side portal score: ${label}`)
   return score.value
 }
 
-const currentBsrm = getCurrentScore('BSRM')
-const currentExecution = getCurrentScore('ES')
+const percentagePoint = (value: number) => `${value.toFixed(2)}pp`
+const percentageChange = (currentValue: number, priorValue: number) =>
+  ((currentValue - priorValue) / priorValue) * 100
+
+const pnlChange = current.financials.portalPnl - prior.financials.portalPnl
+const returnChange =
+  current.financials.returnOnInitialFunds -
+  prior.financials.returnOnInitialFunds
+const sharpeChange =
+  current.financials.sharpeRatio - prior.financials.sharpeRatio
+const scoreChange = current.exactSessionScore - prior.exactSessionScore
+const commissionReduction =
+  Math.abs(prior.financials.commissionPaid) -
+  Math.abs(current.financials.commissionPaid)
+
+const subscoreChanges = {
+  bsrm:
+    getScore(current.portalSubscores, 'BSRM') -
+    getScore(prior.portalSubscores, 'BSRM'),
+  execution:
+    getScore(current.portalSubscores, 'Execution') -
+    getScore(prior.portalSubscores, 'ES'),
+  ra:
+    getScore(current.portalSubscores, 'RA') -
+    getScore(prior.portalSubscores, 'RA'),
+  roi:
+    getScore(current.portalSubscores, 'ROI') -
+    getScore(prior.portalSubscores, 'ROI'),
+}
 
 const rows = [
   {
-    label: 'Composite session score',
+    label: 'Composite score',
     prior: `${prior.exactSessionScore.toFixed(2)}%`,
     current: `${current.exactSessionScore.toFixed(2)}%`,
-    change: `+${percentagePoint(
-      current.exactSessionScore - prior.exactSessionScore
-    )}`,
+    change: `+${percentagePoint(scoreChange)}`,
     tone: 'positive',
   },
   {
-    label: 'Composite leaderboard rank',
-    prior: String(prior.compositeLeaderboardRank),
-    current: String(current.compositeLeaderboardRank),
+    label: 'Leaderboard status',
+    prior: `${prior.compositeLeaderboardRank}th of ${prior.participantCount}`,
+    current: `Displayed ${current.displayedLeaderboardRank}nd of ${current.participantCount}`,
     change: 'Different cohorts',
     tone: 'neutral',
   },
   {
-    label: 'Ending portfolio value',
-    prior: usdTwoDecimals.format(prior.financials.portfolioValue),
-    current: usdTwoDecimals.format(current.financials.portfolioValue),
-    change: `+${usdTwoDecimals.format(
-      current.financials.portfolioValue - prior.financials.portfolioValue
-    )}`,
+    label: 'Portal-reported P&L',
+    prior: usd.format(prior.financials.portalPnl),
+    current: usd.format(current.financials.portalPnl),
+    change: `+${usd.format(pnlChange)} / +${percentageChange(
+      current.financials.portalPnl,
+      prior.financials.portalPnl
+    ).toFixed(1)}%`,
     tone: 'positive',
   },
   {
-    label: 'Portal P&L field',
-    prior: `${usd.format(prior.financials.tradingPnl)} trading P&L`,
-    current: `${usd.format(current.financials.totalPnl)} total P&L`,
-    change: 'Not directly comparable',
-    tone: 'neutral',
+    label: 'Return on initial funds',
+    prior: `${prior.financials.returnOnInitialFunds.toFixed(1)}%`,
+    current: `${current.financials.returnOnInitialFunds.toFixed(1)}%`,
+    change: `+${returnChange.toFixed(1)}pp`,
+    tone: 'positive',
+  },
+  {
+    label: 'Sharpe ratio',
+    prior: prior.financials.sharpeRatio.toFixed(2),
+    current: current.financials.sharpeRatio.toFixed(2),
+    change: `+${sharpeChange.toFixed(2)} / +${percentageChange(
+      current.financials.sharpeRatio,
+      prior.financials.sharpeRatio
+    ).toFixed(1)}%`,
+    tone: 'positive',
+  },
+  {
+    label: 'BSRM platform subscore',
+    prior: `${getScore(prior.portalSubscores, 'BSRM').toFixed(2)}%`,
+    current: `${getScore(current.portalSubscores, 'BSRM').toFixed(2)}%`,
+    change: `+${percentagePoint(subscoreChanges.bsrm)}`,
+    tone: 'positive',
+  },
+  {
+    label: 'Execution platform subscore',
+    prior: `${getScore(prior.portalSubscores, 'ES').toFixed(2)}%`,
+    current: `${getScore(current.portalSubscores, 'Execution').toFixed(2)}%`,
+    change: `+${percentagePoint(subscoreChanges.execution)}`,
+    tone: 'positive',
+  },
+  {
+    label: 'RA platform subscore',
+    prior: `${getScore(prior.portalSubscores, 'RA').toFixed(2)}%`,
+    current: `${getScore(current.portalSubscores, 'RA').toFixed(2)}%`,
+    change: `+${percentagePoint(subscoreChanges.ra)}`,
+    tone: 'positive',
+  },
+  {
+    label: 'ROI platform subscore',
+    prior: `${getScore(prior.portalSubscores, 'ROI').toFixed(2)}%`,
+    current: `${getScore(current.portalSubscores, 'ROI').toFixed(2)}%`,
+    change: `+${percentagePoint(subscoreChanges.roi)}`,
+    tone: 'positive',
   },
   {
     label: 'Commission paid',
     prior: usd.format(prior.financials.commissionPaid),
-    current: usd.format(current.financials.commission),
-    change: `${usd.format(
-      Math.abs(prior.financials.commissionPaid) -
-        Math.abs(current.financials.commission)
-    )} lower`,
+    current: usd.format(current.financials.commissionPaid),
+    change: `${usd.format(commissionReduction)} lower / 3.5%`,
     tone: 'positive',
   },
   {
-    label: 'BSRM portal score',
-    prior: `${prior.portalMetrics.buySideRiskManagement.toFixed(2)}%`,
-    current: `${currentBsrm.toFixed(2)}%`,
-    change: `+${percentagePoint(
-      currentBsrm - prior.portalMetrics.buySideRiskManagement
-    )}`,
-    tone: 'positive',
+    label: 'Final equity allocation',
+    prior: `${prior.finalAllocation.equities.toFixed(1)}%`,
+    current: `${current.finalAllocation.equities.toFixed(1)}%`,
+    change: 'Materially more concentrated',
+    tone: 'caution',
+  },
+] as const
+
+const progression = [
+  {
+    label: 'Composite score',
+    prior: prior.exactSessionScore,
+    current: current.exactSessionScore,
+    priorDisplay: `${prior.exactSessionScore.toFixed(2)}%`,
+    currentDisplay: `${current.exactSessionScore.toFixed(2)}%`,
   },
   {
-    label: 'Execution portal score',
-    prior: `${prior.portalMetrics.execution.toFixed(2)}%`,
-    current: `${currentExecution.toFixed(2)}%`,
-    change: `+${percentagePoint(
-      currentExecution - prior.portalMetrics.execution
-    )}`,
-    tone: 'positive',
+    label: 'Portal P&L',
+    prior: prior.financials.portalPnl,
+    current: current.financials.portalPnl,
+    priorDisplay: usd.format(prior.financials.portalPnl),
+    currentDisplay: usd.format(current.financials.portalPnl),
   },
   {
-    label: 'Fat-finger incidents',
-    prior: String(prior.portalMetrics.fatFingerCount),
-    current: String(current.controls.fatFingerIncidents),
-    change: 'Removed',
-    tone: 'positive',
+    label: 'Return',
+    prior: prior.financials.returnOnInitialFunds,
+    current: current.financials.returnOnInitialFunds,
+    priorDisplay: `${prior.financials.returnOnInitialFunds.toFixed(1)}%`,
+    currentDisplay: `${current.financials.returnOnInitialFunds.toFixed(1)}%`,
+  },
+  {
+    label: 'Sharpe ratio',
+    prior: prior.financials.sharpeRatio,
+    current: current.financials.sharpeRatio,
+    priorDisplay: prior.financials.sharpeRatio.toFixed(2),
+    currentDisplay: current.financials.sharpeRatio.toFixed(2),
   },
 ] as const
 ---
@@ -106,29 +172,64 @@ const rows = [
   aria-labelledby="gm-session-comparison-title"
 >
   <header>
-    <p>Repeated-session evidence</p>
+    <p>Repeated buy-side evidence</p>
     <h3 id="gm-session-comparison-title">
-      15 July baseline versus 22 July principal session
+      22 July benchmark versus 29 July principal session
     </h3>
   </header>
 
   <div class="gm-session-summary">
     <article>
-      <span>15 July 2026</span>
+      <span>{prior.displayDate}</span>
       <strong>{prior.exactSessionScore.toFixed(2)}%</strong>
       <p>
-        Composite score · ending value{' '}
-        {usdTwoDecimals.format(prior.financials.portfolioValue)}
+        {usd.format(prior.financials.portalPnl)} P&amp;L · {
+          prior.financials.returnOnInitialFunds.toFixed(1)
+        }% return · {prior.financials.sharpeRatio.toFixed(2)} Sharpe
       </p>
     </article>
     <article>
-      <span>22 July 2026</span>
+      <span>{current.displayDate}</span>
       <strong>{current.exactSessionScore.toFixed(2)}%</strong>
       <p>
-        Composite score · ending value{' '}
-        {usdTwoDecimals.format(current.financials.portfolioValue)}
+        {usd.format(current.financials.portalPnl)} portal P&amp;L · {
+          current.financials.returnOnInitialFunds.toFixed(1)
+        }% return · {current.financials.sharpeRatio.toFixed(2)} Sharpe
       </p>
     </article>
+  </div>
+
+  <div class="gm-progression" aria-label="Buy-side metric progression">
+    {
+      progression.map((metric) => {
+        const maximum = Math.max(metric.prior, metric.current)
+        const priorWidth = `${(metric.prior / maximum) * 100}%`
+        const currentWidth = `${(metric.current / maximum) * 100}%`
+
+        return (
+          <article>
+            <h4>{metric.label}</h4>
+            <div class="gm-progression-row">
+              <span>22 Jul</span>
+              <div class="gm-progression-track" aria-hidden="true">
+                <span style={`width:${priorWidth}`} />
+              </div>
+              <strong>{metric.priorDisplay}</strong>
+            </div>
+            <div class="gm-progression-row">
+              <span>29 Jul</span>
+              <div
+                class="gm-progression-track gm-progression-track--current"
+                aria-hidden="true"
+              >
+                <span style={`width:${currentWidth}`} />
+              </div>
+              <strong>{metric.currentDisplay}</strong>
+            </div>
+          </article>
+        )
+      })
+    }
   </div>
 
   <div class="gm-session-table-wrapper">
@@ -136,8 +237,8 @@ const rows = [
       <thead>
         <tr>
           <th scope="col">Comparable measure</th>
-          <th scope="col">15 July</th>
           <th scope="col">22 July</th>
+          <th scope="col">29 July</th>
           <th scope="col">Change</th>
         </tr>
       </thead>
@@ -157,12 +258,12 @@ const rows = [
   </div>
 
   <p class="gm-session-note">
-    The P&amp;L fields are shown for context but are not treated as directly
-    comparable: the earlier portal column is labelled trading P&amp;L, while the
-    principal-session figure is total P&amp;L. Cohort size and market path also
-    differ. The strongest defensible comparison is therefore process-oriented:
-    higher composite and BSRM scores, a higher ending portfolio value, lower
-    commission paid and no recorded fat-finger incident in the later session.
+    The comparison is descriptive rather than causal: the sessions had different
+    cohorts, market paths and news sequences. Absolute and risk-adjusted
+    outcomes improved materially, but the allocation strategy also changed. The
+    22 July portfolio finished 73.6% in cash, whereas the 29 July portfolio
+    finished 99.5% in equities. The evidence therefore supports stronger
+    measured output, not an unambiguous reduction in portfolio risk.
   </p>
 </section>
 
@@ -228,13 +329,78 @@ const rows = [
     opacity: 0.52;
   }
 
+  .gm-progression {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.8rem;
+    padding: 1rem 1.2rem;
+    border-bottom: 1px solid color-mix(in srgb, currentColor 10%, transparent);
+  }
+
+  .gm-progression article {
+    padding: 0.85rem 0.9rem;
+    border: 1px solid color-mix(in srgb, currentColor 10%, transparent);
+    border-radius: 0.45rem;
+  }
+
+  .gm-progression h4 {
+    margin: 0 0 0.7rem;
+    font-size: 0.66rem;
+    font-weight: 650;
+    line-height: 1.3;
+    letter-spacing: 0.075em;
+    text-transform: uppercase;
+    opacity: 0.55;
+  }
+
+  .gm-progression-row {
+    display: grid;
+    grid-template-columns: 2.6rem minmax(4rem, 1fr) auto;
+    gap: 0.55rem;
+    align-items: center;
+  }
+
+  .gm-progression-row + .gm-progression-row {
+    margin-top: 0.48rem;
+  }
+
+  .gm-progression-row > span {
+    font-size: 0.65rem;
+    font-weight: 600;
+    opacity: 0.45;
+  }
+
+  .gm-progression-row strong {
+    font-size: 0.7rem;
+    font-weight: 650;
+    white-space: nowrap;
+  }
+
+  .gm-progression-track {
+    overflow: hidden;
+    height: 0.38rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, currentColor 8%, transparent);
+  }
+
+  .gm-progression-track span {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: color-mix(in srgb, currentColor 34%, transparent);
+  }
+
+  .gm-progression-track--current span {
+    background: #69c894;
+  }
+
   .gm-session-table-wrapper {
     overflow-x: auto;
   }
 
   .gm-session-comparison table {
     width: 100%;
-    min-width: 46rem;
+    min-width: 52rem;
     border-collapse: collapse;
     font-size: 0.76rem;
   }
@@ -277,6 +443,10 @@ const rows = [
     opacity: 0.52;
   }
 
+  .gm-change-caution {
+    color: #c9a86a;
+  }
+
   .gm-session-note {
     margin: 0;
     padding: 0.9rem 1.2rem 1rem;
@@ -286,13 +456,24 @@ const rows = [
   }
 
   @media (max-width: 680px) {
-    .gm-session-summary {
+    .gm-session-summary,
+    .gm-progression {
       grid-template-columns: 1fr;
     }
 
     .gm-session-summary article + article {
       border-top: 1px solid color-mix(in srgb, currentColor 10%, transparent);
       border-left: 0;
+    }
+  }
+
+  @media (max-width: 460px) {
+    .gm-progression-row {
+      grid-template-columns: 2.6rem minmax(3rem, 1fr);
+    }
+
+    .gm-progression-row strong {
+      grid-column: 2;
     }
   }
 </style>

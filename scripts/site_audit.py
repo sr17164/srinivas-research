@@ -425,15 +425,20 @@ def main() -> int:
         ROOT / "src" / "components" / "models" / "SelectedWork.astro"
     )
 
-    for required_path in (
-        global_markets_page,
-        global_markets_data,
+    global_markets_components = (
         ROOT / "src" / "components" / "models" / "GlobalMarketsOverview.astro",
         ROOT / "src" / "components" / "models" / "GlobalMarketsAllocation.astro",
         ROOT / "src" / "components" / "models" / "GlobalMarketsMetrics.astro",
         ROOT / "src" / "components" / "models" / "GlobalMarketsLimitations.astro",
         ROOT / "src" / "components" / "models" / "GlobalMarketsSessionComparison.astro",
         ROOT / "src" / "components" / "models" / "GlobalMarketsSellSideComparison.astro",
+        ROOT / "src" / "components" / "models" / "GlobalMarketsSessionLedger.astro",
+    )
+
+    for required_path in (
+        global_markets_page,
+        global_markets_data,
+        *global_markets_components,
         ROOT / "src" / "components" / "models" / "ModelBreadcrumb.astro",
     ):
         if not required_path.exists():
@@ -445,16 +450,9 @@ def main() -> int:
         global_markets_page_text = global_markets_page.read_text(encoding="utf-8")
         global_markets_data_text = global_markets_data.read_text(encoding="utf-8")
         global_markets_component_text = "\n".join(
-            required_path.read_text(encoding="utf-8")
-            for required_path in (
-                ROOT / "src" / "components" / "models" / "GlobalMarketsOverview.astro",
-                ROOT / "src" / "components" / "models" / "GlobalMarketsAllocation.astro",
-                ROOT / "src" / "components" / "models" / "GlobalMarketsMetrics.astro",
-                ROOT / "src" / "components" / "models" / "GlobalMarketsLimitations.astro",
-                ROOT / "src" / "components" / "models" / "GlobalMarketsSessionComparison.astro",
-                ROOT / "src" / "components" / "models" / "GlobalMarketsSellSideComparison.astro",
-            )
-            if required_path.exists()
+            component.read_text(encoding="utf-8")
+            for component in global_markets_components
+            if component.exists()
         )
         combined_global_markets_text = "\n".join(
             (
@@ -468,19 +466,33 @@ def main() -> int:
         ).lower()
 
         required_global_markets_values = {
-            "asset-management P&L": "2_907_448",
-            "asset-management return": "returnOnInitialFunds: 14.5",
-            "portfolio value": "22_690_856.4",
-            "Sharpe ratio": "sharpeRatio: 0.66",
-            "average equity allocation": "equities: 55.9",
-            "final equity allocation": "equities: 26.4",
-            "final cash allocation": "cash: 73.6",
-            "asset-management P&L rank": "pnlRank: 4",
-            "22 July sell-side trading P&L": "tradingPnl: 677_563",
-            "22 July sell-side commission": "commissionRevenue: 100_405",
-            "22 July sell-side total P&L": "totalPnl: 777_968",
-            "22 July sell-side rank": "overallLeaderboardRank: 13",
-            "22 July exchange trades": "exchangeTrades: 392",
+            "29 July participant count": "participantCount: 102",
+            "29 July displayed buy-side rank": "displayedLeaderboardRank: 2",
+            "29 July buy-side score": "exactSessionScore: 93.05",
+            "29 July portal P&L": "portalPnl: 3_801_651",
+            "29 July return": "returnOnInitialFunds: 19",
+            "29 July Sharpe ratio": "sharpeRatio: 1.2",
+            "29 July portfolio-value field": "portfolioValueField: 21_536_948.55",
+            "29 July commission": "commissionPaid: -214_627",
+            "29 July average net exposure": "averageNetExposure: 553_247",
+            "29 July average contract exposure": "averageContractExposure: -2_391.55",
+            "29 July chat and voice trades": "chatAndVoiceTrades: 7",
+            "29 July exchange trades": "exchangeTrades: 5",
+            "29 July BSRM": "value: 98.98",
+            "29 July execution": "value: 96.08",
+            "29 July risk appetite": "value: 70.19",
+            "29 July ROI platform subscore": "value: 100",
+            "29 July average equity allocation": "equities: 70.2",
+            "29 July average cash allocation": "cash: 29.8",
+            "29 July final equity allocation": "equities: 99.5",
+            "29 July final cash allocation": "cash: 0.5",
+            "22 July buy-side P&L": "portalPnl: 2_907_448",
+            "22 July buy-side return": "returnOnInitialFunds: 14.5",
+            "22 July buy-side Sharpe": "sharpeRatio: 0.66",
+            "22 July buy-side score": "exactSessionScore: 79.18",
+            "22 July buy-side composite rank": "compositeLeaderboardRank: 25",
+            "22 July buy-side P&L rank": "pnlRank: 4",
+            "22 July final cash allocation": "cash: 73.6",
             "27 July sell-side score": "exactSessionScore: 88.89",
             "27 July sell-side trading P&L": "tradingPnl: 842_052",
             "27 July sell-side commission": "commissionRevenue: 153_635",
@@ -489,22 +501,17 @@ def main() -> int:
             "27 July participant count": "participantCount: 93",
             "27 July exchange trades": "exchangeTrades: 499",
             "27 July chat trades": "chatTrades: 13",
-            "27 July average net exposure": "averageNetExposure: -10_410_039",
-            "27 July average contract exposure": "averageContractExposure: -37_152",
-            "27 July commission metric": "value: 73.81",
-            "27 July SSRM": "value: 80.95",
-            "zero exchange fat fingers": "exchangeFatFingers: 0",
-            "zero client fat fingers": "clientFatFingers: 0",
-            "prior-session date": "date: '2026-07-15'",
-            "prior-session composite rank": "compositeLeaderboardRank: 53",
-            "prior-session score": "exactSessionScore: 60.73",
-            "prior-session trading P&L": "tradingPnl: 1_836_906",
-            "prior-session commission": "commissionPaid: -312_673",
-            "prior-session portfolio value": "portfolioValue: 21_879_661.96",
-            "prior-session BSRM": "buySideRiskManagement: 73.33",
-            "prior-session execution": "execution: 42.86",
-            "prior-session fat fingers": "fatFingerCount: 1",
-            "current buy-side fat fingers": "fatFingerIncidents: 0",
+            "29 July sell-side participant count": "participantCount: 104",
+            "29 July sell-side rank": "overallLeaderboardRank: 15",
+            "29 July sell-side score": "exactSessionScore: 77.78",
+            "29 July sell-side commission": "commissionRevenue: 192_145",
+            "29 July sell-side trading P&L": "tradingPnl: -496_309",
+            "29 July sell-side total P&L": "totalPnl: -304_164",
+            "29 July sell-side exchange trades": "exchangeTrades: 389",
+            "29 July sell-side chat trades": "chatTrades: 21",
+            "initial-session date": "date: '2026-07-15'",
+            "initial-session score": "exactSessionScore: 60.73",
+            "initial-session P&L": "portalPnl: 1_836_906",
         }
 
         for label, value in required_global_markets_values.items():
@@ -514,38 +521,55 @@ def main() -> int:
                 )
 
         for forbidden_claim in (
+            "1st/102",
+            "1st of 102",
+            "officially ranked first",
+            "won the event",
+            "top 1%",
+            "100% return",
             "4th/148",
             "4th of 148",
             "4th/153",
             "4th of 153",
-            "top 3%",
             "8th overall",
             "89% combined",
             "overall 89%",
         ):
             if forbidden_claim.lower() in global_markets_page_text.lower():
                 errors.append(
-                    "global-markets-simulation.mdx: remove unresolved P&L-rank "
-                    f"denominator or percentile claim ({forbidden_claim})"
+                    "global-markets-simulation.mdx: remove unsupported or "
+                    f"ambiguous claim ({forbidden_claim})"
                 )
 
-        for match in re.finditer(r"88\.89%", global_markets_page_text):
-            window_start = max(0, match.start() - 120)
-            window_end = min(len(global_markets_page_text), match.end() + 120)
-            if "sell-side" not in global_markets_page_text[window_start:window_end].lower():
-                errors.append(
-                    "global-markets-simulation.mdx: every 88.89% reference must be explicitly labelled sell-side"
-                )
+        for percentage, required_context in (
+            (r"88\.89%", "sell-side"),
+            (r"77\.78%", "sell-side"),
+            (r"93\.05%", "asset-management"),
+        ):
+            for match in re.finditer(percentage, global_markets_page_text):
+                window_start = max(0, match.start() - 150)
+                window_end = min(len(global_markets_page_text), match.end() + 150)
+                context = global_markets_page_text[window_start:window_end].lower()
+                if required_context not in context:
+                    errors.append(
+                        "global-markets-simulation.mdx: every "
+                        f"{percentage.replace('\\', '')} reference must be explicitly "
+                        f"labelled {required_context}"
+                    )
 
         for required_phrase in (
             "simulated rather than real capital",
             "weighting formula is unavailable",
-            "denominator is deliberately left unpublished",
-            "No raw transaction export",
-            "different cohorts, market paths and P&amp;L field definitions",
-            "strongest buy-side and sell-side results came from different dates",
-            "larger on 27 July",
-            "88.89% sell-side composite score",
+            "displayed 2nd of 102",
+            "highest valid",
+            "first-place result was subsequently voided",
+            "portal-reported p&amp;l",
+            "does not mechanically reconcile",
+            "99.5% equities",
+            "100% roi figure is a proprietary platform subscore",
+            "77.78% figure is a sell-side score",
+            "different cohorts, market paths and news sequences",
+            "strongest role-specific results came from different dates",
             "two consecutive top-decile sell-side finishes",
         ):
             if required_phrase.lower() not in normalized_global_markets_text:
@@ -560,9 +584,12 @@ def main() -> int:
     for required_models_copy in (
         "Dual-Role Global Markets Simulation",
         "href: '/models/global-markets-simulation/'",
-        "ranked fourth by P&L",
+        "93.05% score",
+        "$3.80m of portal-reported P&L",
+        "highest valid finisher",
+        "19.0% return",
+        "1.20 Sharpe",
         "8th of 93",
-        "88.89% sell-side composite score",
     ):
         if required_models_copy not in models_page_text:
             errors.append(

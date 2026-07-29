@@ -1,0 +1,195 @@
+---
+import { globalMarketsSimulation as simulation } from '~/data/globalMarketsSimulation'
+
+const usd = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+  maximumFractionDigits: 0,
+})
+
+const sessions = [
+  {
+    date: simulation.initialBuySideSession.displayDate,
+    role: 'Buy side',
+    score: `${simulation.initialBuySideSession.exactSessionScore.toFixed(2)}%`,
+    rank: `${simulation.initialBuySideSession.compositeLeaderboardRank}th · denominator not documented`,
+    financial: `${usd.format(simulation.initialBuySideSession.financials.portalPnl)} ${simulation.initialBuySideSession.financials.portalPnlLabel.toLowerCase()}`,
+    interpretation: 'Initial process baseline.',
+    emphasis: false,
+  },
+  {
+    date: simulation.priorBuySideSession.displayDate,
+    role: 'Buy side',
+    score: `${simulation.priorBuySideSession.exactSessionScore.toFixed(2)}%`,
+    rank: `${simulation.priorBuySideSession.compositeLeaderboardRank}th of ${simulation.priorBuySideSession.participantCount} composite; 4th by P&L`,
+    financial: `${usd.format(simulation.priorBuySideSession.financials.portalPnl)} portal P&L`,
+    interpretation:
+      'Prior principal buy-side benchmark; P&L denominator unresolved.',
+    emphasis: false,
+  },
+  {
+    date: simulation.priorSellSideSession.displayDate,
+    role: 'Sell side',
+    score: `${simulation.priorSellSideSession.exactSessionScore.toFixed(2)}%`,
+    rank: `${simulation.priorSellSideSession.overallLeaderboardRank}th of ${simulation.priorSellSideSession.participantCount}`,
+    financial: `${usd.format(simulation.priorSellSideSession.financials.totalPnl)} total P&L`,
+    interpretation: 'First of two consecutive top-decile sell-side finishes.',
+    emphasis: false,
+  },
+  {
+    date: simulation.sellSide.displayDate,
+    role: 'Sell side',
+    score: `${simulation.sellSide.exactSessionScore.toFixed(2)}%`,
+    rank: `${simulation.sellSide.overallLeaderboardRank}th of ${simulation.sellSide.participantCount}`,
+    financial: `${usd.format(simulation.sellSide.financials.totalPnl)} total P&L`,
+    interpretation: 'Principal sell-side result.',
+    emphasis: true,
+  },
+  {
+    date: simulation.buySide.displayDate,
+    role: 'Buy side',
+    score: `${simulation.buySide.exactSessionScore.toFixed(2)}%`,
+    rank: `Displayed ${simulation.buySide.displayedLeaderboardRank}nd of ${simulation.buySide.participantCount}; highest valid after void`,
+    financial: `${usd.format(simulation.buySide.financials.portalPnl)} portal P&L`,
+    interpretation: 'Principal buy-side result.',
+    emphasis: true,
+  },
+  {
+    date: simulation.latestSellSideSession.displayDate,
+    role: 'Sell side',
+    score: `${simulation.latestSellSideSession.exactSessionScore.toFixed(2)}%`,
+    rank: `${simulation.latestSellSideSession.overallLeaderboardRank}th of ${simulation.latestSellSideSession.participantCount}`,
+    financial: `${usd.format(simulation.latestSellSideSession.financials.totalPnl)} total P&L`,
+    interpretation:
+      'Strong operational metrics, but negative dealer P&L separated process quality from inventory outcome.',
+    emphasis: false,
+  },
+] as const
+---
+
+<section class="gm-ledger not-prose" aria-labelledby="gm-ledger-title">
+  <header>
+    <p>Chronological evidence</p>
+    <h3 id="gm-ledger-title">July 2026 session ledger</h3>
+  </header>
+
+  <div class="gm-ledger-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Date</th>
+          <th scope="col">Role</th>
+          <th scope="col">Score</th>
+          <th scope="col">Rank / status</th>
+          <th scope="col">Financial field</th>
+          <th scope="col">Interpretation</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          sessions.map((session) => (
+            <tr class:list={{ 'gm-ledger-emphasis': session.emphasis }}>
+              <th scope="row">{session.date}</th>
+              <td>{session.role}</td>
+              <td>{session.score}</td>
+              <td>{session.rank}</td>
+              <td>{session.financial}</td>
+              <td>{session.interpretation}</td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <p class="gm-ledger-note">
+    The 29 July 77.78% figure is a sell-side score and is not the same measure
+    as the 93.05% asset-management score from the same event. The 29 July
+    sell-side phase generated $192,145 of commission revenue but a $496,309
+    trading loss, producing negative total P&amp;L despite strong execution and
+    operational-control metrics.
+  </p>
+</section>
+
+<style>
+  .gm-ledger {
+    margin: 1.5rem 0 2.3rem;
+    border: 1px solid color-mix(in srgb, currentColor 14%, transparent);
+    border-radius: 0.55rem;
+    background: color-mix(in srgb, currentColor 2.5%, transparent);
+  }
+
+  .gm-ledger > header {
+    padding: 1.1rem 1.2rem 1rem;
+    border-bottom: 1px solid color-mix(in srgb, currentColor 10%, transparent);
+  }
+
+  .gm-ledger > header p {
+    margin: 0 0 0.4rem;
+    font-size: 0.64rem;
+    font-weight: 650;
+    line-height: 1.3;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    opacity: 0.46;
+  }
+
+  .gm-ledger h3 {
+    margin: 0;
+    font-family: Georgia, Cambria, 'Times New Roman', Times, serif;
+    font-size: 1.24rem;
+    font-weight: 500;
+    line-height: 1.3;
+    letter-spacing: -0.02em;
+  }
+
+  .gm-ledger-scroll {
+    overflow-x: auto;
+  }
+
+  .gm-ledger table {
+    width: 100%;
+    min-width: 68rem;
+    border-collapse: collapse;
+    font-size: 0.73rem;
+  }
+
+  .gm-ledger th,
+  .gm-ledger td {
+    padding: 0.72rem 0.75rem;
+    border-bottom: 1px solid color-mix(in srgb, currentColor 8%, transparent);
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .gm-ledger thead th {
+    font-size: 0.61rem;
+    font-weight: 650;
+    letter-spacing: 0.075em;
+    text-transform: uppercase;
+    opacity: 0.45;
+  }
+
+  .gm-ledger tbody th,
+  .gm-ledger tbody td:nth-child(2),
+  .gm-ledger tbody td:nth-child(3) {
+    font-weight: 650;
+    white-space: nowrap;
+  }
+
+  .gm-ledger tbody td:nth-last-child(-n + 2) {
+    opacity: 0.65;
+  }
+
+  .gm-ledger-emphasis {
+    background: color-mix(in srgb, #69c894 6%, transparent);
+  }
+
+  .gm-ledger-note {
+    margin: 0;
+    padding: 0.9rem 1.2rem 1rem;
+    font-size: 0.7rem;
+    line-height: 1.6;
+    opacity: 0.52;
+  }
+</style>
