@@ -2,8 +2,8 @@ export const globalMarketsSimulation = {
   event: {
     provider: 'AmplifyME',
     name: 'Finance Accelerator – Global Markets',
-    date: '2026-07-29',
-    displayDate: 'Repeated sessions · July 2026',
+    date: '2026-08-03',
+    displayDate: 'Repeated sessions · July–August 2026',
     format: 'Timed, live, multi-participant market simulations',
     comparisonStatus:
       'Descriptive rather than causal — cohorts, market paths and news sequences differed across sessions.',
@@ -235,6 +235,59 @@ export const globalMarketsSimulation = {
       { label: 'P&L metric', value: 21, display: '21%' },
       { label: 'SSRM', value: 83.33, display: '83.33%' },
     ],
+  },
+  august3DualRoleSession: {
+    date: '2026-08-03',
+    displayDate: '3 August 2026',
+    significance:
+      'Strongest same-event dual-role result, with top-decile finishes in both mandates.',
+    buySide: {
+      role: 'Asset management',
+      participantCount: 93,
+      leaderboardRank: 5,
+      exactSessionScore: 89.68,
+      financials: {
+        portalPnl: 3_330_183,
+        portalPnlLabel: 'Trading P&L',
+        commissionPaid: -268_753,
+        portfolioValue: 23_019_276.57,
+      },
+      portalSubscores: {
+        roi: 100,
+        execution: 69.57,
+        buySideRiskManagement: 98.81,
+        riskAppetite: 80.01,
+      },
+      controls: {
+        fatFingerIncidents: 0,
+      },
+    },
+    sellSide: {
+      role: 'Sell-side trading',
+      participantCount: 96,
+      leaderboardRank: 9,
+      exactSessionScore: 89.04,
+      financials: {
+        commissionRevenue: 202_035,
+        tradingPnl: 893_072,
+        derivedTotalPnl: 1_095_107,
+        derivedTotalPnlStatus:
+          'Derived as trading P&L plus commission revenue because the total-P&L field was not shown.',
+      },
+      clientDealing: {
+        chatTrades: 18,
+      },
+      portalSubscores: {
+        commissionMetric: 76.32,
+        ctDisplay: 82,
+        exchangeTradeMetric: 100,
+        pnlDisplayMetric: 92,
+        sellSideRiskManagement: 84.21,
+      },
+      controls: {
+        fatFingerIncidents: 0,
+      },
+    },
   },
   excludedPublicContext: {
     july27AssetManagementScore: 48,

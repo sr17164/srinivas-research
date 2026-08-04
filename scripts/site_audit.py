@@ -512,6 +512,27 @@ def main() -> int:
             "initial-session date": "date: '2026-07-15'",
             "initial-session score": "exactSessionScore: 60.73",
             "initial-session P&L": "portalPnl: 1_836_906",
+            "3 August date": "date: '2026-08-03'",
+            "3 August buy-side participant count": "participantCount: 93",
+            "3 August buy-side rank": "leaderboardRank: 5",
+            "3 August buy-side score": "exactSessionScore: 89.68",
+            "3 August buy-side P&L": "portalPnl: 3_330_183",
+            "3 August buy-side commission": "commissionPaid: -268_753",
+            "3 August buy-side portfolio value": "portfolioValue: 23_019_276.57",
+            "3 August buy-side ROI subscore": "roi: 100",
+            "3 August buy-side execution": "execution: 69.57",
+            "3 August buy-side risk management": "buySideRiskManagement: 98.81",
+            "3 August buy-side risk appetite": "riskAppetite: 80.01",
+            "3 August sell-side participant count": "participantCount: 96",
+            "3 August sell-side rank": "leaderboardRank: 9",
+            "3 August sell-side score": "exactSessionScore: 89.04",
+            "3 August sell-side commission": "commissionRevenue: 202_035",
+            "3 August sell-side trading P&L": "tradingPnl: 893_072",
+            "3 August derived sell-side total P&L": "derivedTotalPnl: 1_095_107",
+            "3 August sell-side chat trades": "chatTrades: 18",
+            "3 August sell-side commission metric": "commissionMetric: 76.32",
+            "3 August sell-side exchange-trade metric": "exchangeTradeMetric: 100",
+            "3 August sell-side risk management": "sellSideRiskManagement: 84.21",
         }
 
         for label, value in required_global_markets_values.items():
@@ -544,7 +565,9 @@ def main() -> int:
         for percentage, required_context in (
             (r"88\.89%", "sell-side"),
             (r"77\.78%", "sell-side"),
+            (r"89\.04%", "sell-side"),
             (r"93\.05%", "asset-management"),
+            (r"89\.68%", "asset-management"),
         ):
             for match in re.finditer(percentage, global_markets_page_text):
                 window_start = max(0, match.start() - 150)
@@ -571,6 +594,11 @@ def main() -> int:
             "different cohorts, market paths and news sequences",
             "strongest role-specific results came from different dates",
             "two consecutive top-decile sell-side finishes",
+            "strongest same-event result across both mandates",
+            "5th of 93",
+            "9th of 96",
+            "both were top-decile finishes",
+            "derived from $893,072 of trading p&amp;l plus $202,035 of commission revenue",
         ):
             if required_phrase.lower() not in normalized_global_markets_text:
                 errors.append(
@@ -590,6 +618,7 @@ def main() -> int:
         "19.0% return",
         "1.20 Sharpe",
         "8th of 93",
+        "July–August 2026",
     ):
         if required_models_copy not in models_page_text:
             errors.append(

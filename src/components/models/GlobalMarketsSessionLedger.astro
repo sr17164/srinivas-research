@@ -64,13 +64,31 @@ const sessions = [
       'Strong operational metrics, but negative dealer P&L separated process quality from inventory outcome.',
     emphasis: false,
   },
+  {
+    date: simulation.august3DualRoleSession.displayDate,
+    role: 'Buy side',
+    score: `${simulation.august3DualRoleSession.buySide.exactSessionScore.toFixed(2)}%`,
+    rank: `${simulation.august3DualRoleSession.buySide.leaderboardRank}th of ${simulation.august3DualRoleSession.buySide.participantCount}`,
+    financial: `${usd.format(simulation.august3DualRoleSession.buySide.financials.portalPnl)} portal trading P&L`,
+    interpretation: 'Same-event top-decile result.',
+    emphasis: false,
+  },
+  {
+    date: simulation.august3DualRoleSession.displayDate,
+    role: 'Sell side',
+    score: `${simulation.august3DualRoleSession.sellSide.exactSessionScore.toFixed(2)}%`,
+    rank: `${simulation.august3DualRoleSession.sellSide.leaderboardRank}th of ${simulation.august3DualRoleSession.sellSide.participantCount}`,
+    financial: `${usd.format(simulation.august3DualRoleSession.sellSide.financials.derivedTotalPnl)} derived total P&L`,
+    interpretation: 'Same-event top-decile result.',
+    emphasis: false,
+  },
 ] as const
 ---
 
 <section class="gm-ledger not-prose" aria-labelledby="gm-ledger-title">
   <header>
     <p>Chronological evidence</p>
-    <h3 id="gm-ledger-title">July 2026 session ledger</h3>
+    <h3 id="gm-ledger-title">July–August 2026 session ledger</h3>
   </header>
 
   <div class="gm-ledger-scroll">
@@ -107,7 +125,9 @@ const sessions = [
     as the 93.05% asset-management score from the same event. The 29 July
     sell-side phase generated $192,145 of commission revenue but a $496,309
     trading loss, producing negative total P&amp;L despite strong execution and
-    operational-control metrics.
+    operational-control metrics. The 3 August sell-side total of $1,095,107 is
+    derived from $893,072 of trading P&amp;L plus $202,035 of commission revenue
+    because the portal total-P&amp;L field was not shown.
   </p>
 </section>
 
