@@ -29,8 +29,8 @@ import SelectedWork from '~/components/models/SelectedWork.astro'
       <p>
         This section presents selected empirical research, financial modelling
         and investment case work. The emphasis is on the analytical question,
-        assumptions, methodology and limitations rather than on displaying a
-        spreadsheet or codebase without context.
+        methodology, measurable output, limitations and lessons rather than on
+        displaying a spreadsheet or codebase without context.
       </p>
 
       <h2>Empirical Research</h2>
@@ -51,6 +51,7 @@ import SelectedWork from '~/components/models/SelectedWork.astro'
             value: 'Operating model · DCF · trading comparables',
           },
           { label: 'Format', value: 'Timed Excel assessment' },
+          { label: 'Forecast horizon', value: 'Through 2030' },
         ]}
         note="The underlying workbook is not publicly distributed because it contains third-party assessment material."
       >
@@ -76,6 +77,14 @@ import SelectedWork from '~/components/models/SelectedWork.astro'
             field.
           </li>
         </ul>
+
+        <p>
+          <strong>Limitations:</strong> the timed format constrained sensitivity
+          depth, the workbook contains third-party assessment material and the
+          valuation depends materially on long-duration margin and terminal-value
+          assumptions. The public summary therefore describes the method without
+          presenting the output as a live Tesla recommendation.
+        </p>
       </ModelProject>
 
       <h2>Selected Analytical Work</h2>
@@ -95,7 +104,7 @@ import SelectedWork from '~/components/models/SelectedWork.astro'
             description:
               'Across repeated live simulations, the strongest buy-side session produced a 93.05% score, $3.80m of portal-reported P&L and a 19.0% return, becoming the highest valid finisher after the displayed first-place entry was voided. The strongest sell-side session separately ranked 8th of 93.',
             result:
-              'Highest valid AM finisher · 19.0% return · 1.20 Sharpe · 8th of 93 sell side',
+              'Displayed 2nd/102; highest valid after void · 19.0% return · 1.20 Sharpe · 8th/93 sell side',
             href: '/models/global-markets-simulation/',
             linkLabel: 'Review simulation',
           },

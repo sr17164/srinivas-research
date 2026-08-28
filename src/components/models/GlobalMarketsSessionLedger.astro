@@ -7,12 +7,19 @@ const usd = new Intl.NumberFormat('en-US', {
   maximumFractionDigits: 0,
 })
 
+const ordinal = (value: number) => {
+  const remainder = value % 100
+  if (remainder >= 11 && remainder <= 13) return `${value}th`
+
+  return `${value}${['th', 'st', 'nd', 'rd'][value % 10] ?? 'th'}`
+}
+
 const sessions = [
   {
     date: simulation.initialBuySideSession.displayDate,
     role: 'Buy side',
     score: `${simulation.initialBuySideSession.exactSessionScore.toFixed(2)}%`,
-    rank: `${simulation.initialBuySideSession.compositeLeaderboardRank}th · denominator not documented`,
+    rank: `${ordinal(simulation.initialBuySideSession.compositeLeaderboardRank)} · denominator not documented`,
     financial: `${usd.format(simulation.initialBuySideSession.financials.portalPnl)} ${simulation.initialBuySideSession.financials.portalPnlLabel.toLowerCase()}`,
     interpretation: 'Initial process baseline.',
     emphasis: false,
@@ -21,7 +28,7 @@ const sessions = [
     date: simulation.priorBuySideSession.displayDate,
     role: 'Buy side',
     score: `${simulation.priorBuySideSession.exactSessionScore.toFixed(2)}%`,
-    rank: `${simulation.priorBuySideSession.compositeLeaderboardRank}th of ${simulation.priorBuySideSession.participantCount} composite; 4th by P&L`,
+    rank: `${ordinal(simulation.priorBuySideSession.compositeLeaderboardRank)} of ${simulation.priorBuySideSession.participantCount} composite; 4th by P&L`,
     financial: `${usd.format(simulation.priorBuySideSession.financials.portalPnl)} portal P&L`,
     interpretation:
       'Prior principal buy-side benchmark; P&L denominator unresolved.',
@@ -31,7 +38,7 @@ const sessions = [
     date: simulation.priorSellSideSession.displayDate,
     role: 'Sell side',
     score: `${simulation.priorSellSideSession.exactSessionScore.toFixed(2)}%`,
-    rank: `${simulation.priorSellSideSession.overallLeaderboardRank}th of ${simulation.priorSellSideSession.participantCount}`,
+    rank: `${ordinal(simulation.priorSellSideSession.overallLeaderboardRank)} of ${simulation.priorSellSideSession.participantCount}`,
     financial: `${usd.format(simulation.priorSellSideSession.financials.totalPnl)} total P&L`,
     interpretation: 'First of two consecutive top-decile sell-side finishes.',
     emphasis: false,
@@ -40,7 +47,7 @@ const sessions = [
     date: simulation.sellSide.displayDate,
     role: 'Sell side',
     score: `${simulation.sellSide.exactSessionScore.toFixed(2)}%`,
-    rank: `${simulation.sellSide.overallLeaderboardRank}th of ${simulation.sellSide.participantCount}`,
+    rank: `${ordinal(simulation.sellSide.overallLeaderboardRank)} of ${simulation.sellSide.participantCount}`,
     financial: `${usd.format(simulation.sellSide.financials.totalPnl)} total P&L`,
     interpretation: 'Principal sell-side result.',
     emphasis: true,
@@ -49,7 +56,7 @@ const sessions = [
     date: simulation.buySide.displayDate,
     role: 'Buy side',
     score: `${simulation.buySide.exactSessionScore.toFixed(2)}%`,
-    rank: `Displayed ${simulation.buySide.displayedLeaderboardRank}nd of ${simulation.buySide.participantCount}; highest valid after void`,
+    rank: `Displayed ${ordinal(simulation.buySide.displayedLeaderboardRank)} of ${simulation.buySide.participantCount}; highest valid after void`,
     financial: `${usd.format(simulation.buySide.financials.portalPnl)} portal P&L`,
     interpretation: 'Principal buy-side result.',
     emphasis: true,
@@ -58,7 +65,7 @@ const sessions = [
     date: simulation.latestSellSideSession.displayDate,
     role: 'Sell side',
     score: `${simulation.latestSellSideSession.exactSessionScore.toFixed(2)}%`,
-    rank: `${simulation.latestSellSideSession.overallLeaderboardRank}th of ${simulation.latestSellSideSession.participantCount}`,
+    rank: `${ordinal(simulation.latestSellSideSession.overallLeaderboardRank)} of ${simulation.latestSellSideSession.participantCount}`,
     financial: `${usd.format(simulation.latestSellSideSession.financials.totalPnl)} total P&L`,
     interpretation:
       'Strong operational metrics, but negative dealer P&L separated process quality from inventory outcome.',
@@ -68,7 +75,7 @@ const sessions = [
     date: simulation.august3DualRoleSession.displayDate,
     role: 'Buy side',
     score: `${simulation.august3DualRoleSession.buySide.exactSessionScore.toFixed(2)}%`,
-    rank: `${simulation.august3DualRoleSession.buySide.leaderboardRank}th of ${simulation.august3DualRoleSession.buySide.participantCount}`,
+    rank: `${ordinal(simulation.august3DualRoleSession.buySide.leaderboardRank)} of ${simulation.august3DualRoleSession.buySide.participantCount}`,
     financial: `${usd.format(simulation.august3DualRoleSession.buySide.financials.portalPnl)} portal trading P&L`,
     interpretation: 'Same-event top-decile result.',
     emphasis: false,
@@ -77,7 +84,7 @@ const sessions = [
     date: simulation.august3DualRoleSession.displayDate,
     role: 'Sell side',
     score: `${simulation.august3DualRoleSession.sellSide.exactSessionScore.toFixed(2)}%`,
-    rank: `${simulation.august3DualRoleSession.sellSide.leaderboardRank}th of ${simulation.august3DualRoleSession.sellSide.participantCount}`,
+    rank: `${ordinal(simulation.august3DualRoleSession.sellSide.leaderboardRank)} of ${simulation.august3DualRoleSession.sellSide.participantCount}`,
     financial: `${usd.format(simulation.august3DualRoleSession.sellSide.financials.derivedTotalPnl)} derived total P&L`,
     interpretation: 'Same-event top-decile result.',
     emphasis: false,

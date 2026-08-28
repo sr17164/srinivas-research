@@ -33,13 +33,20 @@ const latestPosts = enrichedPosts
   .filter((post) => post.id !== featuredPost?.id)
   .slice(0, 4)
 
-const featuredVisual =
-  featuredPost?.id === 'why-i-am-bearish-brent-crude-into-late-2026'
-    ? {
-        src: '/research-figures/brent-balance-and-price-outlook.svg',
-        alt: 'EIA inventory balance and Brent price outlook supporting the featured bearish thesis',
-      }
-    : undefined
+const featuredVisuals: Record<string, { src: string; alt: string }> = {
+  'why-i-am-bearish-brent-crude-into-late-2026': {
+    src: '/research-figures/brent-balance-and-price-outlook.svg',
+    alt: 'EIA inventory balance and Brent price outlook supporting the featured bearish thesis',
+  },
+  'gold-after-the-august-2026-rebound': {
+    src: '/research-figures/gold-august-2026-reunderwriting.svg',
+    alt: 'Gold re-underwriting comparing real yields, central-bank demand and ETF flows',
+  },
+}
+
+const featuredVisual = featuredPost
+  ? featuredVisuals[featuredPost.id]
+  : undefined
 
 const siteSections = [
   {
@@ -247,10 +254,10 @@ const siteSections = [
         <h2>Research that can be challenged, reproduced and reviewed.</h2>
 
         <p>
-          SM Research is an independent publication focused on commodity
-          markets, macroeconomic forces and decision-making under uncertainty.
-          Each view is written with explicit assumptions, catalysts and
-          invalidation conditions, then retained as the evidence changes.
+          SM Research is an independent publication covering markets, valuation,
+          capital allocation and quantitative analysis. Each view is written
+          with explicit assumptions, catalysts and invalidation conditions, then
+          retained as the evidence changes.
         </p>
 
         <p>

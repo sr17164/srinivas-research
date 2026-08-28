@@ -167,13 +167,13 @@ def commodity_audit(summary: dict[str, object]) -> None:
 
 
 def brent_outlook() -> None:
-    lines = svg_start(label="EIA oil inventory balance and Brent price outlook")
-    lines.append('<text class="headline" x="70" y="54">Inventory balance</text>')
-    lines.append('<text class="small" x="70" y="78">Million barrels per day; draw is negative</text>')
+    lines = svg_start(label="August oil-balance revision and Brent price outlook")
+    lines.append('<text class="headline" x="70" y="54">3Q26 balance revision</text>')
+    lines.append('<text class="small" x="70" y="78">IEA implied balance, million barrels per day</text>')
     x, y, w, h = 85, 125, 470, 430
-    values = [("2Q26", -5.0), ("3Q26", -2.2), ("4Q26", 2.7), ("2027", 5.0)]
-    y_min, y_max = -6, 6
-    for tick in [-6, -3, 0, 3, 6]:
+    values = [("July OMR", -0.8), ("August OMR", -1.8)]
+    y_min, y_max = -2.2, 0.2
+    for tick in [-2.0, -1.5, -1.0, -0.5, 0]:
         yy = y + h - (tick-y_min)/(y_max-y_min)*h
         lines.append(f'<line class="axis" x1="{x}" y1="{yy:.1f}" x2="{x+w}" y2="{yy:.1f}" opacity="0.55"/>')
         lines.append(f'<text class="small" x="{x-15}" y="{yy+5:.1f}" text-anchor="end">{tick:g}</text>')
@@ -184,19 +184,20 @@ def brent_outlook() -> None:
         yy = y + h - (value-y_min)/(y_max-y_min)*h
         top = min(yy, zero_y)
         height = abs(yy-zero_y)
-        color = GREEN if value > 0 else BLUE
+        color = BLUE if idx == 0 else RED
         lines.append(f'<rect x="{cx-34:.1f}" y="{top:.1f}" width="68" height="{height:.1f}" rx="6" fill="{color}"/>')
         label_y = yy-14 if value > 0 else yy+28
         lines.append(f'<text class="value" x="{cx:.1f}" y="{label_y:.1f}" text-anchor="middle">{value:+.1f}</text>')
         lines.append(f'<text class="label" x="{cx:.1f}" y="{y+h+38}" text-anchor="middle">{label}</text>')
+    lines.append('<text class="note" x="90" y="625">Observed inventories fell 69 million barrels in July.</text>')
 
     lines.append('<line x1="600" y1="90" x2="600" y2="620" stroke="#274052"/>')
     lines.append('<text class="headline" x="650" y="54">Brent price outlook</text>')
-    lines.append('<text class="small" x="650" y="78">EIA quarterly averages, US dollars per barrel</text>')
+    lines.append('<text class="small" x="650" y="78">EIA August 2026 forecast, US dollars per barrel</text>')
     x2, y2, w2, h2 = 665, 125, 450, 430
-    price_values = [("2Q26", 103), ("3Q26", 74), ("4Q26", 70), ("2027", 65)]
-    p_min, p_max = 55, 110
-    for tick in [60, 70, 80, 90, 100, 110]:
+    price_values = [("3Q26", 85), ("2027", 69)]
+    p_min, p_max = 60, 95
+    for tick in [60, 70, 80, 90]:
         yy = y2 + h2 - (tick-p_min)/(p_max-p_min)*h2
         lines.append(f'<line class="axis" x1="{x2}" y1="{yy:.1f}" x2="{x2+w2}" y2="{yy:.1f}" opacity="0.55"/>')
         lines.append(f'<text class="small" x="{x2-15}" y="{yy+5:.1f}" text-anchor="end">${tick}</text>')
@@ -210,11 +211,12 @@ def brent_outlook() -> None:
         lines.append(f'<circle cx="{xx:.1f}" cy="{yy:.1f}" r="8" fill="{BG}" stroke="{AMBER}" stroke-width="4"/>')
         lines.append(f'<text class="value" x="{xx:.1f}" y="{yy-18:.1f}" text-anchor="middle">${value}</text>')
         lines.append(f'<text class="label" x="{xx:.1f}" y="{y2+h2+38}" text-anchor="middle">{label}</text>')
+    lines.append('<text class="note" x="665" y="625">Lower prices require production recovery and inventory rebuilding.</text>')
     finish(lines, ARTICLE_OUT / "brent-balance-and-price-outlook.svg")
 
 
 def copper_context() -> None:
-    lines = svg_start(label="Copper price context, preferred entry band and projected 2035 supply gap")
+    lines = svg_start(label="Copper price context, preferred entry band and refined balance forecasts")
     lines.append('<text class="headline" x="70" y="54">Price context and entry discipline</text>')
     lines.append('<text class="small" x="70" y="78">US dollars per tonne</text>')
     x, y, w, h = 90, 125, 500, 430
@@ -227,7 +229,7 @@ def copper_context() -> None:
     band_bottom=y+h-(11750-p_min)/(p_max-p_min)*h
     lines.append(f'<rect x="{x}" y="{band_top:.1f}" width="{w}" height="{band_bottom-band_top:.1f}" fill="{GREEN}" opacity="0.18"/>')
     lines.append(f'<text class="small" x="{x+w-8}" y="{band_top-10:.1f}" text-anchor="end">Preferred entry: $11,750–12,500</text>')
-    points=[("Dec 2025",12000,BLUE),("Jan high",14500,AMBER),("17 Jul",13526,GREEN)]
+    points=[("Dec 2025",12000,BLUE),("Jan high",14500,AMBER),("17 Jul",13526,GREEN),("27 Aug",14349.5,PURPLE)]
     for idx,(label,value,color) in enumerate(points):
         xx=x+w*(idx+0.5)/len(points)
         yy=y+h-(value-p_min)/(p_max-p_min)*h
@@ -237,27 +239,30 @@ def copper_context() -> None:
         lines.append(f'<text class="label" x="{xx:.1f}" y="{y+h+38}" text-anchor="middle">{label}</text>')
 
     lines.append('<line x1="625" y1="90" x2="625" y2="620" stroke="#274052"/>')
-    lines.append('<text class="headline" x="680" y="54">2035 mine-supply gap</text>')
-    lines.append('<text class="small" x="680" y="78">IEA base-case project pipeline; demand indexed to 100</text>')
-    bx, by, bw = 700, 220, 390
-    lines.append(f'<rect x="{bx}" y="{by}" width="{bw}" height="78" rx="12" fill="#142838"/>')
-    lines.append(f'<rect x="{bx}" y="{by}" width="{bw*0.75}" height="78" rx="12" fill="{BLUE}"/>')
-    lines.append(f'<rect x="{bx+bw*0.75}" y="{by}" width="{bw*0.25}" height="78" rx="0" fill="{RED}" opacity="0.88"/>')
-    lines.append(f'<text class="value" x="{bx+bw*0.375}" y="{by+49}" text-anchor="middle">75 supplied</text>')
-    lines.append(f'<text class="value" x="{bx+bw*0.875}" y="{by+49}" text-anchor="middle">25 gap</text>')
-    lines.append(f'<text class="headline" x="{bx}" y="{by+150}">Projected deficit: 25%</text>')
-    lines.append(f'<text class="note" x="{bx}" y="{by+188}">Structural scarcity supports the long-run case,</text>')
-    lines.append(f'<text class="note" x="{bx}" y="{by+216}">but does not eliminate near-term valuation risk.</text>')
+    lines.append('<text class="headline" x="680" y="54">Refined balance forecasts</text>')
+    lines.append('<text class="small" x="680" y="78">ICSG surplus, thousand tonnes</text>')
+    bars=[("2026",96,BLUE),("2027",377,PURPLE)]
+    bx,by,bw,bh=720,150,150,390
+    max_v=400
+    for idx,(label,value,color) in enumerate(bars):
+        xx=bx+idx*220
+        height=value/max_v*bh
+        yy=by+bh-height
+        lines.append(f'<rect x="{xx}" y="{yy:.1f}" width="{bw}" height="{height:.1f}" rx="9" fill="{color}"/>')
+        lines.append(f'<text class="value" x="{xx+bw/2}" y="{yy-18:.1f}" text-anchor="middle">{value}kt</text>')
+        lines.append(f'<text class="label" x="{xx+bw/2}" y="{by+bh+38}" text-anchor="middle">{label}</text>')
+    lines.append('<text class="note" x="680" y="615">The long-run mine-supply gap remains material, but</text>')
+    lines.append('<text class="note" x="680" y="643">near-term refined surpluses constrain the tactical case.</text>')
     finish(lines, ARTICLE_OUT / "copper-valuation-and-supply-gap.svg")
 
 
 def gold_reality_check() -> None:
-    lines = svg_start(label="Gold real-yield invalidation and official-sector demand")
+    lines = svg_start(label="Gold real-yield invalidation and revised demand evidence")
     lines.append('<text class="headline" x="70" y="54">Real-yield invalidation</text>')
     lines.append('<text class="small" x="70" y="78">US 10-year TIPS yield, selected observations</text>')
     x,y,w,h=90,125,500,430
-    y_min,y_max=1.6,2.5
-    for tick in [1.6,1.8,2.0,2.2,2.4]:
+    y_min,y_max=1.6,2.6
+    for tick in [1.6,1.8,2.0,2.2,2.4,2.6]:
         yy=y+h-(tick-y_min)/(y_max-y_min)*h
         lines.append(f'<line class="axis" x1="{x}" y1="{yy:.1f}" x2="{x+w}" y2="{yy:.1f}" opacity="0.55"/>')
         lines.append(f'<text class="small" x="{x-14}" y="{yy+5:.1f}" text-anchor="end">{tick:.1f}%</text>')
@@ -265,7 +270,7 @@ def gold_reality_check() -> None:
     inv_y=y+h-(invalidation-y_min)/(y_max-y_min)*h
     lines.append(f'<line x1="{x}" y1="{inv_y:.1f}" x2="{x+w}" y2="{inv_y:.1f}" stroke="{RED}" stroke-width="3" stroke-dasharray="10 9"/>')
     lines.append(f'<text class="small" x="{x+w-5}" y="{inv_y-12:.1f}" text-anchor="end" fill="{RED}">2.15% invalidation</text>')
-    observations=[("29 Jan",1.89),("5 Feb",1.89),("16 Jul",2.35)]
+    observations=[("5 Feb",1.89),("16 Jul",2.35),("26 Aug",2.34)]
     points=[]
     for idx,(label,value) in enumerate(observations):
         xx=x+idx/(len(observations)-1)*w
@@ -278,21 +283,25 @@ def gold_reality_check() -> None:
         lines.append(f'<text class="label" x="{xx:.1f}" y="{y+h+38}" text-anchor="middle">{label}</text>')
 
     lines.append('<line x1="625" y1="90" x2="625" y2="620" stroke="#274052"/>')
-    lines.append('<text class="headline" x="680" y="54">Official demand remained strong</text>')
-    lines.append('<text class="small" x="680" y="78">Net central-bank purchases, tonnes</text>')
-    bars=[("2025 qtr avg",216,GREEN),("Q1 2026",244,BLUE)]
-    bx,by,bw,bh=720,150,150,390
-    max_v=280
+    lines.append('<text class="headline" x="680" y="54">Demand signals improved</text>')
+    lines.append('<text class="small" x="680" y="78">Tonnes; central-bank demand and ETF flow</text>')
+    bars=[("Q1 CB",56.5,BLUE),("Q2 CB",288.9,GREEN),("Jul ETF",23,PURPLE)]
+    bx,by,bw,bh=680,150,120,390
+    max_v=320
     for idx,(label,value,color) in enumerate(bars):
-        xx=bx+idx*220
+        xx=bx+idx*150
         height=value/max_v*bh
         yy=by+bh-height
         lines.append(f'<rect x="{xx}" y="{yy:.1f}" width="{bw}" height="{height:.1f}" rx="9" fill="{color}"/>')
-        lines.append(f'<text class="value" x="{xx+bw/2}" y="{yy-18:.1f}" text-anchor="middle">{value}t</text>')
+        lines.append(f'<text class="value" x="{xx+bw/2}" y="{yy-18:.1f}" text-anchor="middle">{value:g}t</text>')
         lines.append(f'<text class="label" x="{xx+bw/2}" y="{by+bh+38}" text-anchor="middle">{label}</text>')
-    lines.append('<text class="note" x="690" y="615">Strong structural buying persisted, but it did not</text>')
-    lines.append('<text class="note" x="690" y="643">prevent the tactical thesis from failing.</text>')
-    finish(lines, ARTICLE_OUT / "gold-real-yield-and-official-demand.svg")
+    lines.append('<text class="note" x="680" y="615">Q1 was revised sharply lower; Q2 official demand and</text>')
+    lines.append('<text class="note" x="680" y="643">July ETF flows then recovered.</text>')
+    primary_path = ARTICLE_OUT / "gold-real-yield-and-official-demand.svg"
+    finish(lines, primary_path)
+    (ARTICLE_OUT / "gold-august-2026-reunderwriting.svg").write_text(
+        primary_path.read_text(encoding="utf8"), encoding="utf8"
+    )
 
 
 def main() -> None:

@@ -200,6 +200,7 @@ def main() -> int:
         PUBLIC / "research-figures" / "brent-balance-and-price-outlook.svg",
         PUBLIC / "research-figures" / "copper-valuation-and-supply-gap.svg",
         PUBLIC / "research-figures" / "gold-real-yield-and-official-demand.svg",
+        PUBLIC / "research-figures" / "gold-august-2026-reunderwriting.svg",
         ROOT / "scripts" / "generate_research_figures.py",
         ROOT / "src" / "pages" / "projects" / "commodity-regime-analysis.astro",
     ]
@@ -582,7 +583,7 @@ def main() -> int:
 
         for required_phrase in (
             "simulated rather than real capital",
-            "weighting formula is unavailable",
+            "without the weighting formula",
             "displayed 2nd of 102",
             "highest valid",
             "first-place result was subsequently voided",
@@ -592,13 +593,13 @@ def main() -> int:
             "100% roi figure is a proprietary platform subscore",
             "77.78% figure is a sell-side score",
             "different cohorts, market paths and news sequences",
-            "strongest role-specific results came from different dates",
-            "two consecutive top-decile sell-side finishes",
-            "strongest same-event result across both mandates",
+            "strongest role-specific results occurred on different dates",
+            "principal sell-side result",
+            "strongest same-event evidence across both mandates",
             "5th of 93",
             "9th of 96",
-            "both were top-decile finishes",
-            "derived from $893,072 of trading p&amp;l plus $202,035 of commission revenue",
+            "simultaneous top-decile performance across both roles",
+            "sell-side total of <strong>$1,095,107 is derived</strong>",
         ):
             if required_phrase.lower() not in normalized_global_markets_text:
                 errors.append(

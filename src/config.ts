@@ -11,7 +11,7 @@ export const SITE: Site = {
   base: '/',
   title: 'SM Research',
   description:
-    'Independent research on commodity markets, macroeconomic forces, valuation and capital allocation, supported by financial modelling and quantitative analysis.',
+    'Independent markets, valuation, capital-allocation and quantitative research with explicit assumptions, evidence and revision rules.',
   author: 'Srinivas Medida',
   lang: 'en',
   ogLocale: 'en_GB',

@@ -1,6 +1,6 @@
 ---
 title: Dual-Role Global Markets Simulation
-description: 'Repeated AmplifyME Global Markets simulations covering asset allocation, dealer inventory and execution, including a 93.05% asset-management score, 19.0% return and an 8th-of-93 sell-side finish.'
+description: 'Repeated AmplifyME market simulations testing asset allocation, dealer inventory and execution across buy-side and sell-side roles, with results and limitations reported separately.'
 subtitle: Repeated-session evidence on portfolio allocation, dealer inventory, client execution and risk across buy-side and sell-side roles.
 bgType: dot
 ogImage: true
@@ -15,8 +15,6 @@ import GlobalMarketsOverview from '~/components/models/GlobalMarketsOverview.ast
 import GlobalMarketsAllocation from '~/components/models/GlobalMarketsAllocation.astro'
 import GlobalMarketsMetrics from '~/components/models/GlobalMarketsMetrics.astro'
 import GlobalMarketsLimitations from '~/components/models/GlobalMarketsLimitations.astro'
-import GlobalMarketsSessionComparison from '~/components/models/GlobalMarketsSessionComparison.astro'
-import GlobalMarketsSellSideComparison from '~/components/models/GlobalMarketsSellSideComparison.astro'
 import GlobalMarketsSessionLedger from '~/components/models/GlobalMarketsSessionLedger.astro'
 import { withBasePath } from '~/utils/path'
 
@@ -41,254 +39,135 @@ import { withBasePath } from '~/utils/path'
 
       <p>
         How do inventory control, execution choice, client flow and dynamic
-        exposure management translate into absolute and risk-adjusted
-        performance across repeated sell-side and buy-side market simulations?
+        exposure management translate into absolute and risk-adjusted outcomes
+        across repeated buy-side and sell-side market simulations?
       </p>
 
-      <h2>Repeated-Session Design</h2>
+      <h2>Evidence Design</h2>
 
       <p>
-        The project draws on timed AmplifyME Finance Accelerator – Global
-        Markets sessions completed on 15, 22, 27 and 29 July and 3 August 2026.
-        Each session had its own cohort, market path and news sequence, so the
-        comparisons are descriptive rather than controlled experiments.
-      </p>
-
-      <p>
-        The principal buy-side evidence now comes from 29 July: a 93.05%
-        asset-management composite score, $3,801,651 of portal-reported
-        P&amp;L, a 19.0% return and a 1.20 Sharpe ratio. The principal sell-side
-        evidence remains the 27 July dealer-trading session, which ranked 8th of
-        93 with an 88.89% sell-side composite score. These strongest role-specific
-        results came from different dates and are treated separately throughout.
+        The project uses timed AmplifyME Finance Accelerator – Global Markets
+        sessions completed on 15, 22, 27 and 29 July and 3 August 2026. Each
+        session had a different cohort, market path and news sequence. Comparisons
+        are therefore descriptive rather than controlled, and platform scores are
+        reported separately from financial outcomes.
       </p>
 
       <p>
-        In the sell-side role, the mandate was to facilitate client flow,
-        generate commission revenue and trading P&amp;L, use the exchange when
-        appropriate and manage dealer inventory without avoidable market impact
-        or operational errors. On the buy side, capital had to be allocated,
-        trades routed through brokers and the exchange, and exposure adjusted as
-        the market evolved.
+        The strongest role-specific results occurred on different dates. The
+        principal buy-side evidence comes from 29 July; the principal sell-side
+        evidence comes from 27 July. The 3 August event is retained because it
+        provides the strongest same-event evidence across both mandates, not
+        because it supersedes either flagship result.
       </p>
 
       <h2>Principal Buy-Side Result — 29 July</h2>
 
       <p>
-        The asset-management session scored <strong>93.05%</strong> and placed
+        The asset-management session scored <strong>93.05%</strong> and appeared
         <strong>2nd of 102 on the displayed leaderboard</strong>. Event
         administration subsequently voided the displayed first-place result,
-        leaving this as the <strong>highest valid score</strong>. The portal has
-        retained its original ordering, so the displayed rank is reported
-        alongside the post-event status rather than being converted into an
-        unqualified first-place claim.
+        leaving this as the <strong>highest valid score</strong>. The displayed
+        rank and post-event status are both retained; the result is not described
+        as an unqualified first place.
       </p>
 
       <p>
-        The platform reported <strong>$3,801,651 of P&amp;L</strong>, a
-        <strong>19.0% return on initial funds</strong> and a
-        <strong>1.20 Sharpe ratio</strong>. The exact execution subscore was
-        96.08%, BSRM was 98.98%, the RA subscore was 70.19% and the ROI platform
-        subscore was 100%. The 100% value is a proprietary subscore—not a 100%
-        portfolio return. Seven chat-and-voice trades and five exchange trades
-        were completed with no recorded fat-finger incident.
+        The portal reported <strong>$3,801,651 of P&amp;L</strong>, a
+        <strong>19.0% return</strong> and a <strong>1.20 Sharpe ratio</strong>.
+        Its 100% ROI field is a proprietary subscore, not a 100% investment
+        return. The detailed and leaderboard screens also use different labels
+        for the $3.80m field, and the displayed portfolio value does not
+        mechanically reconcile with P&amp;L and commission.
       </p>
 
       <GlobalMarketsMetrics mode="buy-side" />
 
-      <h2>Allocation and Risk Path</h2>
+      <h2>Allocation and Risk Interpretation</h2>
 
       <p>
-        The session began with most capital held in cash. Equity exposure was
-        increased materially, fluctuated through several stages and subsequently
-        rose to approximately 100%. Average allocation was 70.2% equities and
-        29.8% cash; the portfolio finished at 99.5% equities and 0.5% cash.
+        Average allocation was 70.2% equities and 29.8% cash; the portfolio
+        finished 99.5% in equities. That exposure captured the main
+        return-generating phase, but it also left the result dependent on a highly
+        concentrated final allocation. No transaction timestamps or
+        security-level weights are reconstructed from the portal chart.
       </p>
 
       <GlobalMarketsAllocation />
 
-      <p>
-        Substantial equity exposure captured the principal return-generating
-        phase, but the position was not materially de-risked before the close.
-        The strong return, Sharpe ratio and platform risk-management subscore
-        therefore need to be interpreted alongside a highly concentrated final
-        allocation. No exact transaction timestamps or security-level weights
-        are reconstructed from the portal chart.
-      </p>
-
-      <h2>Buy-Side Progression — 22 Versus 29 July</h2>
-
-      <p>
-        Relative to the prior principal buy-side session, portal-reported P&amp;L
-        increased by $894,203, or 30.8%. Return increased by 4.5 percentage
-        points, the Sharpe ratio increased by 0.54 and the composite score rose by
-        13.87 percentage points. Execution scoring improved especially sharply,
-        while commission expenditure declined modestly.
-      </p>
-
-      <p>
-        The allocation evidence prevents a one-sided interpretation. The 22 July
-        portfolio finished 73.6% in cash after substantial de-risking; the 29 July
-        portfolio finished 99.5% invested in equities. Stronger financial and
-        platform outcomes were therefore accompanied by materially greater final
-        concentration.
-      </p>
-
-      <GlobalMarketsSessionComparison />
-
       <h2>Principal Sell-Side Result — 27 July</h2>
 
       <p>
-        The 27 July dealer-trading session ranked
-        <strong>8th of 93 on the sell-side leaderboard</strong> with an
-        <strong>88.89% sell-side composite score</strong>. It generated
+        The dealer-trading session ranked <strong>8th of 93</strong> with an
+        <strong>88.89% composite score</strong>. It produced
         <strong>$842,052 of trading P&amp;L</strong> and
-        <strong>$153,635 of commission revenue</strong>, producing
-        <strong>$995,687 of total simulated P&amp;L</strong>.
-      </p>
-
-      <p>
-        The session completed 499 exchange trades and 13 chat trades. The
-        exchange-trade and fat-finger-control metrics were both 100%, with no
-        recorded exchange or client fat-finger incidents and 0% recorded average
-        exchange impact. The P&amp;L display metric was 98%, while SSRM was
-        80.95%.
+        <strong>$153,635 of commission</strong>, for
+        <strong>$995,687 of portal-reported total simulated P&amp;L</strong>.
+        No exchange or client fat-finger incident was recorded.
       </p>
 
       <p>
         Average net exposure was -$10,410,039 and average contract exposure was
-        -37,152. Those figures were materially larger in absolute magnitude than
-        on 22 July. The stronger financial output and platform risk-management
-        score therefore do not justify claiming that every improvement reflected
-        lower dealer risk.
+        -37,152. Stronger financial and platform outcomes therefore do not imply
+        that dealer inventory risk fell on every measure.
       </p>
 
       <GlobalMarketsMetrics mode="sell-side" />
 
-      <h2>Sell-Side Improvement — 22 Versus 27 July</h2>
+      <h2>Same-Event Cross-Role Result — 3 August</h2>
 
       <p>
-        The second sell-side session increased the composite score by 8.54
-        percentage points, commission revenue by 53.0%, trading P&amp;L by 24.3%
-        and total P&amp;L by 28.0%. Exchange activity increased by 27.3%, while
-        the commission metric and SSRM rose by 11.12 and 18.26 percentage points
-        respectively.
+        The asset-management phase ranked <strong>5th of 93</strong> with an
+        <strong>89.68% score</strong> and a
+        <strong>$3,330,183 platform trading-P&amp;L field</strong>. The sell-side
+        phase ranked <strong>9th of 96</strong> with an
+        <strong>89.04% score</strong>, $893,072 of trading P&amp;L and $202,035
+        of commission.
       </p>
 
       <p>
-        The ordinal rank improved from 13th of 153 to 8th of 93. Relative
-        percentile performance was broadly stable at approximately the top
-        8.5–8.6% of each cohort, supporting the measured conclusion of two
-        consecutive top-decile sell-side finishes.
+        The sell-side total of <strong>$1,095,107 is derived</strong> by adding
+        trading P&amp;L and commission because the portal did not show a total
+        field. The significance of the event is simultaneous top-decile
+        performance across both roles; it is not presented as another flagship.
       </p>
 
-      <GlobalMarketsSellSideComparison />
-
-      <h2>Other Sessions</h2>
+      <h2>Session Record and Failure Evidence</h2>
 
       <p>
-        A subsequent session on 3 August produced the strongest same-event result
-        across both mandates. The asset-management phase ranked 5th of 93 with an
-        89.68% composite score, while the sell-side phase ranked 9th of 96 with an
-        89.04% sell-side score. Both were top-decile finishes, providing additional
-        evidence that strong performance could be reproduced across the two roles
-        within a single event.
-      </p>
-
-      <p>
-        The complete ledger also preserves weaker outcomes. In the 29 July
-        sell-side phase, commission revenue reached $192,145 and operational
-        metrics remained reasonably strong, but a $496,309 trading loss produced
-        total P&amp;L of -$304,164. This separates execution and client-process
-        quality from the directional outcome of the dealer inventory.
+        The ledger preserves both stronger and weaker sessions. In particular,
+        the 29 July sell-side phase generated $192,145 of commission but a
+        $496,309 trading loss, producing total simulated P&amp;L of -$304,164.
+        This is useful evidence that client-process and operational metrics can
+        remain credible while dealer inventory produces a poor financial result.
       </p>
 
       <GlobalMarketsSessionLedger />
 
-      <h2>Performance Versus Platform Score</h2>
-
-      <p>
-        Financial results and platform scores measure different things. The 29
-        July asset-management session combined stronger absolute P&amp;L, return
-        and Sharpe ratio with materially improved execution and BSRM subscores.
-        However, the final 99.5% equity allocation remains relevant despite the
-        98.98% BSRM platform subscore. A high proprietary subscore is not
-        synonymous with low real-world portfolio risk.
-      </p>
-
-      <p>
-        The 29 July sell-side phase provides the reverse example: commission,
-        execution and operational-control measures remained credible, yet
-        directional dealer P&amp;L was negative. The weighting formula is
-        unavailable, so no single subscore is treated as the definitive cause of
-        a composite ranking or financial outcome.
-      </p>
-
-      <GlobalMarketsMetrics mode="scores" />
-
-      <h2>What Worked</h2>
+      <h2>Measured Lessons</h2>
 
       <ul>
         <li>
-          Portal-reported buy-side P&amp;L increased by $894,203 from the prior
-          principal session, while return rose from 14.5% to 19.0%.
+          Buy-side return, Sharpe ratio, execution score and composite score all
+          improved between the 22 and 29 July principal sessions, but final
+          concentration also increased materially.
         </li>
         <li>
-          The Sharpe ratio improved from 0.66 to 1.20 and the composite score
-          increased by 13.87 percentage points.
+          Sell-side commission, trading P&amp;L and composite score improved in
+          the principal 27 July session, while average dealer exposure remained
+          substantial.
         </li>
         <li>
-          Execution scoring increased by 48.78 percentage points, BSRM reached
-          98.98% and no fat-finger incident was recorded.
+          A formal late-session de-risking rule would make the buy-side process
+          less dependent on remaining almost fully invested into the close.
         </li>
         <li>
-          Sufficient equity exposure was maintained to capture the main
-          return-generating phase of the 29 July buy-side session.
+          Client facilitation, commission generation and speculative dealer
+          inventory should be monitored as separate sources of outcome.
         </li>
         <li>
-          The result became the highest valid asset-management score after the
-          displayed first-place entry was voided, while retaining the displayed
-          2nd-of-102 ranking for transparency.
-        </li>
-        <li>
-          The principal sell-side session remained a separate 8th-of-93 result,
-          supported by stronger commission generation, P&amp;L and repeatable
-          operational control.
-        </li>
-        <li>
-          A later session produced simultaneous top-decile finishes—5th of 93 in
-          asset management and 9th of 96 on the sell side—strengthening the
-          evidence of performance across both mandates.
-        </li>
-      </ul>
-
-      <h2>What Could Be Improved</h2>
-
-      <ul>
-        <li>
-          The 99.5% final equity allocation was highly concentrated. A formal
-          late-session de-risking rule would make the process less dependent on
-          remaining fully invested into the close.
-        </li>
-        <li>
-          The RA platform subscore of 70.19% remained materially below the other
-          principal buy-side subscores.
-        </li>
-        <li>
-          The improved return and Sharpe ratio should be preserved while reducing
-          dependence on a near-fully invested final portfolio.
-        </li>
-        <li>
-          Portal P&amp;L and portfolio-value fields require clearer reconciliation
-          where more complete source data becomes available.
-        </li>
-        <li>
-          The 29 July sell-side phase needs a better separation between client
-          facilitation, commission generation and speculative inventory risk.
-        </li>
-        <li>
-          Average dealer exposure remained substantial in the principal 27 July
-          sell-side session despite the stronger SSRM score.
+          Proprietary platform subscores cannot be treated as causes of ranking
+          or financial performance without the weighting formula.
         </li>
       </ul>
 
@@ -320,7 +199,7 @@ import { withBasePath } from '~/utils/path'
       </div>
 
       <p class="text-xs op-45">
-        Data source: participant-level AmplifyME portal results, displayed
+        Source: participant-level AmplifyME portal results, displayed
         leaderboards and supplied event screenshots. No full transaction export
         or complete scoring formula was available. All P&amp;L figures refer to
         simulated rather than real capital.

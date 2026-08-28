@@ -11,24 +11,23 @@ export interface CurrentView {
   researchStatus?: string
 }
 
-export const CURRENT_VIEWS_LAST_REVIEWED = '2026-07-20'
+export const CURRENT_VIEWS_LAST_REVIEWED = '2026-08-27'
 
 export const currentViews: CurrentView[] = [
   {
     market: 'Gold',
-    stance: 'Mildly Bullish',
+    stance: 'Neutral',
     timeHorizon: '3–6 months',
     rationale:
-      'Structural central-bank demand and policy uncertainty remain supportive, but this is a new, lower-conviction stance rather than a continuation of the failed early-2026 trade.',
-    href: '/research/why-i-remained-bullish-gold/',
-    linkLabel: 'Review prior thesis',
+      'Q2 central-bank demand and renewed ETF inflows support the structural case, but a 2.34% US 10-year real yield and a tactical August rebound leave limited near-term asymmetry.',
+    href: '/research/gold-after-the-august-2026-rebound/',
   },
   {
     market: 'Brent Crude',
-    stance: 'Bearish',
-    timeHorizon: '3–6 months',
+    stance: 'Mildly Bearish',
+    timeHorizon: '6–12 months',
     rationale:
-      'Recovering Gulf flows and an expected return to inventory builds in 4Q26 support a bearish medium-term view, although renewed regional disruption remains the principal upside risk.',
+      'A projected late-year return to surplus still points lower over time, but renewed Hormuz disruption, a 1.8 mb/d 3Q deficit and July stock draws weaken the near-term short case.',
     href: '/research/why-i-am-bearish-brent-crude-into-late-2026/',
   },
   {
@@ -36,7 +35,7 @@ export const currentViews: CurrentView[] = [
     stance: 'Neutral',
     timeHorizon: '3–6 months',
     rationale:
-      'Record prices and elevated visible stocks argue against chasing the rally, while regional inventory distortion, tight concentrate supply and long-term grid and data-centre demand prevent a clean bearish view.',
+      'A day-delayed LME price near $14,350/t and official forecasts for small refined surpluses argue against chasing the rally, while concentrate tightness and long-run power demand prevent a clean bearish view.',
     href: '/research/why-i-am-neutral-copper-after-the-2026-rally/',
   },
 ]
