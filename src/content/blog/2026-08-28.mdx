@@ -1,0 +1,204 @@
+---
+title: 'Why I Prefer a US 2s10s Steepener to Duration'
+slug: 'why-i-prefer-a-us-2s10s-steepener-to-duration'
+description: 'A cross-asset rates view: Treasury buybacks support liquidity, but the cleaner expression is a 2s10s steepener rather than an outright long-duration bet.'
+pubDate: 2026-08-28
+lastModDate: 2026-08-28
+reportType: Macro Research
+assetClass: Rates
+sector: US Treasuries
+
+market: 'US 10-year minus 2-year Treasury spread'
+outcome: Open
+outcomeSummary: 'Live curve view: prefer a DV01-neutral 2s10s steepener at a +47bp reference spread to outright duration while front-end policy and long-end fiscal risks diverge.'
+investmentView: Bullish
+timeHorizon: 3–6 Months
+drivers:
+  - Federal Reserve policy repricing
+  - Labour-market moderation
+  - Treasury financing needs
+  - Long-end term premium
+  - Liquidity-support buybacks
+tags:
+  - US Treasuries
+  - Yield Curve
+  - Federal Reserve
+  - Fixed Income
+  - Fiscal Policy
+draft: false
+featured: true
+---
+
+import InvestmentSummary from '~/components/research/InvestmentSummary.astro'
+import ResearchPanel from '~/components/research/ResearchPanel.astro'
+import ResearchFigure from '~/components/research/ResearchFigure.astro'
+
+## Executive Summary
+
+<ResearchPanel label="Current view" title="Prefer the curve to a directional duration call">
+
+I prefer a **US 2s10s steepener** to an outright long-duration position over the next three to six months. The reference spread—defined here as the 10-year Treasury yield minus the 2-year yield—was **+47 basis points on 27 August 2026**, with the 2-year at 4.20% and the 10-year at 4.67%.
+
+The orthodox bullish-duration case has strengthened since the Treasury announced that it would at least double the maximum size of long-end liquidity-support buybacks. Citi rates strategist Jason Williams described the policy as a potential light backstop for the long end in comments reported by Bloomberg and Axios. The immediate price response supports part of that view: the 30-year yield fell from 5.31% on 17 August to 5.19% on 27 August.
+
+I disagree with turning that liquidity backstop into a structural duration thesis. Treasury explicitly says buybacks are not expected to reduce privately held net marketable borrowing significantly because new issuance replaces the securities purchased. Its latest estimates still require **$739bn of net marketable borrowing in 3Q26** and **$628bn in 4Q26**, while primary dealers see a **$1.45tn financing shortfall in FY2027–28** at current coupon sizes and bill supply.
+
+The front end faces a different risk. July payrolls fell by 23,000, the prior two months were revised down by 103,000 and real consumer spending was flat in July. Yet the 2-year yield remained 57.5 basis points above the 3.625% midpoint of the Fed's target range. Inflation is too high to justify a confident outright bond rally, but softer activity makes persistent front-end tightening less certain than the yield curve implies.
+
+The result is a relative-value view: own 2-year duration and sell a **DV01-matched** amount of 10-year duration. The trade does not require both yields to fall. It requires the 2-year yield to fall relative to the 10-year yield, or the 10-year yield to rise relative to the 2-year yield.
+
+</ResearchPanel>
+
+<InvestmentSummary
+  stance="Curve Steepener"
+  position="Long 2-year duration / short DV01-matched 10-year duration; +47bp reference spread"
+  horizon="3–6 months"
+  drivers={[
+    'Less front-end tightening than currently embedded',
+    'Large Treasury financing needs',
+    'Persistent long-end term premium',
+    'Buybacks that improve liquidity without removing net supply',
+    'Diverging growth and inflation signals',
+  ]}
+/>
+
+## The Consensus View and My Disagreement
+
+The strongest case for owning long Treasuries is straightforward. The 30-year yield reached a 19-year high, the Treasury responded by increasing long-end buybacks from a maximum of $2bn to at least $4bn per operation, and the long end rallied. A Bloomberg-reported view from Citi argued that the intervention improved the asymmetry of owning long bonds because it created a potential official backstop.
+
+That is a valid **liquidity** argument. It is not yet a convincing **duration** argument.
+
+The distinction matters because a buyback changes which securities are outstanding and can improve trading in older issues, but it does not by itself eliminate the government's funding need. Treasury's own borrowing release states that secondary-market purchases do not directly change privately held net marketable borrowing and that buybacks are not expected to affect it significantly. Bloomberg News also noted the limits: the long-end rally was widely viewed as difficult to sustain while inflation and government debt remained elevated.
+
+My disagreement is therefore narrower than "the intervention will fail." The policy can reduce disorderly selling and still leave the equilibrium 10-year yield high. That makes the long end a poor place to take the full risk of a disinflation call.
+
+## Market Snapshot
+
+| Indicator                                | Latest cited reading | Why it matters                                                 |
+| ---------------------------------------- | -------------------: | -------------------------------------------------------------- |
+| 2-year Treasury yield                    |                4.20% | Prices a policy path above the current 3.50–3.75% target range |
+| 10-year Treasury yield                   |                4.67% | Remains exposed to inflation, supply and term-premium risk     |
+| 10Y minus 2Y spread                      |                +47bp | Reference entry for the steepener framework                    |
+| July payroll change                      |              -23,000 | Weakens the case for repeated front-end tightening             |
+| July core PCE inflation                  |             3.3% y/y | Prevents a clean bullish-duration conclusion                   |
+| 3Q26 net marketable borrowing            |               $739bn | Keeps the Treasury absorption question live                    |
+| FY2027–28 financing gap at current sizes |              $1.45tn | Points towards eventual coupon-size increases                  |
+
+<ResearchFigure
+  src="/research-figures/us-2s10s-steepener-framework.svg"
+  alt="Two-panel chart showing selected 2-year and 10-year Treasury yields and the policy-versus-fiscal split behind the 2s10s steepener view"
+  caption="The curve has already steepened from its inverted phase, but the drivers remain split. The 2-year yield embeds a restrictive policy path while the 10-year yield must absorb inflation, fiscal and term-premium risk."
+  source="US Treasury, Federal Reserve, Bureau of Labor Statistics and Treasury Borrowing Advisory Committee; data through 27 August 2026"
+/>
+
+## Why the Curve Is Cleaner Than Outright Duration
+
+### 1. The Front End Embeds More Tightening Than the Latest Activity Data Justify
+
+The Federal Open Market Committee held its target range at 3.50–3.75% in July. Three members preferred a 25-basis-point increase, and the minutes recorded that market pricing had moved towards one increase by September and another by the end of the first quarter of 2027.
+
+The inflation case for caution is real. July PCE inflation was 3.7% year on year and core PCE was 3.3%. The Fed cannot treat that as price stability.
+
+The activity data nevertheless complicate repeated tightening. Payroll employment declined by 23,000 in July, May and June were revised down by a combined 103,000, real PCE was flat in July, and second-quarter GDP slowed to 1.5% annualised from 2.1% in the first quarter. Private domestic final demand was stronger than headline GDP, so this is not a recession call. It is an argument that the probability distribution around the next policy moves is wider than a simple inflation narrative suggests.
+
+With the 2-year yield at 4.20%, the front end already offers material protection against a modestly higher policy path. If the Fed holds for longer rather than delivering the tightening embedded in rates, the 2-year can rally without requiring rapid rate cuts.
+
+### 2. The Long End Has a Financing Problem That Buybacks Do Not Resolve
+
+Treasury expects to borrow $1.367tn across the third and fourth quarters of 2026. It plans to keep nominal coupon auction sizes unchanged for at least the next several quarters, using bills to absorb seasonal variation, but the August TBAC minutes show why this cannot be the final answer. The median primary-dealer forecast implies a $1.45tn funding gap in FY2027–28 at current coupon sizes and privately held bill supply. Dealers generally expect coupon auctions to increase in 2027.
+
+The longer fiscal backdrop reinforces that pressure. The Congressional Budget Office projects a $1.9tn deficit in 2026, debt held by the public at 101% of GDP and net interest outlays of $1.0tn. These projections are not a timing tool for the next auction, but they explain why investors may continue to demand compensation for holding duration.
+
+That compensation is the term premium: the portion of a long yield that is not simply the expected average path of short rates. It is not directly observable and any model estimate is uncertain. The New York Fed's ACM framework is useful because it makes the decomposition explicit, but the investment conclusion does not require a precise term-premium estimate. Persistent financing needs and sensitivity at long-end auctions are sufficient reasons not to assume that lower policy expectations must pull the 10-year down one-for-one.
+
+### 3. The Treasury "Put" Is Real but Limited
+
+The expanded programme starts on 9 September and applies to the 10-to-20-year and 20-to-30-year nominal sectors through the November refunding. It should support market functioning, and its signalling effect can be larger than the cash amount.
+
+There are still two limits.
+
+First, these are liquidity-support operations, not Federal Reserve quantitative easing. Treasury must finance the purchases, and its borrowing estimate says buybacks do not materially reduce net marketable supply.
+
+Second, the programme concentrates support beyond the 10-year point. Even if it flattens the 10s30s segment, a 2s10s position can still steepen if the front end rallies relative to the 10-year. The policy is therefore a risk to the trade, but not a reason to replace it with an unhedged long-duration position.
+
+### 4. A Steepener Survives More Than One Macro Path
+
+An outright long 10-year position needs yields to fall enough to overcome carry and volatility. The steepener can work through two different paths:
+
+- **Bull steepening:** the Fed delivers fewer increases than priced, labour data continue to soften and the 2-year yield falls faster than the 10-year.
+- **Bear steepening:** growth or inflation stays firm, but fiscal supply and term premium push the 10-year yield higher by more than the 2-year.
+
+The trade fails when the front end sells off more aggressively than the long end—for example, if inflation broadens and the Fed resumes sustained tightening while long-end buybacks cap the 10-year.
+
+## Implementation Framework
+
+The reference expression is a **DV01-neutral** steepener: long 2-year Treasury duration and short enough 10-year Treasury duration to equalise the dollar value of a one-basis-point move on each leg. Equal cash notionals would leave the position dominated by the longer duration of the 10-year bond and would not isolate the curve view.
+
+<ResearchPanel label="Trade framework" title="Entry, objective and invalidation" compact>
+
+- **Spread definition:** 10-year yield minus 2-year yield
+- **Reference level:** +47bp at the 27 August Treasury close
+- **Base-case objective:** +70bp to +85bp over three to six months
+- **Initial invalidation level:** a sustained close below +25bp rather than an intraday breach
+- **Implementation:** long 2-year duration / short DV01-matched 10-year duration
+- **Sizing principle:** risk the spread volatility, not equal bond notionals
+
+</ResearchPanel>
+
+This is a research framework, not a claim that +47bp is the optimal executable level for every instrument. Futures, swaps and cash Treasuries have different carry, financing, delivery and convexity effects. Any live implementation should calculate hedge ratios using the chosen securities and current DV01s.
+
+## Scenario Framework
+
+| Scenario               | Probability | 10Y–2Y outcome | Evidence required                                                                            |
+| ---------------------- | ----------: | -------------: | -------------------------------------------------------------------------------------------- |
+| Flattening case        |         25% |    Below +25bp | Inflation broadens, the Fed tightens repeatedly and long-end support expands materially      |
+| Base case              |         50% | +70bp to +85bp | The Fed does less than the front end prices while fiscal pressure keeps the 10-year elevated |
+| Strong steepening case |         25% |   Above +100bp | Labour and consumption weaken sharply, or long-end supply pressure intensifies               |
+
+The probabilities and spread ranges are judgemental. They describe the relative balance of evidence, not a statistical forecast.
+
+## What Would Change My Mind
+
+I would close or materially reduce the view if the 10Y–2Y spread remained below +25bp and the move was supported by a coherent change in fundamentals rather than a temporary position squeeze.
+
+The clearest invalidation would be a combination of stronger underlying activity, renewed acceleration in core inflation and sustained Fed tightening that lifted the 2-year yield faster than the 10-year. A second invalidation would be a material change in debt management: recurring long-end purchases or issuance cuts large enough to remove net duration from private markets, rather than merely improve liquidity in off-the-run securities.
+
+I would also reassess if the position became visibly crowded and expensive to carry. BNY noted after the buyback announcement that steepener exposure was widely held and vulnerable to unwinding. A sound macro view can still be a poor trade when entry, positioning and financing are ignored.
+
+## Conclusion
+
+The US rates market contains two different questions. The front end asks how much further the Fed must tighten into softer employment and consumption data. The long end asks what yield is required to absorb persistent inflation risk, large borrowing needs and an eventual increase in coupon supply.
+
+Treasury's expanded buybacks improve long-end market functioning and can interrupt disorderly sell-offs. They do not erase the financing requirement. That is why I prefer a 2s10s steepener to an outright duration bet: it isolates the divergence between policy risk and fiscal-duration risk without requiring a confident forecast that all Treasury yields fall.
+
+The view is bullish the 10Y–2Y spread from a +47bp reference level, with a +70bp to +85bp base-case objective over three to six months and a sustained move below +25bp as the initial invalidation threshold.
+
+## Research Methodology
+
+This note triangulates official Treasury par yields and financing estimates with Federal Reserve policy records, BEA activity and inflation data, BLS employment data, CBO fiscal projections and institutional market commentary. Yield observations are end-of-day Treasury par rates rather than executable trade levels. The scenario probabilities, spread objective and invalidation threshold are judgemental; no proprietary term-structure model is used. Term premium is discussed conceptually because it is unobservable and model-dependent.
+
+**Data cut-off:** 27 August 2026.
+
+## Sources
+
+- [US Treasury — Daily Treasury Par Yield Curve Rates](https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?field_tdr_date_value=2026&type=daily_treasury_yield_curve)
+- [Federal Reserve — July 2026 FOMC Statement](https://www.federalreserve.gov/newsevents/pressreleases/monetary20260729a.htm)
+- [Federal Reserve — Minutes of the July 2026 FOMC Meeting](https://www.federalreserve.gov/monetarypolicy/fomcminutes20260729.htm)
+- [US Treasury — August 2026 Quarterly Refunding Statement](https://home.treasury.gov/news/press-releases/sb0590)
+- [US Treasury — July–December 2026 Borrowing Estimates](https://home.treasury.gov/news/press-releases/sb0584)
+- [US Treasury — August 2026 Treasury Borrowing Advisory Committee Minutes](https://home.treasury.gov/news/press-releases/sb0592)
+- [US Treasury — Increased Long-End Liquidity-Support Buybacks](https://home.treasury.gov/news/press-releases/sb0607)
+- [Bureau of Labor Statistics — July 2026 Employment Situation](https://www.bls.gov/news.release/archives/empsit_08072026.htm)
+- [Bureau of Economic Analysis — July 2026 Personal Income and Outlays](https://www.bea.gov/news/2026/personal-income-and-outlays-july-2026)
+- [Bureau of Economic Analysis — Second Estimate of 2Q26 GDP](https://www.bea.gov/news/2026/gdp-second-estimate-and-corporate-profits-2nd-quarter-2026)
+- [Congressional Budget Office — The Budget and Economic Outlook: 2026 to 2036](https://www.cbo.gov/publication/62105)
+- [Federal Reserve Bank of New York — Treasury Term Premia](https://www.newyorkfed.org/research/data_indicators/term-premia-tabs)
+- [Axios — Treasury Department's Bond Intervention Stabilises Long-Term Yields](https://www.axios.com/2026/08/26/treasury-bonds-borrowing-markets)
+- [Bloomberg News — Treasury's Intervention and the Drivers of Long Yields](https://news.bloomberglaw.com/banking-law/bessent-has-no-easy-fix-for-whats-really-driving-bond-yields-up)
+- [BNY — US Treasury Buybacks: Signal Matters More Than Size](https://www.bny.com/corporate/global/en/solutions/platforms/execution-services/iflow/special-reports/us-treasury-buybacks-signal-matters-more-than-size.html)
+
+<small>
+
+_This research reflects information available through 27 August 2026. It is provided for educational and informational purposes only and does not constitute investment advice, a solicitation or a recommendation to transact in any security or derivative._
+
+</small>

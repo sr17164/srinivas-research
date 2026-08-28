@@ -304,6 +304,118 @@ def gold_reality_check() -> None:
     )
 
 
+def rates_curve_framework() -> None:
+    lines = svg_start(
+        label="US Treasury 2s10s curve and policy-versus-fiscal steepener framework"
+    )
+    lines.append('<text class="headline" x="70" y="54">The curve repriced, but the risks remain split</text>')
+    lines.append('<text class="small" x="70" y="78">Selected Treasury par yields; spread labels show 10Y minus 2Y</text>')
+
+    x, y, w, h = 90, 135, 500, 385
+    y_min, y_max = 3.3, 4.9
+    for tick in [3.4, 3.8, 4.2, 4.6]:
+        yy = y + h - (tick - y_min) / (y_max - y_min) * h
+        lines.append(
+            f'<line class="axis" x1="{x}" y1="{yy:.1f}" x2="{x+w}" y2="{yy:.1f}" opacity="0.55"/>'
+        )
+        lines.append(
+            f'<text class="small" x="{x-14}" y="{yy+5:.1f}" text-anchor="end">{tick:.1f}%</text>'
+        )
+
+    observations = [
+        ("2 Jan", 3.47, 4.19, 72),
+        ("29 Jul", 4.22, 4.67, 45),
+        ("17 Aug", 4.19, 4.72, 53),
+        ("27 Aug", 4.20, 4.67, 47),
+    ]
+    series = [("2-year", 1, BLUE), ("10-year", 2, AMBER)]
+    for legend_idx, (label, _, color) in enumerate(series):
+        lx = x + legend_idx * 145
+        lines.append(
+            f'<line x1="{lx}" y1="105" x2="{lx+30}" y2="105" stroke="{color}" stroke-width="5" stroke-linecap="round"/>'
+        )
+        lines.append(f'<text class="label" x="{lx+42}" y="111">{label}</text>')
+
+    for _, value_idx, color in series:
+        points: list[tuple[float, float]] = []
+        for idx, observation in enumerate(observations):
+            xx = x + idx / (len(observations) - 1) * w
+            value = observation[value_idx]
+            yy = y + h - (value - y_min) / (y_max - y_min) * h
+            points.append((xx, yy))
+        point_string = " ".join(f"{xx:.1f},{yy:.1f}" for xx, yy in points)
+        lines.append(
+            f'<polyline points="{point_string}" fill="none" stroke="{color}" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>'
+        )
+        for xx, yy in points:
+            lines.append(
+                f'<circle cx="{xx:.1f}" cy="{yy:.1f}" r="7" fill="{BG}" stroke="{color}" stroke-width="4"/>'
+            )
+
+    for idx, (label, two_year, ten_year, spread) in enumerate(observations):
+        xx = x + idx / (len(observations) - 1) * w
+        lines.append(
+            f'<text class="label" x="{xx:.1f}" y="{y+h+38}" text-anchor="middle">{label}</text>'
+        )
+        lines.append(
+            f'<text class="small" x="{xx:.1f}" y="{y+h+64}" text-anchor="middle">+{spread}bp</text>'
+        )
+        if idx == len(observations) - 1:
+            two_y = y + h - (two_year - y_min) / (y_max - y_min) * h
+            ten_y = y + h - (ten_year - y_min) / (y_max - y_min) * h
+            lines.append(
+                f'<text class="value" x="{xx-10:.1f}" y="{two_y+28:.1f}" text-anchor="end">{two_year:.2f}%</text>'
+            )
+            lines.append(
+                f'<text class="value" x="{xx-10:.1f}" y="{ten_y-16:.1f}" text-anchor="end">{ten_year:.2f}%</text>'
+            )
+
+    lines.append('<line x1="625" y1="100" x2="625" y2="620" stroke="#274052"/>')
+    lines.append('<text class="headline" x="675" y="118">Why a relative-value trade</text>')
+
+    cards = [
+        (
+            675,
+            150,
+            "FRONT END / POLICY",
+            "2Y: 4.20%",
+            "Fed midpoint: 3.625%",
+            "Payrolls: -23k in July",
+            BLUE,
+        ),
+        (
+            675,
+            365,
+            "LONG END / FISCAL",
+            "10Y: 4.67%",
+            "3Q borrowing: $739bn",
+            "FY27–28 funding gap: $1.45tn",
+            AMBER,
+        ),
+    ]
+    for cx, cy, label, value, note_one, note_two, color in cards:
+        lines.append(
+            f'<rect x="{cx}" y="{cy}" width="455" height="180" rx="16" fill="{PANEL}" stroke="{GRID}" filter="url(#shadow)"/>'
+        )
+        lines.append(
+            f'<rect x="{cx}" y="{cy}" width="5" height="180" rx="3" fill="{color}"/>'
+        )
+        lines.append(
+            f'<text class="small" x="{cx+28}" y="{cy+40}" letter-spacing="1.5">{label}</text>'
+        )
+        lines.append(f'<text class="headline" x="{cx+28}" y="{cy+83}">{value}</text>')
+        lines.append(f'<text class="note" x="{cx+28}" y="{cy+122}">{note_one}</text>')
+        lines.append(f'<text class="note" x="{cx+28}" y="{cy+151}">{note_two}</text>')
+
+    lines.append(
+        '<text class="note" x="675" y="590">Buybacks support liquidity; Treasury says they do not</text>'
+    )
+    lines.append(
+        '<text class="note" x="675" y="618">materially reduce privately held net marketable borrowing.</text>'
+    )
+    finish(lines, ARTICLE_OUT / "us-2s10s-steepener-framework.svg")
+
+
 def main() -> None:
     primary = read_csv(MODEL_ROOT / "outputs" / "primary_relationship_results.csv")
     robustness = read_csv(MODEL_ROOT / "outputs" / "threshold_robustness.csv")
@@ -316,6 +428,7 @@ def main() -> None:
     brent_outlook()
     copper_context()
     gold_reality_check()
+    rates_curve_framework()
 
 
 if __name__ == "__main__":

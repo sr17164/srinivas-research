@@ -11,9 +11,17 @@ export interface CurrentView {
   researchStatus?: string
 }
 
-export const CURRENT_VIEWS_LAST_REVIEWED = '2026-08-27'
+export const CURRENT_VIEWS_LAST_REVIEWED = '2026-08-28'
 
 export const currentViews: CurrentView[] = [
+  {
+    market: 'US 10Y–2Y Spread',
+    stance: 'Bullish',
+    timeHorizon: '3–6 months',
+    rationale:
+      'A +47bp reference spread leaves room to steepen if the Fed delivers less tightening than the front end prices while borrowing needs and term premium keep the 10-year yield elevated.',
+    href: '/research/why-i-prefer-a-us-2s10s-steepener-to-duration/',
+  },
   {
     market: 'Gold',
     stance: 'Neutral',

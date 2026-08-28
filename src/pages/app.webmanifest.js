@@ -6,7 +6,7 @@ export async function GET() {
     name: 'SM Research',
     short_name: 'SM Research',
     description:
-      'Independent research on commodity markets, macroeconomic forces, valuation and capital allocation, supported by financial modelling and quantitative analysis by Srinivas Medida.',
+      'Independent cross-asset research on commodities, rates, currencies, macroeconomic forces and capital allocation, supported by financial modelling and quantitative analysis by Srinivas Medida.',
     icons: [
       {
         src: withBasePath('/icon-192.png'),

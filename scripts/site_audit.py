@@ -201,6 +201,7 @@ def main() -> int:
         PUBLIC / "research-figures" / "copper-valuation-and-supply-gap.svg",
         PUBLIC / "research-figures" / "gold-real-yield-and-official-demand.svg",
         PUBLIC / "research-figures" / "gold-august-2026-reunderwriting.svg",
+        PUBLIC / "research-figures" / "us-2s10s-steepener-framework.svg",
         ROOT / "scripts" / "generate_research_figures.py",
         ROOT / "src" / "pages" / "projects" / "commodity-regime-analysis.astro",
     ]

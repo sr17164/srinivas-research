@@ -34,6 +34,10 @@ const latestPosts = enrichedPosts
   .slice(0, 4)
 
 const featuredVisuals: Record<string, { src: string; alt: string }> = {
+  'why-i-prefer-a-us-2s10s-steepener-to-duration': {
+    src: '/research-figures/us-2s10s-steepener-framework.svg',
+    alt: 'US Treasury curve and policy-versus-fiscal framework supporting the featured 2s10s steepener thesis',
+  },
   'why-i-am-bearish-brent-crude-into-late-2026': {
     src: '/research-figures/brent-balance-and-price-outlook.svg',
     alt: 'EIA inventory balance and Brent price outlook supporting the featured bearish thesis',
@@ -51,9 +55,9 @@ const featuredVisual = featuredPost
 const siteSections = [
   {
     label: 'Research',
-    title: 'Commodity & Macro Research',
+    title: 'Cross-Asset Research',
     description:
-      'Long-form analysis of commodity markets, macroeconomic forces, market structure, catalysts and downside risk.',
+      'Long-form analysis across commodities, rates, currencies and macroeconomic forces, with explicit catalysts and downside risk.',
     href: '/research/',
   },
   {
@@ -75,7 +79,7 @@ const siteSections = [
 
 <BaseLayout
   title="SM Research"
-  description="Independent research on commodity markets, macroeconomic forces, valuation and capital allocation."
+  description="Independent cross-asset research on markets, macroeconomic forces, valuation and capital allocation."
   ogImage={true}
 >
   <div class="research-home">
