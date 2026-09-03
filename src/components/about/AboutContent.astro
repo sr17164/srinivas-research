@@ -1,0 +1,159 @@
+---
+import PageNavigation from '~/components/nav/PageNavigation.astro'
+import ResearchPanel from '~/components/research/ResearchPanel.astro'
+import Link from '~/components/base/Link.astro'
+import { withBasePath } from '~/utils/path'
+---
+
+<div class="prose mx-auto">
+  <ResearchPanel
+    label="At a glance"
+    title="An independent publication with clear authorship"
+    titleLevel="h2"
+    compact
+  >
+    <ul>
+      <li>
+        Founded by Srinivas Medida (Sri), who remains the principal author and
+        whose research is the publication's flagship body of work
+      </li>
+      <li>
+        The Research archive records explicit horizons, catalysts, invalidation
+        conditions and a retained Decision Log
+      </li>
+      <li>
+        Selected Contributor Research published under each student's own name,
+        with sources, limitations and disclosures
+      </li>
+      <li>
+        Models and empirical work with reviewable assumptions and reproducible
+        files where licensing permits
+      </li>
+    </ul>
+  </ResearchPanel>
+
+  <h2>What SM Research Is</h2>
+
+  <p>
+    I started SM Research as a place to record questions I was working through
+    across markets, valuation and capital allocation. It remains an independent,
+    student-led publication, and my research is its flagship body of work.
+  </p>
+
+  <p>
+    Writing a view down makes my reasoning reviewable. It exposes the
+    assumptions, gives readers something specific to challenge and forces me to
+    state what would change the conclusion before the outcome is known. That
+    record matters more to me than a polished catalogue of correct calls.
+  </p>
+
+  <h2>Founder Research</h2>
+
+  <p>
+    Everything under <Link href={withBasePath('/research/')}>Research</Link> is my
+    work. This archive alone informs my Current Views, investment stances, historical
+    thesis outcomes and Decision Log. I keep the original thesis visible alongside
+    the evidence that followed.
+  </p>
+
+  <p>
+    I am not trying to present a catalogue of successful calls. I want the
+    archive to show how I frame questions, test evidence, size uncertainty and
+    revise conclusions when the facts change. Failed theses stay published
+    because removing them would create a cleaner record, but a less credible
+    one.
+  </p>
+
+  <h2>Contributor Research</h2>
+
+  <p>
+    Investing offers many ways to understand how capital, risk and exchange
+    shape real outcomes. I opened <Link href={withBasePath('/contributors/')}>
+      Contributor Research</Link
+    > to give other students a place to test serious ideas and publish selected work
+    under their own names. Each article names its author beside the title and links
+    to a simple index of that contributor's research.
+  </p>
+
+  <p>
+    We can help sharpen structure, sourcing, presentation and analytical
+    clarity. We do not replace the author's thesis, core evidence or underlying
+    analysis. Contributors remain responsible for their conclusions, and their
+    work does not enter my Current Views or Decision Log.
+  </p>
+
+  <h2>Analytical Standards</h2>
+
+  <p>
+    Work should begin with a defined analytical question rather than a
+    predetermined conclusion. Facts, assumptions and interpretation should
+    remain visibly separate. Evidence should be traceable, with primary and
+    institutional sources preferred where available. Material risks,
+    counterarguments, model limitations and relevant conflicts belong in the
+    research itself.
+  </p>
+
+  <p>
+    Models are useful when they make assumptions clearer or scenarios more
+    testable. They are not used to add complexity for its own sake. Material
+    errors should be corrected and revisions dated so readers can distinguish
+    the original conclusion from later evidence.
+  </p>
+
+  <h2>Why Commodities</h2>
+
+  <p>
+    My interest in markets started with commodities. My mother's side of the
+    family comes from a farming background, so weather, harvest conditions and
+    commodity prices never felt completely abstract. Learning how futures can
+    protect the value of a harvest, manage an airline's fuel exposure or secure
+    an industrial input changed how I understood finance.
+  </p>
+
+  <p>
+    Many of my early reports originated while I served as Commodities Sector
+    Head at Queen's Tower Capital, Imperial College London's student-managed
+    investment fund. Commodities became an entry point into rates, currencies,
+    credit, valuation and broader asset allocation rather than the boundary of
+    my research. That wider interest still comes back to the same question: how
+    do markets and investing shape exchange, capital allocation and real-world
+    outcomes?
+  </p>
+
+  <h2>About the Founder</h2>
+
+  <p>
+    Sri studies Economics, Finance & Data Science at Imperial College London.
+    His interests sit at the intersection of commodity markets, rates,
+    currencies, macroeconomics, financial modelling and quantitative analysis.
+    SM Research is intended to remain a continuing analytical record rather than
+    a substitute for a curriculum vitae.
+  </p>
+
+  <div class="not-prose my-6 flex flex-wrap gap-3">
+    <Link class="btn-blue" href={withBasePath('/research/')}>
+      Read founder research
+    </Link>
+    <Link class="btn-cyan" href={withBasePath('/contributors/')}>
+      Explore contributors
+    </Link>
+    <Link class="btn-amber" href={withBasePath('/outcomes/')}>
+      View decision log
+    </Link>
+    <Link class="btn-emerald" href={withBasePath('/models/')}>
+      Explore models
+    </Link>
+  </div>
+
+  <h2>Disclosures and Corrections</h2>
+
+  <p>
+    All material is provided for educational and informational purposes only and
+    does not constitute investment advice. Relevant holdings, incentives and
+    conflicts should be disclosed where applicable. Contributor articles carry
+    their named author's conclusions. Corrections and dated updates may be
+    published when evidence or errors materially change the analysis.
+  </p>
+
+  <PageNavigation current="about" />
+</div>

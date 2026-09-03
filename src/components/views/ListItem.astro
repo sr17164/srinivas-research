@@ -18,6 +18,8 @@ interface Props {
   video?: boolean
   platform?: string
   redirect?: string
+  author?: string
+  channel?: string
 }
 
 const {
@@ -34,6 +36,8 @@ const {
   radio,
   platform,
   redirect,
+  author = 'Srinivas Medida',
+  channel = 'Research',
 } = Astro.props
 
 const details: string[] = []
@@ -69,6 +73,7 @@ const href = redirect ? redirect : withBasePath(`/research/${postSlug}/`)
       <h2 class="research-list-title">{title}</h2>
 
       <div class="research-list-details">
+        <span>{channel} · {author}</span>
         {
           video && (
             <span

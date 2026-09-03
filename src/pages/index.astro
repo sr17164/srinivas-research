@@ -5,6 +5,7 @@ import BaseLayout from '~/layouts/BaseLayout.astro'
 import Link from '~/components/base/Link.astro'
 import CurrentViews from '~/components/research/CurrentViews.astro'
 import MarketHero from '~/components/home/MarketHero.astro'
+import ContributorGateway from '~/components/home/ContributorGateway.astro'
 
 import { getFilteredPosts, getSortedPosts, getMinutesRead } from '~/utils/data'
 import { formatDate } from '~/utils/datetime'
@@ -124,6 +125,8 @@ const siteSections = [
               )}
 
               <div class="featured-report-details">
+                <span>By Sri</span>
+
                 {featuredPost.data.assetClass && (
                   <span>{featuredPost.data.assetClass}</span>
                 )}
@@ -188,6 +191,8 @@ const siteSections = [
       </div>
     </section>
 
+    <ContributorGateway />
+
     {
       latestPosts.length > 0 && (
         <section class="home-latest">
@@ -226,6 +231,8 @@ const siteSections = [
                     {post.data.description && <p>{post.data.description}</p>}
 
                     <div class="latest-research-details">
+                      <span>By Sri</span>
+
                       {post.data.assetClass && (
                         <span>{post.data.assetClass}</span>
                       )}
@@ -258,15 +265,15 @@ const siteSections = [
         <h2>Research that can be challenged, reproduced and reviewed.</h2>
 
         <p>
-          SM Research is an independent publication covering markets, valuation,
-          capital allocation and quantitative analysis. Each view is written
-          with explicit assumptions, catalysts and invalidation conditions, then
-          retained as the evidence changes.
+          SM Research is an independent, student-led investment-research
+          publication founded by Sri. His research remains the flagship body of
+          work, with explicit assumptions, catalysts, invalidation conditions
+          and a retained decision record.
         </p>
 
         <p>
-          It is written and edited by Srinivas Medida, an Economics, Finance &
-          Data Science student at Imperial College London.
+          Contributor Research gives other student researchers a place to test
+          and publish serious ideas under their own names.
         </p>
 
         <Link

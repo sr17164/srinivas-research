@@ -11,7 +11,7 @@ export const SITE: Site = {
   base: '/',
   title: 'SM Research',
   description:
-    'Independent markets, valuation, capital-allocation and quantitative research with explicit assumptions, evidence and revision rules.',
+    'An independent, student-led investment-research publication founded by Srinivas Medida, with distinct founder and contributor research channels.',
   author: 'Srinivas Medida',
   lang: 'en',
   ogLocale: 'en_GB',
@@ -25,6 +25,12 @@ export const UI: Ui = {
       title: 'Research',
       displayMode: 'alwaysText',
       text: 'Research',
+    },
+    {
+      path: '/contributors',
+      title: 'Contributors',
+      displayMode: 'alwaysText',
+      text: 'Contributors',
     },
     {
       path: '/models',
@@ -110,6 +116,10 @@ export const FEATURES: Features = {
           collection: 'blog',
           pathnamePrefix: '/research',
         },
+        {
+          collection: 'contributorResearch',
+          pathnamePrefix: '/contributors/research',
+        },
       ],
     },
   ],
@@ -131,7 +141,7 @@ export const FEATURES: Features = {
   search: [
     true,
     {
-      includes: ['blog'],
+      includes: ['founder', 'contributors'],
       filter: true,
       navHighlight: true,
       batchLoadSize: [true, 5],

@@ -9,6 +9,9 @@ interface Props {
   reportType?: string
   assetClass?: string
   sector?: string
+  authorName?: string
+  authorDisplayName?: string
+  channel?: string
 }
 
 const {
@@ -18,18 +21,32 @@ const {
   reportType = 'Research Note',
   assetClass,
   sector,
+  authorName = 'Srinivas Medida',
+  authorDisplayName = authorName,
+  channel = 'Research',
 } = Astro.props
 
 const classifications = [assetClass, sector].filter(Boolean)
 ---
 
 <div class="post-meta">
-  <div class="research-category">
+  <div class="research-category" data-pagefind-meta="type">
     {reportType}
   </div>
 
+  <div class="research-byline">
+    <span data-pagefind-meta="channel">{channel}</span>
+    <span aria-hidden="true">·</span>
+    <span>Written by <strong>{authorDisplayName}</strong></span>
+    <span class="hidden" aria-hidden="true" data-pagefind-meta="author"
+      >{authorName}</span
+    >
+  </div>
+
   <div class="meta-line">
-    <time datetime={pubDate}>{formatDate(pubDate)}</time>
+    <time datetime={pubDate} data-pagefind-meta="date">
+      {formatDate(pubDate)}
+    </time>
 
     {
       minutesRead > 0 && (
@@ -88,7 +105,8 @@ const classifications = [assetClass, sector].filter(Boolean)
   }
 
   .meta-line,
-  .classification-line {
+  .classification-line,
+  .research-byline {
     display: flex;
     flex-wrap: wrap;
     gap: 0.6rem;
@@ -102,6 +120,14 @@ const classifications = [assetClass, sector].filter(Boolean)
 
   .classification-line {
     margin-top: 0.6rem;
+  }
+
+  .research-byline {
+    margin-bottom: 0.65rem;
+  }
+
+  .research-byline strong {
+    font-weight: 650;
   }
 
   .divider,

@@ -750,19 +750,16 @@ interface GiscusConfig {
 
 interface SearchConfig {
   /**
-   * Specify which content collections rendered by `RenderPost.astro` are indexed.
-   *
-   * - By default, only `blog` and `changelog` are indexed, as their dynamic routes
-   * (`/blog/[...slug]` and `/changelog/[slug]`) use `RenderPost.astro`.
-   * - If needed, see https://pagefind.app/ for adjusting the search implementation.
+   * Specify the Pagefind channel-filter values used by indexed article layouts.
+   * The current channels are `founder` and `contributors`.
    */
   includes: string[]
 
   /**
    * Whether to enable search filtering by collection.
    *
-   * When enabled, the search panel displays multiple tabs named after the collections,
-   * allowing users to search in each collection separately.
+   * When enabled, the search panel displays channel tabs, allowing users to
+   * search founder and contributor research separately.
    *
    * When disabled, all results are searched together.
    */

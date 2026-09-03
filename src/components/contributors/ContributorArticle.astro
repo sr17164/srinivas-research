@@ -1,0 +1,362 @@
+---
+import { getEntry, render } from 'astro:content'
+
+import BaseLayout from '~/layouts/BaseLayout.astro'
+import Link from '~/components/base/Link.astro'
+import Warning from '~/components/base/Warning.astro'
+import DesktopAside from '~/components/base/DesktopAside.astro'
+import MobileControl from '~/components/base/MobileControl.astro'
+import PostCover from '~/components/base/PostCover.astro'
+import ResearchFactsheet from '~/components/base/ResearchFactsheet.astro'
+import ImageViewer from '~/components/widgets/ImageViewer.astro'
+import ContributorCard from '~/components/contributors/ContributorCard.astro'
+
+import {
+  getFilteredContributorResearch,
+  getMinutesRead,
+  getSortedContributorResearch,
+} from '~/utils/data'
+import { formatDate } from '~/utils/datetime'
+import { withBasePath } from '~/utils/path'
+import { FEATURES } from '~/config'
+
+import type { CollectionEntry } from 'astro:content'
+
+interface Props {
+  post: CollectionEntry<'contributorResearch'>
+}
+
+const { post } = Astro.props
+const { data: frontmatter } = post
+const author = await getEntry(frontmatter.author)
+
+if (!author) {
+  throw new Error(`Contributor article ${post.id} references a missing author.`)
+}
+
+const { Content, headings, remarkPluginFrontmatter } = await render(post)
+const minutesRead = getMinutesRead(
+  frontmatter.minutesRead,
+  remarkPluginFrontmatter.minutesRead as number
+)
+const pubDate = frontmatter.pubDate.toISOString()
+const lastModDate =
+  frontmatter.lastModDate instanceof Date
+    ? frontmatter.lastModDate.toISOString()
+    : undefined
+const authorPath = `/contributors/${author.id}/`
+const authorUrl = new URL(withBasePath(authorPath), Astro.site ?? Astro.url)
+  .href
+const tocEnabled =
+  Array.isArray(FEATURES.toc) &&
+  FEATURES.toc[0] &&
+  frontmatter.toc &&
+  headings.length > 0
+const isSearchable =
+  Array.isArray(FEATURES.search) &&
+  FEATURES.search[0] &&
+  FEATURES.search[1].includes.includes('contributors') &&
+  frontmatter.search
+
+const allContributorResearch = getSortedContributorResearch(
+  await getFilteredContributorResearch()
+)
+const relatedEntries = allContributorResearch
+  .filter((entry) => entry.id !== post.id)
+  .filter(
+    (entry) =>
+      (frontmatter.assetClass &&
+        entry.data.assetClass === frontmatter.assetClass) ||
+      entry.data.tags.some((tag) => frontmatter.tags.includes(tag))
+  )
+  .slice(0, 3)
+
+const related = await Promise.all(
+  relatedEntries.map(async (entry) => {
+    const relatedAuthor = await getEntry(entry.data.author)
+    const { remarkPluginFrontmatter: reading } = await render(entry)
+
+    return {
+      entry,
+      author: relatedAuthor,
+      minutesRead: getMinutesRead(
+        entry.data.minutesRead,
+        reading.minutesRead as number
+      ),
+    }
+  })
+)
+
+const draftWarning = `
+  This contributor article is a development draft and is excluded from
+  production routes and indexing.
+`
+---
+
+<BaseLayout
+  title={frontmatter.title}
+  description={frontmatter.description}
+  ogImage={frontmatter.ogImage}
+  bgType={frontmatter.bgType}
+  {pubDate}
+  {lastModDate}
+  authorName={author.data.fullName}
+  {authorUrl}
+  articleSection="Contributor Research"
+>
+  <div class="contributor-article-shell">
+    <header class="contributor-article-header">
+      <p class="contributor-eyebrow" data-pagefind-meta="channel">
+        Contributor Research
+      </p>
+
+      <h1 data-pagefind-meta="title">{frontmatter.title}</h1>
+      <p class="contributor-deck">{frontmatter.description}</p>
+
+      <div class="contributor-byline">
+        <span>Written by</span>
+        <Link
+          href={withBasePath(authorPath)}
+          class="contributor-author-link border-b-none!"
+          data-pagefind-meta="author"
+        >
+          {author.data.fullName}
+        </Link>
+      </div>
+
+      <div class="contributor-meta">
+        <span data-pagefind-meta="type">{frontmatter.reportType}</span>
+        <time datetime={pubDate} data-pagefind-meta="date">
+          {formatDate(frontmatter.pubDate)}
+        </time>
+        {lastModDate && <span>Revised {formatDate(lastModDate)}</span>}
+        {minutesRead > 0 && <span>{minutesRead} min read</span>}
+        <span>{frontmatter.editorialStatus}</span>
+      </div>
+
+      <p class="contributor-responsibility">
+        This Contributor Research was written by {author.data.fullName}. The
+        analysis and conclusion are the author's own, not a personal investment
+        view of Sri.
+      </p>
+
+      <ResearchFactsheet
+        investmentView={frontmatter.investmentView}
+        timeHorizon={frontmatter.timeHorizon}
+      />
+    </header>
+
+    <article
+      class="contributor-article research-article prose"
+      data-pagefind-body={isSearchable ? '' : undefined}
+      data-pagefind-filter={isSearchable
+        ? 'collection:contributors'
+        : undefined}
+    >
+      {frontmatter.draft && <Warning html={draftWarning} />}
+
+      {
+        tocEnabled && (
+          <>
+            <DesktopAside {headings} />
+            <MobileControl {headings} />
+          </>
+        )
+      }
+
+      {
+        frontmatter.cover && (
+          <PostCover
+            cover={frontmatter.cover}
+            coverAlt={frontmatter.coverAlt}
+          />
+        )
+      }
+
+      <Content />
+
+      <section
+        class="contributor-disclosures"
+        aria-labelledby="disclosures-title"
+      >
+        <h2 id="disclosures-title">Disclosures</h2>
+        <p>{frontmatter.disclosure}</p>
+        {author.data.disclosure && <p>{author.data.disclosure}</p>}
+        <p>
+          This research is provided for educational and informational purposes
+          only. It is not investment advice or a recommendation to transact in
+          any security or financial instrument.
+        </p>
+      </section>
+    </article>
+
+    {
+      related.length > 0 && (
+        <section class="contributor-related" aria-labelledby="related-title">
+          <p class="contributor-eyebrow">Continue exploring</p>
+          <h2 id="related-title">Related Contributor Research</h2>
+          <div class="contributor-related-grid">
+            {related.map(
+              ({ entry, author: relatedAuthor, minutesRead: relatedMinutes }) =>
+                relatedAuthor && (
+                  <ContributorCard
+                    slug={entry.id}
+                    title={entry.data.title}
+                    description={entry.data.description}
+                    authorName={relatedAuthor.data.fullName}
+                    authorSlug={relatedAuthor.id}
+                    pubDate={entry.data.pubDate}
+                    reportType={entry.data.reportType}
+                    assetClass={entry.data.assetClass}
+                    sector={entry.data.sector}
+                    minutesRead={relatedMinutes}
+                  />
+                )
+            )}
+          </div>
+        </section>
+      )
+    }
+  </div>
+
+  <ImageViewer selector="article" options={{ title: 0, navbar: 0 }} />
+</BaseLayout>
+
+<style>
+  .contributor-article-shell {
+    width: min(100%, 72rem);
+    margin: 0 auto;
+  }
+
+  .contributor-article-header,
+  .contributor-article {
+    width: min(100%, 48rem);
+    margin-inline: auto;
+  }
+
+  .contributor-article-header {
+    padding: clamp(2rem, 6vw, 5rem) 0 2rem;
+  }
+
+  .contributor-eyebrow {
+    margin: 0 0 1.2rem;
+    color: color-mix(in srgb, #2f7778 78%, var(--c-text));
+    font-size: 0.72rem;
+    font-weight: 750;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .contributor-article-header h1 {
+    margin: 0;
+    font-family: Georgia, Cambria, 'Times New Roman', Times, serif;
+    font-size: clamp(2.6rem, 7vw, 5rem);
+    font-weight: 500;
+    line-height: 1.02;
+    letter-spacing: -0.05em;
+    text-wrap: balance;
+  }
+
+  .contributor-deck {
+    max-width: 43rem;
+    margin: 1.35rem 0 0;
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    line-height: 1.7;
+    opacity: 0.62;
+  }
+
+  .contributor-byline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 1.75rem;
+    font-size: 0.92rem;
+  }
+
+  .contributor-byline > span {
+    opacity: 0.52;
+  }
+
+  .contributor-author-link {
+    color: inherit;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .contributor-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem 0.85rem;
+    margin-top: 0.85rem;
+    font-size: 0.76rem;
+    line-height: 1.5;
+    opacity: 0.48;
+  }
+
+  .contributor-meta > * + *::before {
+    margin-right: 0.85rem;
+    content: '·';
+  }
+
+  .contributor-responsibility {
+    margin: 1.5rem 0 0;
+    padding: 1rem 1.15rem;
+    border-left: 0.2rem solid color-mix(in srgb, #2f7778 70%, var(--c-text));
+    background: color-mix(in srgb, #2f7778 5%, transparent);
+    font-size: 0.82rem;
+    line-height: 1.6;
+    opacity: 0.74;
+  }
+
+  .contributor-article {
+    position: relative;
+  }
+
+  .contributor-disclosures {
+    margin-top: 4rem;
+    padding: 1.5rem;
+    border: 1px solid color-mix(in srgb, var(--c-text) 14%, transparent);
+    font-size: 0.82rem;
+  }
+
+  .contributor-disclosures h2 {
+    margin-top: 0;
+    font-size: 1.1rem;
+  }
+
+  .contributor-related {
+    padding: clamp(3.5rem, 7vw, 6rem) 0 1rem;
+    border-top: 1px solid color-mix(in srgb, var(--c-text) 14%, transparent);
+  }
+
+  .contributor-related > h2 {
+    margin: 0 0 2rem;
+    font-family: Georgia, Cambria, 'Times New Roman', Times, serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 500;
+  }
+
+  .contributor-related-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  @media (max-width: 720px) {
+    .contributor-article-header {
+      padding-top: 1rem;
+    }
+
+    .contributor-meta > * + *::before {
+      margin-right: 0.6rem;
+    }
+
+    .contributor-article-header h1 {
+      overflow-wrap: anywhere;
+    }
+
+    .contributor-related-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,17 +1,14 @@
 ---
 title: About SM Research
-description: Why SM Research exists, how its investment research is produced and how published views are reviewed over time.
-subtitle: A public record of research, models and decisions under uncertainty.
+description: SM Research is an independent, student-led investment-research publication founded by Srinivas Medida, with distinct founder and contributor channels.
+subtitle: Founder research, contributor research and decisions under uncertainty.
 bgType: plum
 ogImage: true
 ---
 
 import BaseLayout from '~/layouts/BaseLayout.astro'
 import StandardLayout from '~/layouts/StandardLayout.astro'
-import PageNavigation from '~/components/nav/PageNavigation.astro'
-import ResearchPanel from '~/components/research/ResearchPanel.astro'
-import Link from '~/components/base/Link.astro'
-import { withBasePath } from '~/utils/path'
+import AboutContent from '~/components/about/AboutContent.astro'
 
 <BaseLayout
   title={frontmatter.title}
@@ -25,168 +22,6 @@ import { withBasePath } from '~/utils/path'
     subtitle={frontmatter.subtitle}
     isCentered={false}
   >
-    <div slot="article" class="prose mx-auto">
-      <ResearchPanel
-        label="At a glance"
-        title="What this site is intended to demonstrate"
-        compact
-      >
-        <ul>
-          <li>
-            Independent market views with explicit horizons, catalysts and
-            invalidation conditions
-          </li>
-          <li>
-            Cross-asset research spanning commodities, rates, currencies and
-            macroeconomics, grounded in primary and institutional sources
-          </li>
-          <li>
-            Financial modelling and empirical work with reviewable assumptions
-            and reproducible files
-          </li>
-          <li>
-            A decision log that retains failed theses and separates original
-            reasoning from hindsight
-          </li>
-        </ul>
-      </ResearchPanel>
-
-          <h2>Why I Built It</h2>
-
-          <p>
-            SM Research is a public record of how I analyse markets. Writing a view
-            down imposes a higher standard than holding an informal opinion:
-            assumptions become visible, evidence can be challenged and the
-            conditions that would invalidate the conclusion must be stated in
-            advance.
-          </p>
-
-          <p>
-            The objective is not to present a catalogue of successful calls. It is
-            to show how I frame questions, test evidence, size uncertainty and
-            revise conclusions when the facts change. SM Research is the work of an
-            individual analyst, not an investment firm or advisory service.
-          </p>
-
-          <h2>Why Commodities</h2>
-
-          <p>
-            My interest in markets began with risk transfer in the real economy.
-            My mother's side of the family comes from a farming background, so the
-            effects of weather, harvest conditions and commodity prices never felt
-            abstract. Learning how futures can protect the value of a harvest,
-            manage an airline's fuel exposure or secure an industrial input changed
-            how I understood finance.
-          </p>
-
-          <p>
-            Many of the earliest reports here originated while I served as
-            Commodities Sector Head at Queen's Tower Capital, Imperial College
-            London's student-managed investment fund. I led five analysts,
-            coordinated sector coverage and presented recommendations through the
-            fund's investment process.
-          </p>
-
-          <h2>From Commodities to Broader Investing</h2>
-
-          <p>
-            Commodities were my entry point into markets, not the boundary of my
-            interest. They showed me that investing can protect livelihoods,
-            finance production and transfer risk between people who need very
-            different things from the same market. From there I moved into rates,
-            currencies, credit and broader asset allocation because I realised how
-            many avenues there are through which investing can change lives.
-          </p>
-
-          <p>
-            Foreign exchange makes that breadth especially tangible. A currency is
-            a means of exchange, but its price also compresses judgements about
-            growth, inflation, policy, trade and institutional confidence. Studying
-            those links made investing meaningful to me in another sense: not only
-            as a way to allocate capital, but as a disciplined way to understand how
-            people, businesses and countries make choices under uncertainty. The
-            research here is expanding accordingly, while retaining the grounding
-            in real-economy risk that first drew me to commodities.
-          </p>
-
-          <h2>How I Work</h2>
-
-          <p>
-            Each report begins with a defined investment question rather than a
-            predetermined conclusion. The analysis considers physical supply and
-            demand, market structure, macroeconomic conditions, valuation,
-            positioning, catalysts and principal risks. Where the evidence permits,
-            I specify a horizon, reference level, implementation framework and
-            invalidation conditions.
-          </p>
-
-          <p>
-            I prefer primary data and institutional sources, and try to keep facts,
-            assumptions and interpretation visibly separate. Models are used where
-            they make assumptions clearer or scenarios more testable. They are not
-            used to add complexity for its own sake.
-          </p>
-
-          <p>
-            Material errors are corrected rather than defended. The commodity-regime
-            project, for example, preserves the original workflow while withdrawing
-            conclusions that did not survive a data and specification audit.
-          </p>
-
-          <h2>Analytical Toolkit</h2>
-
-          <p>
-            The work combines Excel-based operating and valuation models with
-            Python for data preparation, regression analysis, robustness testing
-            and market-simulation research. Public model pages disclose inputs,
-            outputs and limitations where the underlying material can be shared;
-            reproducibility files are provided where licensing and data rights
-            permit.
-          </p>
-
-          <h2>Accountability</h2>
-
-          <p>
-            Failed theses remain published. Removing them would create a cleaner
-            record, but a less credible one. The decision log reviews each view
-            against its stated horizon and implementation without presenting the
-            classifications as audited portfolio returns.
-          </p>
-
-          <p>
-            The standard I am trying to develop is conviction without attachment:
-            enough conviction to act on a well-supported view, but enough
-            flexibility to change it when better evidence arrives. Both the process
-            and the outcome matter.
-          </p>
-
-          <div class="not-prose my-6 flex flex-wrap gap-3">
-            <Link class="btn-blue" href={withBasePath('/research/')}>
-              Read research
-            </Link>
-            <Link class="btn-amber" href={withBasePath('/outcomes/')}>
-              View decision log
-            </Link>
-            <Link class="btn-emerald" href={withBasePath('/models/')}>
-              Explore models
-            </Link>
-          </div>
-
-          <h2>About the Author</h2>
-
-          <p>
-            SM Research is written and edited by Srinivas Medida. My interests sit
-            at the intersection of commodity markets, rates, currencies,
-            macroeconomics, financial modelling and quantitative analysis. I study
-            Economics, Finance & Data Science at Imperial College London. The
-            publication is intended to remain a continuing record of how that
-            analytical framework develops, rather than a substitute for a
-            curriculum vitae.
-          </p>
-
-          <PageNavigation current="about" />
-        </div>
-
-      </StandardLayout>
-
-  </BaseLayout>
+    <AboutContent slot="article" />
+  </StandardLayout>
+</BaseLayout>

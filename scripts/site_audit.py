@@ -15,6 +15,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 BLOG = ROOT / "src" / "content" / "blog"
+CONTRIBUTORS = ROOT / "src" / "content" / "contributors"
+AUTHORS = ROOT / "src" / "content" / "authors"
 PUBLIC = ROOT / "public"
 CURRENT_VIEWS = ROOT / "src" / "data" / "currentViews.ts"
 
@@ -29,6 +31,17 @@ REQUIRED_FRONTMATTER = {
     "market",
     "outcome",
     "outcomeSummary",
+    "draft",
+}
+
+REQUIRED_CONTRIBUTOR_FRONTMATTER = {
+    "title",
+    "description",
+    "author",
+    "pubDate",
+    "reportType",
+    "editorialStatus",
+    "disclosure",
     "draft",
 }
 
@@ -158,6 +171,60 @@ def main() -> int:
             f"found {len(featured_public)} ({names})"
         )
 
+    contributor_articles = sorted(
+        path
+        for path in [*CONTRIBUTORS.glob("*.md"), *CONTRIBUTORS.glob("*.mdx")]
+        if not path.name.startswith("_")
+    )
+    author_ids = {
+        path.stem
+        for path in AUTHORS.glob("*.json")
+        if not path.name.startswith("_")
+    }
+    contributor_slugs: dict[str, Path] = {}
+    valid_editorial_statuses = {"Published", "Revised"}
+
+    for path in contributor_articles:
+        text = path.read_text(encoding="utf-8")
+        fm = frontmatter(text)
+        missing = sorted(REQUIRED_CONTRIBUTOR_FRONTMATTER - set(fm))
+        if missing:
+            errors.append(
+                f"{path.relative_to(ROOT)}: missing contributor frontmatter {missing}"
+            )
+
+        author_id = clean_scalar(fm.get("author", ""))
+        if author_id and author_id not in author_ids:
+            errors.append(
+                f"{path.relative_to(ROOT)}: unknown contributor author {author_id!r}"
+            )
+
+        editorial_status = clean_scalar(fm.get("editorialStatus", ""))
+        if editorial_status and editorial_status not in valid_editorial_statuses:
+            errors.append(
+                f"{path.relative_to(ROOT)}: invalid editorial status {editorial_status!r}"
+            )
+
+        slug = clean_scalar(fm.get("slug", path.stem))
+        if slug in contributor_slugs:
+            errors.append(
+                f"Duplicate contributor slug: {slug!r} in "
+                f"{contributor_slugs[slug].name} and {path.name}"
+            )
+        contributor_slugs[slug] = path
+
+        for required_section in (
+            "## Methodology",
+            "## Risks and Counterarguments",
+            "## Limitations",
+            "## Sources",
+            "## Disclosures",
+        ):
+            if required_section not in text:
+                warnings.append(
+                    f"{path.relative_to(ROOT)}: missing {required_section!r} section"
+                )
+
     current_views_text = CURRENT_VIEWS.read_text(encoding="utf-8")
     linked_slugs = re.findall(
         r"href:\s*['\"]/research/([^/'\"]+)/['\"]",
@@ -173,6 +240,11 @@ def main() -> int:
     if "Research in progress" in current_views_text:
         errors.append(
             "src/data/currentViews.ts: remove remaining research placeholder"
+        )
+
+    if "/contributors/" in current_views_text:
+        errors.append(
+            "src/data/currentViews.ts: contributor content cannot enter Current Views"
         )
 
     all_text_files = [
@@ -346,7 +418,8 @@ def main() -> int:
         errors.append("Missing recruiter-facing decision log: src/pages/outcomes.astro")
     else:
         outcomes_text = outcomes_page.read_text(encoding="utf-8")
-        if "audited portfolio returns" not in outcomes_text:
+        normalized_outcomes_text = re.sub(r"\s+", " ", outcomes_text)
+        if "audited portfolio returns" not in normalized_outcomes_text:
             errors.append(
                 "src/pages/outcomes.astro: clarify that outcomes are not audited returns"
             )
@@ -357,6 +430,104 @@ def main() -> int:
 
     if "path: '/outcomes'" not in config:
         errors.append("src/config.ts: add Outcomes to the primary navigation")
+
+    if "path: '/contributors'" not in config:
+        errors.append("src/config.ts: add Contributors to the primary navigation")
+
+    contributor_architecture_files = (
+        ROOT / "src" / "pages" / "contributors" / "index.astro",
+        ROOT / "src" / "pages" / "contributors" / "submit.astro",
+        ROOT / "src" / "pages" / "contributors" / "research" / "index.astro",
+        ROOT
+        / "src"
+        / "pages"
+        / "contributors"
+        / "research"
+        / "[...slug].astro",
+        ROOT / "src" / "pages" / "contributors" / "[authorSlug].astro",
+        ROOT / "src" / "pages" / "contributors" / "rss.xml.js",
+        ROOT
+        / "src"
+        / "components"
+        / "contributors"
+        / "ContributorArticle.astro",
+    )
+    for path in contributor_architecture_files:
+        if not path.exists():
+            errors.append(
+                f"Missing contributor-platform file: {path.relative_to(ROOT)}"
+            )
+
+    submission_form_url = (
+        "https://docs.google.com/forms/d/e/"
+        "1FAIpQLSeShurDNE3SwpHYr7QZXOTwFpDgcA6XuQl8vP5s0BhZEVbVfA/viewform"
+    )
+    submission_touchpoints = (
+        ROOT / "src" / "pages" / "contributors" / "index.astro",
+        ROOT / "src" / "pages" / "contributors" / "submit.astro",
+        ROOT / "src" / "components" / "home" / "ContributorGateway.astro",
+    )
+    for path in submission_touchpoints:
+        touchpoint_text = path.read_text(encoding="utf-8") if path.exists() else ""
+        if path.exists() and submission_form_url not in touchpoint_text:
+            errors.append(
+                f"{path.relative_to(ROOT)}: missing canonical contributor form URL"
+            )
+
+    schema_text = (ROOT / "src" / "schema.ts").read_text(encoding="utf-8")
+    for required_schema_rule in (
+        "author: reference('authors')",
+        "editorialStatus: z.enum(['Published', 'Revised'])",
+        "disclosure: z.string().trim().min(1)",
+        "shortBio: z.string().trim().max(420).default('')",
+        "researchInterests: z.array(z.string().trim().min(1)).max(8).default([])",
+    ):
+        if required_schema_rule not in schema_text:
+            errors.append(
+                "src/schema.ts: missing contributor validation "
+                f"({required_schema_rule})"
+            )
+
+    submission_guide_text = submission_touchpoints[1].read_text(encoding="utf-8")
+    if "srinivas.medida05@gmail.com" not in submission_guide_text:
+        errors.append(
+            "src/pages/contributors/submit.astro: missing contributor email fallback"
+        )
+    if "srinivas.medida08@gmail.com" in submission_guide_text:
+        errors.append(
+            "src/pages/contributors/submit.astro: stale contributor submission email"
+        )
+
+    contributor_article_component = (
+        ROOT
+        / "src"
+        / "components"
+        / "contributors"
+        / "ContributorArticle.astro"
+    )
+    if contributor_article_component.exists():
+        contributor_article_text = contributor_article_component.read_text(
+            encoding="utf-8"
+        )
+        for required_attribution in (
+            "Contributor Research",
+            "Written by",
+            "This Contributor Research was written by",
+            "analysis and conclusion are the author's own",
+            "not a personal investment",
+            "/contributors/${author.id}/",
+        ):
+            if required_attribution not in contributor_article_text:
+                errors.append(
+                    "ContributorArticle.astro: missing required attribution or "
+                    f"responsibility copy ({required_attribution})"
+                )
+
+    outcomes_text = outcomes_page.read_text(encoding="utf-8")
+    if "getFilteredContributorResearch" in outcomes_text:
+        errors.append(
+            "src/pages/outcomes.astro: contributor research cannot enter the Decision Log"
+        )
 
     footer_text = (ROOT / "src" / "components" / "base" / "Footer.astro").read_text(
         encoding="utf-8"

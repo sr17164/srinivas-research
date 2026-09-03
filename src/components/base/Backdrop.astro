@@ -22,10 +22,13 @@
   /* Close panel when user click on backdrop */
   document.addEventListener('astro:page-load', () => {
     const handleClick = () => {
-      for (const { id, hiddenClass } of PANELS) {
+      for (const { id, button, hiddenClass } of PANELS) {
         const panel = document.getElementById(id)
         if (panel && !panel.classList.contains(hiddenClass)) {
           toggleFadeEffect(id, false, hiddenClass)
+          document
+            .getElementById(button)
+            ?.setAttribute('aria-expanded', 'false')
           break
         }
       }
@@ -52,6 +55,7 @@
       ) {
         toggleFadeEffect(id, false, hiddenClass)
         toggleFadeEffect('backdrop', false, 'hidden')
+        document.getElementById(button)?.setAttribute('aria-expanded', 'false')
         if (panel.contains(focusEl)) {
           document.getElementById(button)?.focus()
         }

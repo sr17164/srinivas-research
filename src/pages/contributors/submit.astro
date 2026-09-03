@@ -1,0 +1,408 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro'
+import Link from '~/components/base/Link.astro'
+import PageNavigation from '~/components/nav/PageNavigation.astro'
+
+const essentialItems = [
+  [
+    'A specific analytical question',
+    'Make clear what you are trying to understand and why the question matters.',
+  ],
+  [
+    'A defensible thesis or conclusion',
+    'Reach a view that follows from the analysis, even if the answer is nuanced or uncertain.',
+  ],
+  [
+    'Evidence supporting the argument',
+    'Show the data, examples or analysis that connect the question to the conclusion.',
+  ],
+  [
+    'Identifiable sources',
+    'Link or name the material you relied on so readers can trace the evidence.',
+  ],
+  [
+    'Material risks or counterarguments',
+    'Engage with the strongest case against your conclusion rather than hiding it.',
+  ],
+  [
+    'Honest limitations',
+    'Say what the research cannot establish and where the main uncertainties remain.',
+  ],
+]
+
+const strengtheningItems = [
+  {
+    title: 'Primary sources',
+    copy: 'Company filings, official data and institutional material where available.',
+  },
+  {
+    title: 'Original analysis',
+    copy: 'Your own data work, comparisons or synthesis rather than a summary of other views.',
+  },
+  {
+    title: 'Valuation or models',
+    copy: 'Useful when they make assumptions testable, but not required for every idea.',
+  },
+  {
+    title: 'Clear charts',
+    copy: 'Visuals that reveal an important relationship and explain their source and units.',
+  },
+  {
+    title: 'Scenario analysis',
+    copy: 'A considered range of outcomes when a single forecast would imply false precision.',
+  },
+  {
+    title: 'Catalysts or invalidation',
+    copy: 'What could move the thesis forward—and what evidence would make you change it.',
+  },
+]
+
+const editorialHelpItems = [
+  'Structure and flow',
+  'Presentation',
+  'Chart clarity',
+  'Sourcing format',
+  'Clearer assumptions',
+  'Clearer risks and limitations',
+]
+
+const submissionFormUrl =
+  'https://docs.google.com/forms/d/e/1FAIpQLSeShurDNE3SwpHYr7QZXOTwFpDgcA6XuQl8vP5s0BhZEVbVfA/viewform'
+const submissionEmailAddress = 'srinivas.medida05@gmail.com'
+const submissionEmail = `mailto:${submissionEmailAddress}?subject=SM%20Research%20Contributor%20Submission`
+---
+
+<BaseLayout
+  title="Contributor Guide"
+  description="Submission requirements and editorial standards for SM Research Contributor Research."
+  ogImage="fallback"
+>
+  <div class="submission-guide">
+    <header class="submission-hero">
+      <p>Contributor guide</p>
+      <h1>Have a research idea worth testing?</h1>
+      <p>
+        SM Research welcomes thoughtful student work across markets, macro,
+        valuation, credit and quantitative finance. We care more about the
+        quality of the idea and evidence than perfect formatting. Selected work
+        is published under its author's name.
+      </p>
+      <Link
+        href={submissionFormUrl}
+        title="Submit research using Google Forms (opens in a new tab)"
+        class="submission-action border-b-none!"
+        external={true}
+      >
+        Submit research <span aria-hidden="true">→</span>
+      </Link>
+    </header>
+
+    <section aria-labelledby="accepted-title">
+      <div class="guide-heading">
+        <p>Scope</p>
+        <h2 id="accepted-title">Serious ideas from across finance</h2>
+      </div>
+      <div class="scope-grid">
+        <p>
+          Public and private markets, macroeconomics, asset management,
+          investment banking, private equity, private credit and quantitative
+          finance can all fit. A piece does not need a trade recommendation to
+          make a useful analytical contribution.
+        </p>
+        <p>
+          We publish selectively, with quality first. Strong thinking can arrive
+          in a draft that still needs editorial polish. What matters is that the
+          core argument is your own and the evidence behind it can be checked.
+        </p>
+      </div>
+    </section>
+
+    <section aria-labelledby="submit-title">
+      <div class="guide-heading">
+        <p>Essential substance</p>
+        <h2 id="submit-title">What every submission needs</h2>
+      </div>
+      <ol class="submission-list">
+        {
+          essentialItems.map(([title, copy], index) => (
+            <li>
+              <span>{String(index + 1).padStart(2, '0')}</span>
+              <div>
+                <h3>{title}</h3>
+                <p>{copy}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    <section aria-labelledby="strengthens-title">
+      <div class="guide-heading">
+        <p>Useful additions</p>
+        <h2 id="strengthens-title">What strengthens a submission</h2>
+      </div>
+      <div class="review-grid">
+        {
+          strengtheningItems.map((item, index) => (
+            <article>
+              <span>{String(index + 1).padStart(2, '0')}</span>
+              <h3>{item.title}</h3>
+              <p>{item.copy}</p>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="editorial-boundary" aria-labelledby="boundary-title">
+      <div class="guide-heading">
+        <p>Editorial support</p>
+        <h2 id="boundary-title">What editorial review can help with</h2>
+      </div>
+      <div class="editorial-help">
+        <ul>
+          {editorialHelpItems.map((item) => <li>{item}</li>)}
+        </ul>
+        <p>
+          Editorial review can help sharpen how an argument is communicated; it
+          will not create the thesis, source the core evidence or perform the
+          underlying analysis on an author's behalf.
+        </p>
+      </div>
+    </section>
+
+    <section class="submission-contact" aria-labelledby="contact-title">
+      <p>Ready to share work?</p>
+      <h2 id="contact-title">Send us the idea and the evidence behind it.</h2>
+      <p>
+        The form asks for your research and a few basic author and disclosure
+        details. A short biography, institution and professional link are
+        optional; the quality of the analysis is what matters.
+      </p>
+      <Link
+        href={submissionFormUrl}
+        title="Submit research using Google Forms (opens in a new tab)"
+        class="submission-action border-b-none!"
+        external={true}
+      >
+        Submit research <span aria-hidden="true">→</span>
+      </Link>
+      <p class="submission-email-fallback">
+        Don’t feel like filling out the form? You can also send your research
+        straight to{' '}
+        <Link
+          href={submissionEmail}
+          title={`Email a contributor submission to ${submissionEmailAddress}`}
+        >
+          {submissionEmailAddress}
+        </Link>. If you’re unsure whether an idea fits, feel free to email Sri.
+      </p>
+    </section>
+
+    <PageNavigation current="contributors" />
+  </div>
+</BaseLayout>
+
+<style>
+  .submission-guide {
+    width: min(100%, 68rem);
+    margin: 0 auto;
+  }
+
+  .submission-hero {
+    max-width: 57rem;
+    padding: clamp(2rem, 7vw, 6rem) 0 clamp(4rem, 8vw, 7rem);
+  }
+
+  .submission-hero > p:first-child,
+  .guide-heading > p,
+  .submission-contact > p:first-child {
+    margin: 0 0 1rem;
+    color: color-mix(in srgb, #2f7778 78%, var(--c-text));
+    font-size: 0.72rem;
+    font-weight: 750;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .submission-hero h1 {
+    margin: 0;
+    font-family: Georgia, Cambria, 'Times New Roman', Times, serif;
+    font-size: clamp(3rem, 8vw, 6.5rem);
+    font-weight: 500;
+    line-height: 0.98;
+    letter-spacing: -0.055em;
+    text-wrap: balance;
+  }
+
+  .submission-hero > p:not(:first-child) {
+    max-width: 46rem;
+    margin: 1.5rem 0 0;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    opacity: 0.62;
+  }
+
+  .submission-action {
+    display: inline-flex;
+    gap: 0.65rem;
+    margin-top: 1.75rem;
+    padding: 0.82rem 1rem;
+    background: #276b6d;
+    color: white;
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .submission-guide > section {
+    padding: clamp(3.5rem, 7vw, 6rem) 0;
+    border-top: 1px solid color-mix(in srgb, var(--c-text) 15%, transparent);
+  }
+
+  .guide-heading {
+    margin-bottom: 2rem;
+  }
+
+  .guide-heading h2,
+  .submission-contact h2 {
+    max-width: 47rem;
+    margin: 0;
+    font-family: Georgia, Cambria, 'Times New Roman', Times, serif;
+    font-size: clamp(2rem, 5vw, 3.6rem);
+    font-weight: 500;
+    line-height: 1.06;
+    letter-spacing: -0.04em;
+  }
+
+  .scope-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(1.5rem, 5vw, 4rem);
+  }
+
+  .scope-grid p,
+  .submission-contact > p:not(:first-child) {
+    margin: 0;
+    line-height: 1.75;
+    opacity: 0.64;
+  }
+
+  .submission-list {
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid color-mix(in srgb, var(--c-text) 14%, transparent);
+    list-style: none;
+  }
+
+  .submission-list li {
+    display: grid;
+    grid-template-columns: 4rem minmax(0, 1fr);
+    gap: 1.25rem;
+    padding: 1.35rem 0;
+    border-bottom: 1px solid color-mix(in srgb, var(--c-text) 14%, transparent);
+  }
+
+  .submission-list li > span,
+  .review-grid article > span {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    opacity: 0.36;
+  }
+
+  .submission-list h3,
+  .review-grid h3 {
+    margin: 0;
+    font-family: Georgia, Cambria, 'Times New Roman', Times, serif;
+    font-size: 1.35rem;
+    font-weight: 500;
+  }
+
+  .submission-list p,
+  .review-grid p {
+    margin: 0.4rem 0 0;
+    font-size: 0.88rem;
+    line-height: 1.65;
+    opacity: 0.6;
+  }
+
+  .review-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    border-top: 1px solid color-mix(in srgb, var(--c-text) 14%, transparent);
+    border-left: 1px solid color-mix(in srgb, var(--c-text) 14%, transparent);
+  }
+
+  .review-grid article {
+    padding: 1.5rem;
+    border-right: 1px solid color-mix(in srgb, var(--c-text) 14%, transparent);
+    border-bottom: 1px solid color-mix(in srgb, var(--c-text) 14%, transparent);
+  }
+
+  .review-grid h3 {
+    margin-top: 2rem;
+  }
+
+  .submission-contact > p:not(:first-child) {
+    max-width: 45rem;
+  }
+
+  .editorial-help {
+    display: grid;
+    grid-template-columns: minmax(14rem, 0.75fr) minmax(0, 1.25fr);
+    gap: clamp(2rem, 6vw, 5rem);
+    align-items: start;
+  }
+
+  .editorial-help ul {
+    display: grid;
+    gap: 0.7rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .editorial-help li {
+    padding-bottom: 0.7rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--c-text) 12%, transparent);
+    font-size: 0.88rem;
+  }
+
+  .editorial-help p {
+    margin: 0;
+    padding: 1.25rem;
+    border-left: 0.2rem solid color-mix(in srgb, #2f7778 68%, var(--c-text));
+    background: color-mix(in srgb, #2f7778 4%, transparent);
+    font-size: 0.9rem;
+    line-height: 1.75;
+    opacity: 0.72;
+  }
+
+  .submission-email-fallback {
+    margin-top: 1.2rem !important;
+    font-size: 0.82rem;
+  }
+
+  .submission-email-fallback a {
+    overflow-wrap: anywhere;
+  }
+
+  @media (max-width: 800px) {
+    .review-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 640px) {
+    .scope-grid,
+    .review-grid,
+    .editorial-help {
+      grid-template-columns: 1fr;
+    }
+
+    .submission-list li {
+      grid-template-columns: 2.25rem minmax(0, 1fr);
+    }
+  }
+</style>

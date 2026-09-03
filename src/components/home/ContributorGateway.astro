@@ -1,0 +1,101 @@
+---
+import Link from '~/components/base/Link.astro'
+import { withBasePath } from '~/utils/path'
+
+const submissionFormUrl =
+  'https://docs.google.com/forms/d/e/1FAIpQLSeShurDNE3SwpHYr7QZXOTwFpDgcA6XuQl8vP5s0BhZEVbVfA/viewform'
+---
+
+<section
+  class="home-contributor-gateway"
+  aria-labelledby="home-contributors-title"
+>
+  <div>
+    <p>Contributor Research</p>
+    <h2 id="home-contributors-title">
+      A home for thoughtful student research.
+    </h2>
+  </div>
+
+  <div>
+    <p>
+      Research across markets, companies and investing, published under each
+      author's name with clear sourcing and editorial standards.
+    </p>
+    <div class="home-contributor-links">
+      <Link href={withBasePath('/contributors/')} class="border-b-none!">
+        Explore Contributors <span aria-hidden="true">→</span>
+      </Link>
+      <Link
+        href={submissionFormUrl}
+        title="Submit research using Google Forms (opens in a new tab)"
+        class="border-b-none!"
+        external={true}
+      >
+        Submit research <span aria-hidden="true">→</span>
+      </Link>
+    </div>
+  </div>
+</section>
+
+<style>
+  .home-contributor-gateway {
+    display: grid;
+    grid-template-columns: minmax(15rem, 0.9fr) minmax(0, 1.1fr);
+    gap: clamp(2rem, 6vw, 5rem);
+    margin: clamp(3.5rem, 7vw, 6rem) 0;
+    padding: clamp(2.25rem, 5vw, 4rem);
+    border-top: 0.2rem solid color-mix(in srgb, #2f7778 65%, var(--c-text));
+    border-right: 1px solid color-mix(in srgb, var(--c-text) 14%, transparent);
+    border-bottom: 1px solid color-mix(in srgb, var(--c-text) 14%, transparent);
+    border-left: 1px solid color-mix(in srgb, var(--c-text) 14%, transparent);
+    background: color-mix(in srgb, #2f7778 3%, transparent);
+  }
+
+  .home-contributor-gateway > div:first-child > p {
+    margin: 0 0 1rem;
+    color: color-mix(in srgb, #2f7778 78%, var(--c-text));
+    font-size: 0.7rem;
+    font-weight: 750;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+  }
+
+  .home-contributor-gateway h2 {
+    margin: 0;
+    font-family: Georgia, Cambria, 'Times New Roman', Times, serif;
+    font-size: clamp(1.9rem, 4vw, 3rem);
+    font-weight: 500;
+    line-height: 1.08;
+    letter-spacing: -0.04em;
+  }
+
+  .home-contributor-gateway > div:last-child > p {
+    max-width: 40rem;
+    margin: 0;
+    font-size: 0.94rem;
+    line-height: 1.75;
+    opacity: 0.64;
+  }
+
+  .home-contributor-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.5rem;
+    margin-top: 1.35rem;
+  }
+
+  .home-contributor-links a {
+    color: inherit;
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  @media (max-width: 720px) {
+    .home-contributor-gateway {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+  }
+</style>

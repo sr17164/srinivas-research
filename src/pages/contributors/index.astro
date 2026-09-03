@@ -1,0 +1,431 @@
+---
+import { getCollection } from 'astro:content'
+
+import BaseLayout from '~/layouts/BaseLayout.astro'
+import Link from '~/components/base/Link.astro'
+import ContributorResearchList from '~/components/contributors/ContributorResearchList.astro'
+import PageNavigation from '~/components/nav/PageNavigation.astro'
+import { withBasePath } from '~/utils/path'
+
+const authors = await getCollection('authors', ({ data }) => !data.template)
+const submissionFormUrl =
+  'https://docs.google.com/forms/d/e/1FAIpQLSeShurDNE3SwpHYr7QZXOTwFpDgcA6XuQl8vP5s0BhZEVbVfA/viewform'
+
+const standards = [
+  {
+    title: 'A clear question',
+    copy: 'Know what you are trying to understand and let the conclusion follow from the work.',
+  },
+  {
+    title: 'Evidence that holds up',
+    copy: 'Show where the argument comes from and make the important assumptions visible.',
+  },
+  {
+    title: 'A willingness to be wrong',
+    copy: 'Explain the strongest challenge to the idea and what could change the conclusion.',
+  },
+  {
+    title: 'Your analysis, with editorial support',
+    copy: 'We can help sharpen structure and presentation. The underlying thinking remains yours.',
+  },
+]
+---
+
+<BaseLayout
+  title="Contributors"
+  description="Thoughtful student research published under each contributor's name, with clear sourcing and editorial standards."
+  bgType="plum"
+  ogImage="fallback"
+>
+  <div class="contributors-hub">
+    <header class="contributors-hero">
+      <p class="contributors-eyebrow">Thoughtful student research</p>
+      <h1>Contributor Research</h1>
+      <p class="contributors-intro">
+        Serious ideas across markets, companies and investing, published under
+        each contributor's name with clear sourcing and honest limitations.
+      </p>
+
+      <div class="contributors-actions">
+        <Link
+          href={withBasePath('/contributors/research/')}
+          class="contributors-primary border-b-none!"
+        >
+          Browse Contributor Research <span aria-hidden="true">→</span>
+        </Link>
+        <Link
+          href={withBasePath('/contributors/submit/')}
+          class="contributors-secondary border-b-none!"
+        >
+          Contributor guide <span aria-hidden="true">↗</span>
+        </Link>
+      </div>
+    </header>
+
+    <section class="channel-separation" aria-labelledby="channels-title">
+      <div class="section-heading">
+        <p>Two research channels</p>
+        <h2 id="channels-title">Clear authorship from the start.</h2>
+      </div>
+
+      <div class="channel-grid">
+        <article class="channel-card channel-founder">
+          <p>Research</p>
+          <h3>Sri's research</h3>
+          <p>
+            The publication's flagship research archive, written by Sri. This
+            work supports Current Views, the Decision Log and historical thesis
+            outcomes.
+          </p>
+          <Link href={withBasePath('/research/')} class="border-b-none!">
+            Explore founder research <span aria-hidden="true">→</span>
+          </Link>
+        </article>
+
+        <article class="channel-card channel-contributor">
+          <p>Contributor Research</p>
+          <h3>Research under each author's name</h3>
+          <p>
+            Selected student research with a named author, traceable evidence
+            and clear disclosures. The analysis and conclusion remain the
+            contributor's own.
+          </p>
+          <Link
+            href={withBasePath('/contributors/submit/')}
+            class="border-b-none!"
+          >
+            Read how selection works <span aria-hidden="true">→</span>
+          </Link>
+        </article>
+      </div>
+    </section>
+
+    <section class="contributor-selection" aria-labelledby="selection-title">
+      <div class="section-heading section-heading-row">
+        <div>
+          <p>Selected work</p>
+          <h2 id="selection-title">Contributor Research</h2>
+        </div>
+        <Link
+          href={withBasePath('/contributors/research/')}
+          class="section-link border-b-none!"
+        >
+          Research archive <span aria-hidden="true">→</span>
+        </Link>
+      </div>
+      <ContributorResearchList limit={4} />
+    </section>
+
+    {
+      authors.length > 0 && (
+        <section class="contributor-authors" aria-labelledby="authors-title">
+          <div class="section-heading">
+            <p>Authors</p>
+            <h2 id="authors-title">Contributor profiles</h2>
+          </div>
+          <div class="author-grid">
+            {authors.map((author) => (
+              <article>
+                <h3>{author.data.fullName}</h3>
+                {author.data.shortBio && <p>{author.data.shortBio}</p>}
+                <Link
+                  href={withBasePath(`/contributors/${author.id}/`)}
+                  class="border-b-none!"
+                >
+                  View profile <span aria-hidden="true">→</span>
+                </Link>
+              </article>
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    <section class="editorial-standard" aria-labelledby="standard-title">
+      <div class="section-heading">
+        <p>What we look for</p>
+        <h2 id="standard-title">
+          Clear questions. Strong evidence. Honest limitations.
+        </h2>
+      </div>
+
+      <div class="standard-grid">
+        {
+          standards.map((standard, index) => (
+            <article>
+              <span>{String(index + 1).padStart(2, '0')}</span>
+              <h3>{standard.title}</h3>
+              <p>{standard.copy}</p>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="contributor-invitation" aria-labelledby="invitation-title">
+      <p class="contributors-eyebrow">Thinking of contributing?</p>
+      <h2 id="invitation-title">Have a research idea worth testing?</h2>
+      <p>
+        We care more about the quality of the thinking and evidence than perfect
+        formatting. The contributor guide explains what every submission needs
+        and where editorial review can help.
+      </p>
+      <div class="contributors-actions">
+        <Link
+          href={submissionFormUrl}
+          title="Submit research using Google Forms (opens in a new tab)"
+          class="contributors-primary border-b-none!"
+          external={true}
+        >
+          Submit research <span aria-hidden="true">→</span>
+        </Link>
+        <Link
+          href={withBasePath('/contributors/submit/')}
+          class="contributors-secondary border-b-none!"
+        >
+          Read the contributor guide <span aria-hidden="true">→</span>
+        </Link>
+      </div>
+    </section>
+
+    <PageNavigation current="contributors" />
+  </div>
+</BaseLayout>
+
+<style>
+  .contributors-hub {
+    width: min(100%, 72rem);
+    margin: 0 auto;
+  }
+
+  .contributors-hero {
+    max-width: 59rem;
+    padding: clamp(2rem, 7vw, 6rem) 0 clamp(4rem, 9vw, 7.5rem);
+  }
+
+  .contributors-eyebrow,
+  .section-heading > p,
+  .section-heading > div > p {
+    margin: 0 0 1rem;
+    color: color-mix(in srgb, #2f7778 78%, var(--c-text));
+    font-size: 0.72rem;
+    font-weight: 750;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .contributors-hero h1 {
+    margin: 0;
+    font-family: Georgia, Cambria, 'Times New Roman', Times, serif;
+    font-size: clamp(3.5rem, 10vw, 7.7rem);
+    font-weight: 500;
+    line-height: 0.96;
+    letter-spacing: -0.06em;
+  }
+
+  .contributors-intro {
+    max-width: 45rem;
+    margin: 1.7rem 0 0;
+    font-size: clamp(1.05rem, 2.2vw, 1.35rem);
+    line-height: 1.65;
+    opacity: 0.64;
+  }
+
+  .contributors-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.85rem;
+    margin-top: 2rem;
+  }
+
+  .contributors-primary,
+  .contributors-secondary {
+    display: inline-flex;
+    gap: 0.65rem;
+    align-items: center;
+    padding: 0.8rem 1rem;
+    color: inherit;
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .contributors-primary {
+    background: #276b6d;
+    color: white;
+  }
+
+  .contributors-secondary {
+    border: 1px solid color-mix(in srgb, var(--c-text) 18%, transparent);
+  }
+
+  .channel-separation,
+  .contributor-selection,
+  .contributor-authors,
+  .editorial-standard,
+  .contributor-invitation {
+    padding: clamp(3.5rem, 7vw, 6rem) 0;
+    border-top: 1px solid color-mix(in srgb, var(--c-text) 15%, transparent);
+  }
+
+  .section-heading {
+    margin-bottom: 2rem;
+  }
+
+  .section-heading-row {
+    display: flex;
+    gap: 2rem;
+    align-items: end;
+    justify-content: space-between;
+  }
+
+  .section-heading h2,
+  .contributor-invitation h2 {
+    max-width: 48rem;
+    margin: 0;
+    font-family: Georgia, Cambria, 'Times New Roman', Times, serif;
+    font-size: clamp(2.15rem, 5vw, 3.8rem);
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: -0.045em;
+  }
+
+  .section-link {
+    flex: none;
+    color: inherit;
+    font-size: 0.82rem;
+    font-weight: 650;
+    text-decoration: none;
+    opacity: 0.58;
+  }
+
+  .channel-grid,
+  .standard-grid,
+  .author-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .channel-card {
+    padding: clamp(1.75rem, 4vw, 3rem);
+    border: 1px solid color-mix(in srgb, var(--c-text) 14%, transparent);
+  }
+
+  .channel-card + .channel-card {
+    border-left: 0;
+  }
+
+  .channel-card > p:first-child {
+    margin: 0;
+    font-size: 0.68rem;
+    font-weight: 750;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0.5;
+  }
+
+  .channel-contributor {
+    border-top: 0.2rem solid color-mix(in srgb, #2f7778 68%, var(--c-text));
+  }
+
+  .channel-founder {
+    border-top: 0.2rem solid color-mix(in srgb, var(--c-text) 50%, transparent);
+  }
+
+  .channel-card h3,
+  .standard-grid h3,
+  .author-grid h3 {
+    margin: 1.4rem 0 0.75rem;
+    font-family: Georgia, Cambria, 'Times New Roman', Times, serif;
+    font-size: 1.7rem;
+    font-weight: 500;
+    line-height: 1.15;
+  }
+
+  .channel-card > p:not(:first-child),
+  .standard-grid p,
+  .author-grid p {
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.7;
+    opacity: 0.62;
+  }
+
+  .channel-card a,
+  .author-grid a {
+    display: inline-flex;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+    color: inherit;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .standard-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    border-top: 1px solid color-mix(in srgb, var(--c-text) 14%, transparent);
+    border-left: 1px solid color-mix(in srgb, var(--c-text) 14%, transparent);
+  }
+
+  .standard-grid article,
+  .author-grid article {
+    padding: 1.6rem;
+    border-right: 1px solid color-mix(in srgb, var(--c-text) 14%, transparent);
+    border-bottom: 1px solid color-mix(in srgb, var(--c-text) 14%, transparent);
+  }
+
+  .standard-grid span {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    opacity: 0.36;
+  }
+
+  .standard-grid h3 {
+    margin-top: 2rem;
+    font-size: 1.25rem;
+  }
+
+  .contributor-invitation > p:not(.contributors-eyebrow) {
+    max-width: 42rem;
+    margin: 1.2rem 0 1.6rem;
+    line-height: 1.7;
+    opacity: 0.62;
+  }
+
+  @media (max-width: 800px) {
+    .standard-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 640px) {
+    .contributors-hero h1 {
+      overflow-wrap: anywhere;
+    }
+
+    .channel-grid,
+    .standard-grid,
+    .author-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .channel-card + .channel-card {
+      border-top: 0;
+      border-left: 1px solid color-mix(in srgb, var(--c-text) 14%, transparent);
+    }
+
+    .channel-contributor {
+      border-top: 0.2rem solid color-mix(in srgb, #2f7778 68%, var(--c-text)) !important;
+    }
+
+    .section-heading-row {
+      display: block;
+    }
+
+    .section-link {
+      display: inline-block;
+      margin-top: 1rem;
+    }
+  }
+</style>

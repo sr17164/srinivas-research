@@ -19,8 +19,9 @@ export async function GET() {
   const feedImageUrl = new URL('icon-512.png', siteUrl).toString()
 
   return rss({
-    title: SITE.title,
-    description: SITE.description,
+    title: `${SITE.title} — Research by Srinivas Medida`,
+    description:
+      'Founder-authored investment research, current theses and subsequent revisions by Srinivas Medida.',
     site: siteUrl,
 
     customData: `
@@ -39,6 +40,7 @@ export async function GET() {
       pubDate: item.data.pubDate,
       description: item.data.description,
       author: SITE.author,
+      categories: ['Research', item.data.reportType, ...item.data.tags],
     })),
 
     stylesheet: withBasePath('/rss-styles.xsl'),

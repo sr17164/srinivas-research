@@ -58,6 +58,7 @@ const coverAlt = frontmatter.coverAlt
 const investmentView = frontmatter.investmentView
 const timeHorizon = frontmatter.timeHorizon
 const outcome = frontmatter.outcome
+const drivers = frontmatter.drivers
 
 const tocEnabled = Array.isArray(toc) && toc[0] && frontmatter.toc && pageToc
 
@@ -66,11 +67,11 @@ const haveHeadings = tocEnabled && headings.length > 0
 const isSearchable =
   Array.isArray(search) &&
   search[0] &&
-  search[1].includes.includes('blog') &&
+  search[1].includes.includes('founder') &&
   frontmatter.search
 
 const searchFilter =
-  isSearchable && search[1].filter ? 'collection:blog' : undefined
+  isSearchable && search[1].filter ? 'collection:founder' : undefined
 
 const draftWarning = `
   This is a draft article and will not be published in production.
@@ -79,7 +80,16 @@ const draftWarning = `
 `
 ---
 
-<BaseLayout {title} {description} {ogImage} {pubDate} {lastModDate} {bgType}>
+<BaseLayout
+  {title}
+  {description}
+  {ogImage}
+  {pubDate}
+  {lastModDate}
+  {bgType}
+  authorName="Srinivas Medida"
+  articleSection="Founder Research"
+>
   <StandardLayout
     {title}
     subtitle={subtitle ?? description}
@@ -95,9 +105,12 @@ const draftWarning = `
         {reportType}
         {assetClass}
         {sector}
+        authorName="Srinivas Medida"
+        authorDisplayName="Sri"
+        channel="Research"
       />
 
-      <ResearchFactsheet {investmentView} {timeHorizon} {outcome} />
+      <ResearchFactsheet {investmentView} {timeHorizon} {outcome} {drivers} />
     </Fragment>
 
     <Fragment slot="article">

@@ -1,0 +1,304 @@
+---
+import { getCollection, render } from 'astro:content'
+
+import BaseLayout from '~/layouts/BaseLayout.astro'
+import ContributorCard from '~/components/contributors/ContributorCard.astro'
+import Link from '~/components/base/Link.astro'
+import PageNavigation from '~/components/nav/PageNavigation.astro'
+import { getMinutesRead } from '~/utils/data'
+import { withBasePath } from '~/utils/path'
+
+export async function getStaticPaths() {
+  const authors = await getCollection('authors', ({ data }) => !data.template)
+
+  return authors.map((author) => ({
+    params: { authorSlug: author.id },
+    props: { author },
+  }))
+}
+
+const { author } = Astro.props
+const contributorResearch = (
+  await getCollection(
+    'contributorResearch',
+    ({ data }) => !data.template && (import.meta.env.PROD ? !data.draft : true)
+  )
+)
+  .filter((entry) => entry.data.author.id === author.id)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+
+const articles = await Promise.all(
+  contributorResearch.map(async (entry) => {
+    const { remarkPluginFrontmatter } = await render(entry)
+    return {
+      entry,
+      minutesRead: getMinutesRead(
+        entry.data.minutesRead,
+        remarkPluginFrontmatter.minutesRead as number
+      ),
+    }
+  })
+)
+
+const profileUrl = new URL(
+  withBasePath(`/contributors/${author.id}/`),
+  Astro.site ?? Astro.url
+).href
+const profileDescription =
+  author.data.shortBio ||
+  `Contributor Research by ${author.data.fullName}, published through SM Research.`
+const personData = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  'name': author.data.fullName,
+  'url': profileUrl,
+  ...(author.data.shortBio && { description: author.data.shortBio }),
+  ...(author.data.professionalUrl && { sameAs: [author.data.professionalUrl] }),
+}
+---
+
+<BaseLayout
+  title={author.data.fullName}
+  description={profileDescription}
+  ogImage="fallback"
+>
+  <script
+    slot="head"
+    is:inline
+    type="application/ld+json"
+    set:html={JSON.stringify(personData)}
+  />
+
+  <div class="contributor-profile">
+    <header>
+      <p>Contributor profile</p>
+      <h1>{author.data.fullName}</h1>
+      {
+        author.data.institution && (
+          <p class="profile-institution">{author.data.institution}</p>
+        )
+      }
+      {
+        author.data.shortBio && (
+          <p class="profile-bio">{author.data.shortBio}</p>
+        )
+      }
+
+      <div class="profile-links">
+        {
+          author.data.professionalUrl && (
+            <Link
+              href={author.data.professionalUrl}
+              external={true}
+              class="border-b-none!"
+            >
+              Professional profile <span aria-hidden="true">↗</span>
+            </Link>
+          )
+        }
+        <Link href={withBasePath('/contributors/')} class="border-b-none!">
+          Contributor channel <span aria-hidden="true">→</span>
+        </Link>
+      </div>
+    </header>
+
+    {
+      author.data.researchInterests.length > 0 && (
+        <section class="profile-details" aria-labelledby="interests-title">
+          <div>
+            <p>Research interests</p>
+            <h2 id="interests-title">Coverage and interests</h2>
+          </div>
+          <ul>
+            {author.data.researchInterests.map((interest) => (
+              <li>{interest}</li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    <section class="profile-research" aria-labelledby="research-title">
+      <div>
+        <p>Published work</p>
+        <h2 id="research-title">Contributor Research</h2>
+      </div>
+
+      {
+        articles.length > 0 ? (
+          <div class="profile-research-grid">
+            {articles.map(({ entry, minutesRead }) => (
+              <ContributorCard
+                slug={entry.id}
+                title={entry.data.title}
+                description={entry.data.description}
+                authorName={author.data.fullName}
+                authorSlug={author.id}
+                pubDate={entry.data.pubDate}
+                reportType={entry.data.reportType}
+                assetClass={entry.data.assetClass}
+                sector={entry.data.sector}
+                {minutesRead}
+              />
+            ))}
+          </div>
+        ) : (
+          <p class="profile-empty">
+            No Contributor Research is published under this name yet.
+          </p>
+        )
+      }
+    </section>
+
+    {
+      author.data.disclosure && (
+        <aside class="profile-disclosure" aria-label="Author disclosure">
+          <strong>Disclosure</strong>
+          <p>{author.data.disclosure}</p>
+        </aside>
+      )
+    }
+
+    <PageNavigation current="contributors" />
+  </div>
+</BaseLayout>
+
+<style>
+  .contributor-profile {
+    width: min(100%, 68rem);
+    margin: 0 auto;
+  }
+
+  .contributor-profile > header {
+    max-width: 53rem;
+    padding: clamp(2rem, 7vw, 6rem) 0 clamp(4rem, 8vw, 7rem);
+  }
+
+  .contributor-profile > header > p:first-child,
+  .profile-details > div > p,
+  .profile-research > div > p {
+    margin: 0 0 1rem;
+    color: color-mix(in srgb, #2f7778 78%, var(--c-text));
+    font-size: 0.72rem;
+    font-weight: 750;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .contributor-profile h1 {
+    margin: 0;
+    font-family: Georgia, Cambria, 'Times New Roman', Times, serif;
+    font-size: clamp(3.2rem, 9vw, 6.8rem);
+    font-weight: 500;
+    line-height: 0.98;
+    letter-spacing: -0.055em;
+  }
+
+  .profile-institution {
+    margin: 1rem 0 0;
+    font-size: 0.85rem;
+    font-weight: 650;
+    opacity: 0.5;
+  }
+
+  .profile-bio {
+    max-width: 44rem;
+    margin: 1.4rem 0 0;
+    font-size: 1.05rem;
+    line-height: 1.75;
+    opacity: 0.65;
+  }
+
+  .profile-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 1.5rem;
+    margin-top: 1.5rem;
+  }
+
+  .profile-links a {
+    color: inherit;
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .profile-details,
+  .profile-research {
+    padding: clamp(3.5rem, 7vw, 6rem) 0;
+    border-top: 1px solid color-mix(in srgb, var(--c-text) 15%, transparent);
+  }
+
+  .profile-details {
+    display: grid;
+    grid-template-columns: minmax(15rem, 1fr) 2fr;
+    gap: 3rem;
+  }
+
+  .profile-details h2,
+  .profile-research h2 {
+    margin: 0;
+    font-family: Georgia, Cambria, 'Times New Roman', Times, serif;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 500;
+    line-height: 1.08;
+    letter-spacing: -0.04em;
+  }
+
+  .profile-details ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    align-content: start;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .profile-details li {
+    padding: 0.45rem 0.75rem;
+    border: 1px solid color-mix(in srgb, var(--c-text) 17%, transparent);
+    border-radius: 999px;
+    font-size: 0.8rem;
+  }
+
+  .profile-research > div:first-child {
+    margin-bottom: 2rem;
+  }
+
+  .profile-research-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .profile-empty {
+    padding: 2rem;
+    border: 1px solid color-mix(in srgb, var(--c-text) 14%, transparent);
+    opacity: 0.56;
+  }
+
+  .profile-disclosure {
+    padding: 1.4rem;
+    border-left: 0.2rem solid color-mix(in srgb, #2f7778 68%, var(--c-text));
+    background: color-mix(in srgb, #2f7778 4%, transparent);
+    font-size: 0.82rem;
+    line-height: 1.65;
+  }
+
+  .profile-disclosure p {
+    margin: 0.45rem 0 0;
+    opacity: 0.68;
+  }
+
+  @media (max-width: 700px) {
+    .contributor-profile h1 {
+      overflow-wrap: anywhere;
+    }
+
+    .profile-details,
+    .profile-research-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

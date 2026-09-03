@@ -7,6 +7,8 @@ import type { GitHubView } from '~/types'
 
 type BlogEntry = CollectionEntry<'blog'>
 type BlogEntryList = BlogEntry[]
+type ContributorEntry = CollectionEntry<'contributorResearch'>
+type ContributorEntryList = ContributorEntry[]
 
 /**
  * Ensures that a value is a positive integer.
@@ -62,6 +64,25 @@ export async function getFilteredPosts(): Promise<BlogEntryList> {
  * Sorts research articles by publication date in descending order.
  */
 export function getSortedPosts(posts: BlogEntryList): BlogEntryList {
+  return [...posts].sort(
+    (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+  )
+}
+
+/**
+ * Retrieves contributor research without ever mixing it into founder-only
+ * research, Current Views or the Decision Log.
+ */
+export async function getFilteredContributorResearch(): Promise<ContributorEntryList> {
+  return await getCollection('contributorResearch', ({ data }) => {
+    if (data.template) return false
+    return import.meta.env.PROD ? !data.draft : true
+  })
+}
+
+export function getSortedContributorResearch(
+  posts: ContributorEntryList
+): ContributorEntryList {
   return [...posts].sort(
     (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
   )

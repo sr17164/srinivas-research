@@ -1,0 +1,119 @@
+---
+import Link from '~/components/base/Link.astro'
+import { formatDate } from '~/utils/datetime'
+import { withBasePath } from '~/utils/path'
+
+interface Props {
+  slug: string
+  title: string
+  description: string
+  authorName: string
+  authorSlug: string
+  pubDate: Date
+  reportType: string
+  assetClass?: string
+  sector?: string
+  minutesRead?: number
+}
+
+const {
+  slug,
+  title,
+  description,
+  authorName,
+  authorSlug,
+  pubDate,
+  reportType,
+  assetClass,
+  sector,
+  minutesRead,
+} = Astro.props
+
+const details = [
+  assetClass,
+  sector,
+  minutesRead ? `${minutesRead} min read` : '',
+]
+  .filter(Boolean)
+  .join(' · ')
+---
+
+<article class="contributor-card">
+  <div class="contributor-card-meta">
+    <span>Contributor Research</span>
+    <time datetime={pubDate.toISOString()}>{formatDate(pubDate, false)}</time>
+  </div>
+
+  <h2>
+    <Link
+      href={withBasePath(`/contributors/research/${slug}/`)}
+      class="border-b-none!"
+    >
+      {title}
+    </Link>
+  </h2>
+
+  <p>{description}</p>
+
+  <div class="contributor-card-footer">
+    <span>{reportType}{details ? ` · ${details}` : ''}</span>
+    <Link
+      href={withBasePath(`/contributors/${authorSlug}/`)}
+      class="contributor-card-author border-b-none!"
+    >
+      <span>Written by {authorName}</span>
+    </Link>
+  </div>
+</article>
+
+<style>
+  .contributor-card {
+    padding: clamp(1.5rem, 3vw, 2.25rem);
+    border: 1px solid color-mix(in srgb, var(--c-text) 14%, transparent);
+    border-top: 0.2rem solid color-mix(in srgb, #2f7778 68%, var(--c-text));
+  }
+
+  .contributor-card-meta,
+  .contributor-card-footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem 1rem;
+    justify-content: space-between;
+    font-size: 0.72rem;
+    line-height: 1.45;
+    opacity: 0.52;
+  }
+
+  .contributor-card-meta span {
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .contributor-card h2 {
+    margin: 1.4rem 0 0;
+    font-family: Georgia, Cambria, 'Times New Roman', Times, serif;
+    font-size: clamp(1.5rem, 3vw, 2.1rem);
+    font-weight: 500;
+    line-height: 1.18;
+    letter-spacing: -0.025em;
+  }
+
+  .contributor-card h2 a,
+  .contributor-card-author {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .contributor-card > p {
+    margin: 0.8rem 0 1.4rem;
+    font-size: 0.9rem;
+    line-height: 1.65;
+    opacity: 0.62;
+  }
+
+  .contributor-card-author {
+    font-weight: 650;
+    opacity: 1;
+  }
+</style>

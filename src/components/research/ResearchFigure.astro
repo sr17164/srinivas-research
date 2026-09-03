@@ -18,9 +18,9 @@ const { src, alt, caption, source, sourceHref } = Astro.props
   </div>
 
   <figcaption>
-    <span>{caption}</span>
+    <span class="research-figure-caption">{caption}</span>
     <span class="research-figure-source">
-      Source:
+      Source:{' '}
       {
         sourceHref ? (
           <a href={sourceHref} rel="noreferrer" target="_blank">
@@ -55,8 +55,8 @@ const { src, alt, caption, source, sourceHref } = Astro.props
   }
 
   .research-figure figcaption {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
+    display: flex;
+    flex-wrap: wrap;
     gap: 0.75rem 1.5rem;
     align-items: start;
     margin-top: 0.8rem;
@@ -66,9 +66,17 @@ const { src, alt, caption, source, sourceHref } = Astro.props
     opacity: 0.58;
   }
 
+  .research-figure-caption {
+    flex: 1 1 20rem;
+    min-width: 0;
+  }
+
   .research-figure-source {
+    flex: 0 1 auto;
+    min-width: 0;
+    max-width: 100%;
     text-align: right;
-    white-space: nowrap;
+    overflow-wrap: anywhere;
   }
 
   .research-figure-source a {
@@ -85,7 +93,9 @@ const { src, alt, caption, source, sourceHref } = Astro.props
     }
 
     .research-figure figcaption {
+      display: grid;
       grid-template-columns: 1fr;
+      gap: 0.35rem;
     }
 
     .research-figure-source {

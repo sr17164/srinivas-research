@@ -16,9 +16,21 @@ interface Props {
   ogImage?: string | boolean
   pubDate?: string
   lastModDate?: string
+  authorName?: string
+  authorUrl?: string
+  articleSection?: string
 }
 
-const { title, description, ogImage, pubDate, lastModDate } = Astro.props
+const {
+  title,
+  description,
+  ogImage,
+  pubDate,
+  lastModDate,
+  authorName = SITE.author,
+  authorUrl = SITE.website,
+  articleSection,
+} = Astro.props
 
 const pageTitle =
   title && title !== SITE.title ? `${title} - ${SITE.title}` : SITE.title
@@ -48,7 +60,7 @@ const ogImageURL = ogImagePathname
 // https://jsonld.com/blog-post/
 const blogPostingData = {
   '@context': 'https://schema.org',
-  '@type': 'BlogPosting',
+  '@type': 'Article',
   'headline': title || SITE.title,
   ...(ogImageURL && { image: ogImageURL }),
   'url': canonicalURL,
@@ -58,10 +70,11 @@ const blogPostingData = {
   'datePublished': pubDate,
   ...(lastModDate && { dateModified: lastModDate }),
   'description': pageDescription,
+  ...(articleSection && { articleSection }),
   'author': {
     '@type': 'Person',
-    'name': SITE.author,
-    'url': SITE.website,
+    'name': authorName,
+    'url': authorUrl,
   },
 }
 
@@ -100,7 +113,7 @@ const webPageData = {
 <title>{pageTitle}</title>
 <meta name="title" content={pageTitle} />
 <meta name="description" content={pageDescription} />
-<meta name="author" content={SITE.author} />
+<meta name="author" content={authorName} />
 
 <!-- Color -->
 <meta name="color-scheme" content="" />
@@ -151,7 +164,7 @@ const webPageData = {
 {
   pubDate && (
     <>
-      <meta property="article:author" content={SITE.author} />
+      <meta property="article:author" content={authorName} />
       <meta property="article:published_time" content={pubDate} />
       {lastModDate && (
         <meta property="article:modified_time" content={lastModDate} />
@@ -209,6 +222,12 @@ const webPageData = {
   type="application/rss+xml"
   title="SM Research RSS"
   href={withBasePath('/rss.xml')}
+/>
+<link
+  rel="alternate"
+  type="application/rss+xml"
+  title="SM Research Contributor Research RSS"
+  href={withBasePath('/contributors/rss.xml')}
 />
 
 <!-- Google JSON-LD Structured Data -->

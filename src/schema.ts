@@ -1,4 +1,5 @@
 import { z } from 'astro/zod'
+import { reference } from 'astro:content'
 import type { SchemaContext } from 'astro:content'
 
 /* Pages */
@@ -260,6 +261,68 @@ export const postSchema = ({ image }: SchemaContext) =>
       .describe(
         'Marks the post as a draft. If `true`, it is only visible in development and excluded from production builds.'
       ),
+  })
+
+/* Contributor authors */
+export const authorSchema = z.object({
+  template: z.boolean().default(false),
+  fullName: z.string().trim().min(1).max(90),
+  shortBio: z.string().trim().max(420).default(''),
+  institution: z.string().trim().min(1).max(140).optional(),
+  researchInterests: z.array(z.string().trim().min(1)).max(8).default([]),
+  professionalUrl: z.url().optional(),
+  disclosure: z.string().trim().max(420).default(''),
+})
+
+/* Contributor research — intentionally separate from founder research. */
+export const contributorResearchSchema = ({ image }: SchemaContext) =>
+  z.object({
+    template: z.boolean().default(false),
+    title: z.string().trim().min(1).max(72),
+    description: z.string().trim().min(1).max(240),
+    author: reference('authors'),
+    pubDate: z.coerce.date(),
+    lastModDate: z.union([z.coerce.date(), z.literal('')]).optional(),
+    reportType: z
+      .enum([
+        'Research Note',
+        'Commodity Research',
+        'Macro Research',
+        'Credit Research',
+        'Quantitative Research',
+        'Investment Case',
+        'Market Note',
+      ])
+      .default('Research Note'),
+    assetClass: z
+      .enum([
+        'Commodities',
+        'Credit',
+        'Rates',
+        'FX',
+        'Equities',
+        'Private Markets',
+        'Multi-Asset',
+      ])
+      .optional(),
+    sector: z.string().trim().min(1).max(100).optional(),
+    tags: z.array(z.string().trim().min(1)).max(10).default([]),
+    investmentView: z.enum(['Bullish', 'Bearish', 'Neutral']).optional(),
+    timeHorizon: z.string().trim().min(1).max(80).optional(),
+    editorialStatus: z.enum(['Published', 'Revised']).default('Published'),
+    disclosure: z.string().trim().min(1).max(600),
+    cover: z.union([image(), z.url()]).default(''),
+    coverAlt: z.string().trim().default(''),
+    minutesRead: z
+      .union([z.number().int().positive(), z.boolean()])
+      .default(true),
+    bgType: z.union([z.literal(false), z.enum(['plum', 'dot'])]).default(false),
+    ogImage: z
+      .union([z.literal('fallback'), z.string(), z.boolean()])
+      .default(true),
+    toc: z.boolean().default(true),
+    search: z.boolean().default(true),
+    draft: z.boolean().default(false),
   })
 
 /* Projects */

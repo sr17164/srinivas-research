@@ -1,0 +1,81 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro'
+import ContributorResearchList from '~/components/contributors/ContributorResearchList.astro'
+import Link from '~/components/base/Link.astro'
+import PageNavigation from '~/components/nav/PageNavigation.astro'
+import { withBasePath } from '~/utils/path'
+---
+
+<BaseLayout
+  title="Contributor Research"
+  description="Student research published under each contributor's name, with sources and limitations readers can check."
+  ogImage="fallback"
+>
+  <div class="contributor-archive">
+    <header>
+      <p>Contributor channel</p>
+      <h1>Contributor Research</h1>
+      <p>
+        Student research published under each author's name, with sources,
+        limitations and disclosures kept alongside the work. These articles sit
+        outside Sri's Research, Current Views and Decision Log.
+      </p>
+      <Link href={withBasePath('/contributors/submit/')} class="border-b-none!">
+        Contributor guide <span aria-hidden="true">→</span>
+      </Link>
+    </header>
+
+    <section aria-label="Contributor Research archive">
+      <ContributorResearchList />
+    </section>
+
+    <PageNavigation current="contributors" />
+  </div>
+</BaseLayout>
+
+<style>
+  .contributor-archive {
+    width: min(100%, 72rem);
+    margin: 0 auto;
+  }
+
+  .contributor-archive > header {
+    max-width: 55rem;
+    padding: clamp(2rem, 7vw, 6rem) 0 clamp(3rem, 7vw, 5rem);
+  }
+
+  .contributor-archive > header > p:first-child {
+    margin: 0 0 1rem;
+    color: color-mix(in srgb, #2f7778 78%, var(--c-text));
+    font-size: 0.72rem;
+    font-weight: 750;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .contributor-archive h1 {
+    margin: 0;
+    font-family: Georgia, Cambria, 'Times New Roman', Times, serif;
+    font-size: clamp(3rem, 8vw, 6rem);
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -0.055em;
+  }
+
+  .contributor-archive > header > p:not(:first-child) {
+    max-width: 46rem;
+    margin: 1.4rem 0 0;
+    line-height: 1.7;
+    opacity: 0.62;
+  }
+
+  .contributor-archive > header > a {
+    display: inline-flex;
+    gap: 0.6rem;
+    margin-top: 1.4rem;
+    color: inherit;
+    font-size: 0.84rem;
+    font-weight: 700;
+    text-decoration: none;
+  }
+</style>
